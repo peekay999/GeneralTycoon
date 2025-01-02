@@ -22,6 +22,6 @@ public enum FrameDirection
 	SOUTH = 3,
 	SOUTH_EAST = 4,
 	EAST = 5,
-	NORTH_EAST = 6, 
+	NORTH_EAST = 6,
 	NORTH = 7
 }

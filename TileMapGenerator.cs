@@ -273,7 +273,7 @@ public partial class TileMapGenerator : Node2D
 		Vector2I W = new Vector2I(cell.X - 1, cell.Y);
 
 		if (
-			IsTileMatch(nextLayer, NW, new HashSet<Vector2I> { TileMapUtil.tile_base, TileMapUtil.tile_slope_E, TileMapUtil.tile_slope_S, TileMapUtil.tile_corner_SE, TileMapUtil.tile_corner_high_SW, TileMapUtil.tile_corner_high_NE, TileMapUtil.tile_corner_high_SE })
+			IsTileMatch(nextLayer, NW, new HashSet<Vector2I> { TileMapUtil.tile_base, TileMapUtil.tile_slope_E, TileMapUtil.tile_slope_S, TileMapUtil.tile_corner_SE, TileMapUtil.tile_corner_high_SW, TileMapUtil.tile_corner_high_NE, TileMapUtil.tile_corner_high_SE, TileMapUtil.tile_corner_NW_SE })
 			|| IsTileMatch(nextLayer, N, new HashSet<Vector2I> { TileMapUtil.tile_slope_W, TileMapUtil.tile_corner_SW, TileMapUtil.tile_corner_high_NW })
 		)
 		{
@@ -331,7 +331,7 @@ public partial class TileMapGenerator : Node2D
 		return tileTypes.Contains(layer.GetCellAtlasCoords(cell));
 	}
 
-		private void UpdateCurrentLayerTiles(List<TileMapLayer> tileMapLayers)
+	private void UpdateCurrentLayerTiles(List<TileMapLayer> tileMapLayers)
 	{
 		for (int i = 0; i < tileMapLayers.Count - 1; i++)
 		{

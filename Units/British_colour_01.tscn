@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbbacrkxxyia1"]
+
+[ext_resource type="Script" path="res://Units/Unit.cs" id="1_pe06p"]
+[ext_resource type="SpriteFrames" uid="uid://b6oichcsp8ehn" path="res://Units/British_soldier_01_sprites.tres" id="2_ijo14"]
+
+[node name="Unit" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_pe06p")
+
+[node name="YSort" type="Node2D" parent="."]
+position = Vector2(0, -1)
+
+[node name="Sprites" type="Node2D" parent="YSort"]
+position = Vector2(0, 1)
+
+[node name="troop_0" type="AnimatedSprite2D" parent="YSort/Sprites"]
+texture_filter = 1
+position = Vector2(-5, -37)
+sprite_frames = ExtResource("2_ijo14")
+animation = &"walk"
+frame = 7
+
+[node name="troop_1" type="AnimatedSprite2D" parent="YSort/Sprites"]
+texture_filter = 1
+position = Vector2(5, -32)
+sprite_frames = ExtResource("2_ijo14")
+animation = &"walk"
+frame = 7
+
+[node name="troop_2" type="AnimatedSprite2D" parent="YSort/Sprites"]
+texture_filter = 1
+position = Vector2(15, -27)
+sprite_frames = ExtResource("2_ijo14")
+animation = &"walk"
+frame = 7
+
+[node name="troop_3" type="AnimatedSprite2D" parent="YSort/Sprites"]
+texture_filter = 1
+position = Vector2(-16, -32)
+sprite_frames = ExtResource("2_ijo14")
+animation = &"walk"
+frame = 7
+
+[node name="troop_4" type="AnimatedSprite2D" parent="YSort/Sprites"]
+texture_filter = 1
+position = Vector2(-6, -26)
+sprite_frames = ExtResource("2_ijo14")
+animation = &"walk"
+frame = 7
+
+[node name="troop_5" type="AnimatedSprite2D" parent="YSort/Sprites"]
+texture_filter = 1
+position = Vector2(5, -22)
+sprite_frames = ExtResource("2_ijo14")
+animation = &"walk"
+frame = 7
+
+[node name="Area2D" type="Area2D" parent="."]
+z_as_relative = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+z_as_relative = false
+position = Vector2(0, -16)
+polygon = PackedVector2Array(0, 0, 32, 16, 0, 32, -32, 16)

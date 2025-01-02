@@ -1,0 +1,28 @@
+[gd_scene load_steps=7 format=3 uid="uid://bufsvbmaiccdc"]
+
+[ext_resource type="Script" path="res://TileMapController.cs" id="1_luie1"]
+[ext_resource type="TileSet" uid="uid://cl6fplrb3wsga" path="res://TileMaps/Tilesets/Base.tres" id="2_htakq"]
+[ext_resource type="Script" path="res://Util/CameraController.cs" id="3_4f6d4"]
+[ext_resource type="Texture2D" uid="uid://dimbf0et8fm5f" path="res://height.png" id="3_f1de7"]
+[ext_resource type="Texture2D" uid="uid://dq7cieaeonpp4" path="res://icon.svg" id="5_eqyv0"]
+[ext_resource type="Script" path="res://TileMapGenerator.cs" id="6_ee2ii"]
+
+[node name="World" type="Node2D"]
+y_sort_enabled = true
+position = Vector2(-1, 0)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("3_4f6d4")
+MoveSpeed = 400.0
+
+[node name="TileMapController" type="Node2D" parent="."]
+y_sort_enabled = true
+script = ExtResource("1_luie1")
+_heightMap = ExtResource("3_f1de7")
+_totalLayers = 8
+_smoothingIterations = 1
+_tileSet = ExtResource("2_htakq")
+mouseFollowTexture = ExtResource("5_eqyv0")
+
+[node name="TileMapGenerator" type="Node2D" parent="TileMapController"]
+script = ExtResource("6_ee2ii")

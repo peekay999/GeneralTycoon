@@ -10,6 +10,8 @@ public static class TileMapUtil
 		public static Vector2I tile_corner_NE = new Vector2I(2, 1);
 		public static Vector2I tile_corner_SE = new Vector2I(0, 2);
 		public static Vector2I tile_corner_SW = new Vector2I(2, 2);
+		public static Vector2I tile_corner_NW_SE = new Vector2I(1, 4);
+		public static Vector2I tile_corner_SW_NE = new Vector2I(2, 4);
 
 		public static Vector2I tile_slope_N = new Vector2I(1, 1);
 		public static Vector2I tile_slope_E = new Vector2I(3, 1);
@@ -26,7 +28,7 @@ public static class TileMapUtil
 		public static Vector2I tile_corner_double_SE = new Vector2I(3, 4);
 		public static Vector2I tile_corner_double_SW = new Vector2I(1, 0);
 
+		public static Vector2I tile_debug_0 = new Vector2I(0, 4);
 		public static Vector2I tile_debug_1 = new Vector2I(1, 4);
 		public static Vector2I tile_debug_2 = new Vector2I(2, 4);
-		public static Vector2I tile_debug_3 = new Vector2I(0, 4);
 }

@@ -189,7 +189,7 @@ public partial class TileMapGenerator : Node2D
 
 							break;
 						case 5:
-							nextLayer.SetCell(cell, 0, TileMapUtil.tile_base);
+							nextLayer.SetCell(cell, 0, TileMapUtil.tile_corner_NW_SE);
 							break;
 						case 6:
 							nextLayer.SetCell(cell, 0, TileMapUtil.tile_slope_E);
@@ -233,7 +233,7 @@ public partial class TileMapGenerator : Node2D
 							nextLayer.SetCell(cell, 0, TileMapUtil.tile_slope_W);
 							break;
 						case 10:
-							nextLayer.SetCell(cell, 0, TileMapUtil.tile_base);
+							nextLayer.SetCell(cell, 0, TileMapUtil.tile_corner_SW_NE);
 							break;
 						case 11:
 							nextLayer.SetCell(cell, 0, TileMapUtil.tile_corner_high_NW);
@@ -257,47 +257,6 @@ public partial class TileMapGenerator : Node2D
 
 		}
 		UpdateCurrentLayerTiles(tileMapLayers);
-	}
-
-	private void UpdateCurrentLayerTiles(List<TileMapLayer> tileMapLayers)
-	{
-		for (int i = 0; i < tileMapLayers.Count - 1; i++)
-		{
-			TileMapLayer currentLayer = tileMapLayers[i];
-			TileMapLayer nextLayer = tileMapLayers[i + 1];
-
-			foreach (Vector2I cell in currentLayer.GetUsedCells())
-			{
-				if (nextLayer.GetCellSourceId(cell) != -1)
-				{
-					currentLayer.SetCell(cell, 0, TileMapUtil.tile_base);
-				}
-				if (nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_NE || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_NW || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_SE || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_SW)
-				{
-					currentLayer.SetCell(cell, 0, TileMapUtil.tile_debug_1);
-				}
-			}
-		}
-		for (int i = 0; i < tileMapLayers.Count - 1; i++)
-		{
-			TileMapLayer currentLayer = tileMapLayers[i];
-			TileMapLayer nextLayer = tileMapLayers[i + 1];
-
-			foreach (Vector2I cell in currentLayer.GetUsedCells())
-			{
-				if (currentLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_debug_1)
-				{
-					if (nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_debug_1)
-					{
-						currentLayer.SetCell(cell, 0, TileMapUtil.tile_base);
-					}
-					else
-					{
-						currentLayer.SetCell(cell, 0, TileMapUtil.tile_debug_2);
-					}
-				}
-			}
-		}
 	}
 
 	private int CalculateTileIndex(TileMapLayer nextLayer, Vector2I cell)
@@ -370,5 +329,46 @@ public partial class TileMapGenerator : Node2D
 	private bool IsTileMatch(TileMapLayer layer, Vector2I cell, HashSet<Vector2I> tileTypes)
 	{
 		return tileTypes.Contains(layer.GetCellAtlasCoords(cell));
+	}
+
+		private void UpdateCurrentLayerTiles(List<TileMapLayer> tileMapLayers)
+	{
+		for (int i = 0; i < tileMapLayers.Count - 1; i++)
+		{
+			TileMapLayer currentLayer = tileMapLayers[i];
+			TileMapLayer nextLayer = tileMapLayers[i + 1];
+
+			foreach (Vector2I cell in currentLayer.GetUsedCells())
+			{
+				if (nextLayer.GetCellSourceId(cell) != -1)
+				{
+					currentLayer.SetCell(cell, 0, TileMapUtil.tile_base);
+				}
+				if (nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_NE || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_NW || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_SE || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_SW)
+				{
+					currentLayer.SetCell(cell, 0, TileMapUtil.tile_debug_0);
+				}
+			}
+		}
+		for (int i = 0; i < tileMapLayers.Count - 1; i++)
+		{
+			TileMapLayer currentLayer = tileMapLayers[i];
+			TileMapLayer nextLayer = tileMapLayers[i + 1];
+
+			foreach (Vector2I cell in currentLayer.GetUsedCells())
+			{
+				if (currentLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_debug_0)
+				{
+					if (nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_debug_0)
+					{
+						currentLayer.SetCell(cell, 0, TileMapUtil.tile_base);
+					}
+					else
+					{
+						currentLayer.SetCell(cell, 0, TileMapUtil.tile_none);
+					}
+				}
+			}
+		}
 	}
 }

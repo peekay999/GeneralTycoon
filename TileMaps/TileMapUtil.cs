@@ -1,5 +1,8 @@
 using Godot;
 
+/// <summary>
+/// Utility class for tile maps.
+/// </summary>
 public static class TileMapUtil
 {
     	/* ATLAS coords of tiles */
@@ -33,6 +36,9 @@ public static class TileMapUtil
 		public static Vector2I tile_debug_2 = new Vector2I(2, 4);
 }
 
+/// <summary>
+/// Enum for the different tile sets. Used to determine which tile set to use for a given tile.
+/// </summary>
 public enum TileSets
 {
 	BASE = 0,

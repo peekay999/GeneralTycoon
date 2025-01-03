@@ -1,6 +1,8 @@
 using Godot;
 
-
+/// <summary>
+/// Controller class for all units on the map. Handles unit creation and positioning.
+/// </summary>
 public partial class UnitController : Node2D
 {
 	private Node2D world;
@@ -30,6 +32,10 @@ public partial class UnitController : Node2D
 		}
 	}
 
+	/// <summary>
+	/// Adds a unit to the unit layer at the specified cell.
+	/// </summary>
+	/// <param name="cell">The cell on the map where the unit should be placed.</param>
 	public void AddUnit(Vector2I cell)
 	{
 		PackedScene unitScene = (PackedScene)ResourceLoader.Load("res://Units/British_troops_01.tscn");
@@ -38,6 +44,12 @@ public partial class UnitController : Node2D
 		unit.MoveToTile(cell);
 	}
 
+	/// <summary>
+	/// Updates the position of a unit on the map. This is called when a unit moves. Used to update the unit layer for unit position tracking and updating a unit's real transform position.
+	/// </summary>
+	/// <param name="unit">The unit that has moved.</param>
+	/// <param name="cellFrom">The cell which the unit is moving from.</param>
+	/// <param name="cellTo">The cell which the unit is moving to.</param>
 	public void UpdateUnitPosition(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
 		_unitLayer.SetCell(cellFrom, -1);

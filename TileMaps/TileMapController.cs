@@ -2,6 +2,9 @@ using Godot;
 using Godot.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Controller for the tile map. Handles the generation of the map by way of the TileMapGenerator and the selection of tiles.
+/// </summary>
 public partial class TileMapController : Node2D
 {
 	[Export]
@@ -54,6 +57,10 @@ public partial class TileMapController : Node2D
 		GetSelectionTile();
 	}
 
+	/// <summary>
+	/// Gets the tile at the current mouse position.
+	/// </summary>
+	/// <returns>The tile at the mouse's current position</returns>
 	public Vector2I GetSelectionTile()
 	{
 		for (int i = tileMapLayers.Count - 1; i > 0; i--)
@@ -87,11 +94,17 @@ public partial class TileMapController : Node2D
 		return new Vector2I(-1, -1);
 	}
 
+	/// <summary>
+	/// Gets the tile set used by the tile map.
+	/// </summary>
 	public TileSet GetTileSet()
 	{
 		return _tileSet;
 	}
 
+	/// <summary>
+	/// Generates the tile map using the height map and tile set. Adds the layers to the scene.
+	/// </summary>
 	private void GenerateTileMap()
 	{
 		tileMapLayers = _tileMapGenerator.GenerateTileMapLayers(_heightMap, _totalLayers, _tileSet);
@@ -102,6 +115,9 @@ public partial class TileMapController : Node2D
 		_tileMapGenerator.CalculateEdgePieces(tileMapLayers, _smoothingIterations);
 	}
 
+	/// <summary>
+	/// Gets the top layer at the specified cell.
+	/// </summary>
 	public TileMapLayer GetTopLayer(Vector2I cell)
 	{
 		for (int i = tileMapLayers.Count; i > 0; i--)

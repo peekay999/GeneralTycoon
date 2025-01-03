@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://bufsvbmaiccdc"]
+[gd_scene load_steps=8 format=3 uid="uid://bufsvbmaiccdc"]
 
-[ext_resource type="Script" path="res://TileMapController.cs" id="1_luie1"]
+[ext_resource type="Script" path="res://TileMaps/TileMapController.cs" id="1_luie1"]
 [ext_resource type="TileSet" uid="uid://cl6fplrb3wsga" path="res://TileMaps/Tilesets/Base.tres" id="2_htakq"]
 [ext_resource type="Script" path="res://Util/CameraController.cs" id="3_4f6d4"]
 [ext_resource type="Texture2D" uid="uid://dimbf0et8fm5f" path="res://height.png" id="3_f1de7"]
-[ext_resource type="Script" path="res://TileMapGenerator.cs" id="6_ee2ii"]
-[ext_resource type="Script" path="res://UnitController.cs" id="6_fvck0"]
+[ext_resource type="Script" path="res://TileMaps/TileMapGenerator.cs" id="6_ee2ii"]
+[ext_resource type="Script" path="res://Units/UnitController.cs" id="6_fvck0"]
+[ext_resource type="Script" path="res://TileMaps/Pathfinder.cs" id="6_qqpqo"]
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -25,6 +26,9 @@ _tileSet = ExtResource("2_htakq")
 
 [node name="TileMapGenerator" type="Node2D" parent="TileMapController"]
 script = ExtResource("6_ee2ii")
+
+[node name="Pathfinder" type="Node2D" parent="TileMapController"]
+script = ExtResource("6_qqpqo")
 
 [node name="UnitController" type="Node2D" parent="."]
 y_sort_enabled = true

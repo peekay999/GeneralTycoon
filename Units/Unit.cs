@@ -8,12 +8,13 @@ public partial class Unit : Node2D
 	private Node2D _sprites;
 	private List<AnimatedSprite2D> animatedSprite2Ds;
 	private UnitController _parentController;
-	private FrameDirection _frameDirection;
+	private Direction _frameDirection;
+	public List<Vector2I> path;
 	public override void _Ready()
 	{
 		_Ysort = GetNode<Node2D>("YSort");
 		_sprites = _Ysort.GetNode<Node2D>("Sprites");
-		_frameDirection = FrameDirection.NORTH_EAST;
+		_frameDirection = Direction.NORTH_EAST;
 		_parentController = GetParent<UnitController>();
 		animatedSprite2Ds = new List<AnimatedSprite2D>();
 		foreach (Node node in _sprites.GetChildren())
@@ -38,12 +39,10 @@ public partial class Unit : Node2D
 		if (tileMapLayer.GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
 		{
 			Position = new Vector2(Position.X, Position.Y + 8);
-			// _Ysort.Position = new Vector2(_Ysort.Position.X, _Ysort.Position.Y + 8);
-			// _sprites.Position = new Vector2(_sprites.Position.X, _sprites.Position.Y - 8);
 		}
 	}
 
-	public void MoveToTile(Vector2I cell, TileMapLayer tileMapLayer, FrameDirection direction)
+	public void MoveToTile(Vector2I cell, TileMapLayer tileMapLayer, Direction direction)
 	{
 		MoveToTile(cell, tileMapLayer);
 		UpdateDirection(direction);
@@ -55,7 +54,7 @@ public partial class Unit : Node2D
 		_sprites.Position = new Vector2(_sprites.Position.X, _sprites.Position.Y + value);
 	}
 
-	public void UpdateDirection(FrameDirection direction)
+	public void UpdateDirection(Direction direction)
 	{
 		foreach (AnimatedSprite2D sprite in animatedSprite2Ds)
 		{

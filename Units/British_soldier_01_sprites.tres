@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" load_steps=26 format=3 uid="uid://b6oichcsp8ehn"]
 
-[ext_resource type="Texture2D" uid="uid://isx5ncjviet8" path="res://sprites/Character/soldiers_british_01.png" id="1_ljglf"]
+[ext_resource type="Texture2D" uid="uid://isx5ncjviet8" path="res://Sprites/Character/soldiers_british_01.png" id="1_ljglf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cwgdm"]
 atlas = ExtResource("1_ljglf")

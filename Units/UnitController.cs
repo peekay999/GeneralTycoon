@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class UnitController : Node2D
 {
@@ -32,13 +33,26 @@ public partial class UnitController : Node2D
 
 	public void AddUnit(Vector2I cell)
 	{
+
 		PackedScene unitScene = (PackedScene)ResourceLoader.Load("res://Units/British_troops_01.tscn");
 		Unit unit = (Unit)unitScene.Instantiate();
 		AddChild(unit);
-		MoveToTile(unit, cell, FrameDirection.NORTH);
+		MoveToTile(unit, cell, Direction.NORTH);
 	}
 
-	public void MoveToTile(Unit unit, Vector2I cell, FrameDirection direction)
+	public void MoveOnPath(Unit unit)
+	{
+		if (unit.path.Count > 0)
+		{
+			Vector2I cell = unit.path[0];
+			unit.path.RemoveAt(0);
+			TileMapLayer tileMapLayer = _tileMapController.GetTopLayer(cell);
+			Vector2I unitPosition = tileMapLayer.LocalToMap(unit.Position);
+			MoveToTile(unit, cell, UnitUtil.DetermineDirection(unitPosition, cell));
+		}
+	}
+
+	public void MoveToTile(Unit unit, Vector2I cell, Direction direction)
 	{
 		TileMapLayer layer = _tileMapController.GetTopLayer(cell);
 		unit.MoveToTile(cell, layer, direction);

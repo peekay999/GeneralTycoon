@@ -58,7 +58,7 @@ public partial class TileMapController : Node2D
 	{
 		for (int i = tileMapLayers.Count - 1; i > 0; i--)
 		{
-			Vector2 mousePos = GetGlobalMousePosition() - tileMapLayers[i - 1].Position;
+			Vector2 mousePos = GetGlobalMousePosition() - tileMapLayers[i - 1].Position + new Vector2(0, 2);
 			_selectionLayer.Clear();
 			Vector2I cell = tileMapLayers[i].LocalToMap(ToLocal(mousePos));
 
@@ -85,6 +85,11 @@ public partial class TileMapController : Node2D
 			}
 		}
 		return new Vector2I(-1, -1);
+	}
+
+	public TileSet GetTileSet()
+	{
+		return _tileSet;
 	}
 
 	private void GenerateTileMap()

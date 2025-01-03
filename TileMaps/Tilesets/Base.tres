@@ -1,7 +1,8 @@
-[gd_resource type="TileSet" load_steps=6 format=3 uid="uid://cl6fplrb3wsga"]
+[gd_resource type="TileSet" load_steps=8 format=3 uid="uid://cl6fplrb3wsga"]
 
 [ext_resource type="Texture2D" uid="uid://cwxb3c31qlv05" path="res://Sprites/Terrain/grass_01.png" id="1_ejbjh"]
 [ext_resource type="Texture2D" uid="uid://diagvsd3k327l" path="res://Sprites/selection_overlay.png" id="2_70idp"]
+[ext_resource type="Texture2D" uid="uid://c8nww0w2lctlg" path="res://Sprites/unit_tilemap.png" id="3_8d2er"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kt113"]
 
@@ -118,6 +119,12 @@ texture_region_size = Vector2i(64, 64)
 3:2/0 = 0
 3:2/0/y_sort_origin = 16
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dwwgd"]
+texture = ExtResource("3_8d2er")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+
 [resource]
 tile_shape = 1
 tile_layout = 5
@@ -127,3 +134,4 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_kt113")
 sources/0 = SubResource("TileSetAtlasSource_vajw1")
 sources/1 = SubResource("TileSetAtlasSource_5saws")
+sources/3 = SubResource("TileSetAtlasSource_dwwgd")

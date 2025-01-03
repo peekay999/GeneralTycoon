@@ -32,3 +32,10 @@ public static class TileMapUtil
 		public static Vector2I tile_debug_1 = new Vector2I(1, 4);
 		public static Vector2I tile_debug_2 = new Vector2I(2, 4);
 }
+
+public enum TileSets
+{
+	BASE = 0,
+	SELECTION = 1,
+	UNITS = 2,
+}

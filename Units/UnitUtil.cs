@@ -1,18 +1,7 @@
 using Godot;
-using Godot.NativeInterop;
-using System;
-using System.Runtime.ConstrainedExecution;
 
 public static class UnitUtil
 {
-	public static Vector2[] POLY_BASE = new Vector2[]
-	{
-		new Vector2(0, 0),
-		new Vector2(32, 16),
-		new Vector2(0, 32),
-		new Vector2(-32, 16)
-	}; 
-
 	public static Direction DetermineDirection (Vector2I start, Vector2I end)
 	{
 		Vector2I diff = end - start;

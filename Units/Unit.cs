@@ -10,18 +10,21 @@ public partial class Unit : Node2D
 	private Node2D _Ysort;
 	private Node2D _sprites;
 	private List<AnimatedSprite2D> animatedSprite2Ds;
-	private UnitController _parentController;
+	// private UnitController _parentController;
 	private Direction _frameDirection;
 	private List<Vector2I> path;
 	private UnitType unitType;
 	private Vector2I currentCell;
+
+	[Signal]
+	public delegate void PositionUpdatedEventHandler(Vector2I oldCell, Vector2I newCell);
 
 	public override void _Ready()
 	{
 		_Ysort = GetNode<Node2D>("YSort");
 		_sprites = _Ysort.GetNode<Node2D>("Sprites");
 		_frameDirection = Direction.NORTH_EAST;
-		_parentController = GetParent<UnitController>();
+		// _parentController = GetParent<UnitController>();
 		animatedSprite2Ds = new List<AnimatedSprite2D>();
 		foreach (Node node in _sprites.GetChildren())
 		{
@@ -58,8 +61,20 @@ public partial class Unit : Node2D
 	/// <param name="cell">The target cell to move to.</param>
 	public void MoveToTile(Vector2I cell)
 	{
-		_parentController.UpdateUnitPosition(this, currentCell, cell);
+		// EmitSignal(nameof(PositionUpdated), currentCell, cell);
+		EmitSignal(SignalName.PositionUpdated, currentCell, cell);
 		currentCell = cell;
+	}
+
+	/// <summary>
+	/// Moves the unit to a specific cell and updates its direction. Handles real position and tracking via the parent controller.
+	/// </summary>
+	/// <param name="cell">The target cell to move to.</param>
+	/// <param name="direction">The direction to face after moving.</param>
+	public void MoveToTile(Vector2I cell, Direction direction)
+	{
+		MoveToTile(cell);
+		UpdateDirection(direction);
 	}
 
 	/// <summary>
@@ -72,7 +87,11 @@ public partial class Unit : Node2D
 	public void UpdateRealPosition(Vector2I cell, TileMapLayer tileMapLayer)
 	{
 		Vector2 worldPosition = tileMapLayer.MapToLocal(cell);
+		_Ysort.Position = Vector2.Zero;
+		_sprites.Position = Vector2.Zero;
 		Position = worldPosition + tileMapLayer.Position;
+		GD.Print("worldPosition: " + worldPosition);
+		GD.Print("tileMapLayer.Position: " + tileMapLayer.Position);
 
 		_Ysort.MoveLocalY(-tileMapLayer.Position.Y);
 		_sprites.MoveLocalY(tileMapLayer.Position.Y);

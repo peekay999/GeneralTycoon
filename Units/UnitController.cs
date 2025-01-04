@@ -8,6 +8,9 @@ public partial class UnitController : Node2D
 	private Node2D world;
 	private TileMapController _tileMapController;
 	private TileMapLayer _unitLayer;
+
+	private Formation debugFormation;
+	private Direction direction;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -30,6 +33,38 @@ public partial class UnitController : Node2D
 				AddUnit(cell);
 			}
 		}
+
+		// if is number 1 key
+		if (@event is InputEventKey key && key.Pressed)
+		{
+			switch(key.Keycode)
+			{
+				case Key.Key1:
+					direction = Direction.NORTH;
+					break;
+				case Key.Key2:
+					direction = Direction.NORTH_EAST;
+					break;
+				case Key.Key3:
+					direction = Direction.EAST;
+					break;
+				case Key.Key4:
+					direction = Direction.SOUTH_EAST;
+					break;
+				case Key.Key5:
+					direction = Direction.SOUTH;
+					break;
+				case Key.Key6:
+					direction = Direction.SOUTH_WEST;
+					break;
+				case Key.Key7:
+					direction = Direction.WEST;
+					break;
+				case Key.Key8:
+					direction = Direction.NORTH_WEST;
+					break;
+			}
+		}
 	}
 
 	/// <summary>
@@ -38,19 +73,23 @@ public partial class UnitController : Node2D
 	/// <param name="cell">The cell on the map where the unit should be placed.</param>
 	public void AddUnit(Vector2I cell)
 	{
-		PackedScene unitScene = (PackedScene)ResourceLoader.Load("res://Units/British_troops_01.tscn");
-		Unit unit = (Unit)unitScene.Instantiate();
-		AddChild(unit);
-		unit.MoveToTile(cell);
+		if (debugFormation == null)
+		{
+			debugFormation = new Formation();
+			AddChild(debugFormation);
+		}
+		// Formation formation = new Formation();
+		// AddChild(formation);
+		debugFormation.MoveToTile(cell, direction);
 	}
 
 	/// <summary>
-	/// Updates the position of a unit on the map. This is called when a unit moves. Used to update the unit layer for unit position tracking and updating a unit's real transform position.
+	/// Signal in. Handles the updating of a unit's position on the map.
 	/// </summary>
-	/// <param name="unit">The unit that has moved.</param>
-	/// <param name="cellFrom">The cell which the unit is moving from.</param>
-	/// <param name="cellTo">The cell which the unit is moving to.</param>
-	public void UpdateUnitPosition(Unit unit, Vector2I cellFrom, Vector2I cellTo)
+	/// <param name="unit"></param>
+	/// <param name="cellFrom"></param>
+	/// <param name="cellTo"></param>
+	public void _on_unit_position_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
 		_unitLayer.SetCell(cellFrom, -1);
 		_unitLayer.SetCell(cellTo, (int)TileSets.UNITS, unit.GetUnitTypeAtlasCoords());

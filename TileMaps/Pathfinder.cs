@@ -9,7 +9,7 @@ public partial class Pathfinder : Node2D
 	public override void _Ready()
 	{
 		ZIndex = 1;
-		_tileMapController = GetParent<TileMapController>();
+		_tileMapController = GetParent<World>().GetNode<TileMapController>("TileMapController");
 	}
 
 	public List<Vector2I> FindPath(Vector2I start, Vector2I goal)

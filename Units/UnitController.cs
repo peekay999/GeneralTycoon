@@ -133,9 +133,10 @@ public partial class UnitController : Node2D
 		unit.UpdateRealPosition(cellTo, topLayer);
 	}
 
-	public void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo, Direction direction)
+	public async void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo, Direction direction)
 	{
-		List<Vector2I> path = _pathfinder.FindPath(cellFrom, cellTo);
+		List<Vector2I> path = await _pathfinder.FindPathAsync(cellFrom, cellTo);
+		// List<Vector2I> path = _pathfinder.FindPath(cellFrom, cellTo);
 		unit.SetPath(path);
 		unit.UpdateDirection(direction);
 	}

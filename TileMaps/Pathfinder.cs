@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public partial class Pathfinder : Node2D
 {
@@ -12,6 +13,11 @@ public partial class Pathfinder : Node2D
 		ZIndex = 1;
 		_tileMapController = GetParent<World>().GetNode<TileMapController>("TileMapController");
 		_unitController = GetParent<World>().GetNode<UnitController>("UnitController");
+	}
+
+	public async Task<List<Vector2I>> FindPathAsync(Vector2I start, Vector2I goal)
+	{
+		return await Task.Run(() => FindPath(start, goal));
 	}
 
 	public List<Vector2I> FindPath(Vector2I start, Vector2I goal)
@@ -174,36 +180,4 @@ public partial class Pathfinder : Node2D
 		}
 		return true;
 	}
-
-	// public Vector2I FindAlternateCell(Vector2I cell)
-	// {
-	// 	Vector2I NW = new Vector2I(cell.X - 1, cell.Y - 1);
-	// 	Vector2I N = new Vector2I(cell.X, cell.Y - 1);
-	// 	Vector2I NE = new Vector2I(cell.X + 1, cell.Y - 1);
-	// 	Vector2I E = new Vector2I(cell.X + 1, cell.Y);
-	// 	Vector2I SE = new Vector2I(cell.X + 1, cell.Y + 1);
-	// 	Vector2I S = new Vector2I(cell.X, cell.Y + 1);
-	// 	Vector2I SW = new Vector2I(cell.X - 1, cell.Y + 1);
-	// 	Vector2I W = new Vector2I(cell.X - 1, cell.Y);
-	// 	List<Vector2I> neighbors = new List<Vector2I>
-	// 	{
-	// 		NW,
-	// 		N,
-	// 		NE,
-	// 		E,
-	// 		SE,
-	// 		S,
-	// 		SW,
-	// 		W
-	// 	};
-
-	// 	foreach (Vector2I neighbor in neighbors)
-	// 	{
-	// 		if (IsWalkable(cell, neighbor) && _unitController.GetUnitLayer().GetCellSourceId(neighbor) == -1)
-	// 		{
-	// 			return neighbor;
-	// 		}
-	// 	}
-	// 	return new Vector2I(-1, -1);
-	// }
 }

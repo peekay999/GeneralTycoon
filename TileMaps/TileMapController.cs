@@ -1,6 +1,7 @@
-using Godot;
-using Godot.Collections;
+
+using System.Collections;
 using System.Collections.Generic;
+using Godot;
 
 /// <summary>
 /// Controller for the tile map. Handles the generation of the map by way of the TileMapGenerator and the selection of tiles.
@@ -22,6 +23,9 @@ public partial class TileMapController : Node2D
 	private Node2D _world;
 	private Pathfinder _pathfinder;
 	private UnitController _unitController;
+	private Dictionary<Vector2I, int> _tileHeights;
+	private Dictionary<Vector2I, TileMapLayer> _topLayers;
+	private readonly object _tileHeightsLock = new object();
 
 	public override void _Ready()
 	{
@@ -48,6 +52,7 @@ public partial class TileMapController : Node2D
 		else
 		{
 			GenerateTileMap();
+
 		}
 
 	}
@@ -113,12 +118,40 @@ public partial class TileMapController : Node2D
 			AddChild(layer);
 		}
 		_tileMapGenerator.CalculateEdgePieces(tileMapLayers, _smoothingIterations);
+
+		lock (_tileHeightsLock)
+		{
+			_tileHeights = new Dictionary<Vector2I, int>();
+			_topLayers = new Dictionary<Vector2I, TileMapLayer>();
+			List<Vector2I> usedCells = new List<Vector2I>(tileMapLayers[0].GetUsedCells());
+			foreach (Vector2I cell in usedCells)
+			{
+				TileMapLayer topLayer = DetermineTopLayer(cell);
+				_tileHeights.Add(cell, (int)topLayer.Position.Y);
+				_topLayers.Add(cell, topLayer);
+			}
+
+
+		}
+	}
+
+	/// <summary>
+	/// Gets the top layer at the specified cell.
+	/// </summary>
+	public int GetTopLayerOffset(Vector2I cell)
+	{
+		return _tileHeights.ContainsKey(cell) ? _tileHeights[cell] : 0;
 	}
 
 	/// <summary>
 	/// Gets the top layer at the specified cell.
 	/// </summary>
 	public TileMapLayer GetTopLayer(Vector2I cell)
+	{
+		return _topLayers.ContainsKey(cell) ? _topLayers[cell] : null;
+	}
+
+	private TileMapLayer DetermineTopLayer(Vector2I cell)
 	{
 		for (int i = tileMapLayers.Count - 1; i > 0; i--)
 		{

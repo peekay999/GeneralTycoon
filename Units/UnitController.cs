@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
 
 /// <summary>
@@ -121,10 +122,10 @@ public partial class UnitController : Node2D
 	{
 		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
 
-		if (_unitLayer.GetCellSourceId(cellTo) != -1)
-		{
-			// unit.
-		}
+		// if (_unitLayer.GetCellSourceId(cellTo) != -1)
+		// {
+		// 	// unit.
+		// }
 
 		_unitLayer.SetCell(cellFrom, 2, new Vector2I(-1, -1));
 		_unitLayer.SetCell(cellTo, 2, UnitType.BLUE_INF.AtlasCoords);

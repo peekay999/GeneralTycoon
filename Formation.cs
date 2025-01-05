@@ -21,13 +21,12 @@ public partial class Formation : Node2D
 			Unit unit = (Unit)unitScene.Instantiate();
 			_units.Add(unit);
 		}
-		int X = 0;
 		foreach (Unit unit in _units)
 		{
 			AddChild(unit);
-			unit.Name = "Unit " + X;
-			X++;
+			unit.Name = "Unit " + _units.IndexOf(unit);
 			unit.MoveAttempted += (currentCell, targetCell) => _parentController._on_unit_move_attempted(unit, currentCell, targetCell);
+
 			unit.WaypointUpdated += (currentCell, targetCell, direction) => _parentController._on_unit_waypoint_updated(unit, currentCell, targetCell, direction);
 		}
 
@@ -138,7 +137,6 @@ public partial class Formation : Node2D
 		for (int i = 0; i < _units.Count; i++)
 		{
 			targetCells[i] = cellForPlacement + right * i;
-			// _units[i].MoveToTile(cellForPlacement + right * i, direction);
 		}
 
 		return targetCells;

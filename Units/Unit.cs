@@ -137,8 +137,8 @@ public partial class Unit : Node2D
 		if (path != null && path.Count > 0)
 		{
 			Vector2I nextCell = path[0];
-			path.RemoveAt(0);
 			MoveToTile(nextCell);
+			SetWaypoint(target, Direction.CONTINUE);
 		}
 	}
 

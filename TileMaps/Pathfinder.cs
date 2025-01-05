@@ -112,13 +112,16 @@ public partial class Pathfinder : Node2D
 
 	private int GetMovementCost(Vector2I from, Vector2I to)
 	{
-		int movementCost = 0;
+		int movementCost;
 		// Check if the movement is diagonal
 		if (from.X != to.X && from.Y != to.Y)
 		{
 			movementCost = 14; // Diagonal movement cost (1.4 * 10)
 		}
-		movementCost = 10; // Horizontal or vertical movement cost (1 * 10)
+		else
+		{
+			movementCost = 10; // Horizontal or vertical movement cost (1 * 10)
+		}
 
 		if (_unitController.GetUnitLayer().GetCellSourceId(to) != -1)
 		{
@@ -168,7 +171,7 @@ public partial class Pathfinder : Node2D
 		{
 			return false;
 		}
-		if (_tileMapController.GetTopLayer(cellFrom).Position.Y > _tileMapController.GetTopLayer(cellTo).Position.Y + 16 || _tileMapController.GetTopLayer(cellFrom).Position.Y < _tileMapController.GetTopLayer(cellTo).Position.Y - 16)
+		if (_tileMapController.GetTopLayerOffset(cellTo) - _tileMapController.GetTopLayerOffset(cellFrom) > 16 || _tileMapController.GetTopLayerOffset(cellTo) - _tileMapController.GetTopLayerOffset(cellFrom) < -16)
 		{
 			return false;
 		}

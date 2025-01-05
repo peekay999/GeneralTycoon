@@ -9,7 +9,6 @@ public partial class Unit : Node2D
 	private Node2D _Ysort;
 	private Node2D _sprites;
 	private List<AnimatedSprite2D> animatedSprite2Ds;
-	// private UnitController _parentController;
 	private Direction _frameDirection;
 	private List<Vector2I> path;
 	private UnitType unitType;
@@ -137,16 +136,9 @@ public partial class Unit : Node2D
 		if (path != null && path.Count > 0)
 		{
 			Vector2I nextCell = path[0];
+			path.RemoveAt(0);
 			MoveToTile(nextCell);
 			SetWaypoint(target, Direction.CONTINUE);
-		}
-	}
-
-	public void AvoidObstacle()
-	{
-		if (path.Count > 0)
-		{
-			SetWaypoint(path[path.Count - 1], Direction.CONTINUE);
 		}
 	}
 }

@@ -35,8 +35,6 @@ public partial class Pathfinder : Node2D
 
 			if (current == goal)
 			{
-
-				QueueRedraw();
 				List<Vector2I> path = ReconstructPath(cameFrom, current);
 				path.RemoveAt(0);
 				return path;
@@ -122,10 +120,9 @@ public partial class Pathfinder : Node2D
 		{
 			movementCost = 10; // Horizontal or vertical movement cost (1 * 10)
 		}
-
 		if (_unitController.GetUnitLayer().GetCellSourceId(to) != -1)
 		{
-			movementCost += 24;
+			movementCost += 100;
 		}
 
 		return movementCost;

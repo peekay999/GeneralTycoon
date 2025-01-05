@@ -39,7 +39,7 @@ public partial class Pathfinder : Node2D
 
 			foreach (Vector2I neighbour in GetNeighbours(current))
 			{
-				if (closedList.Contains(neighbour) || !IsWalkable(neighbour))
+				if (closedList.Contains(neighbour) || !IsWalkable(current, neighbour))
 				{
 					continue;
 				}
@@ -117,9 +117,22 @@ public partial class Pathfinder : Node2D
 		return neighbors;
 	}
 
-	private bool IsWalkable(Vector2I cell)
+	private bool IsWalkable(Vector2I cellTo)
 	{
-		if (_tileMapController.GetTopLayer(cell) == null || _tileMapController.GetTopLayer(cell).GetCellSourceId(cell) == -1)
+		if (_tileMapController.GetTopLayer(cellTo) == null || _tileMapController.GetTopLayer(cellTo).GetCellSourceId(cellTo) == -1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	private bool IsWalkable(Vector2I cellFrom, Vector2I cellTo)
+	{
+		if(!IsWalkable(cellTo))
+		{
+			return false;
+		}
+		if (_tileMapController.GetTopLayer(cellFrom).Position.Y > _tileMapController.GetTopLayer(cellTo).Position.Y + 16 || _tileMapController.GetTopLayer(cellFrom).Position.Y < _tileMapController.GetTopLayer(cellTo).Position.Y - 16)
 		{
 			return false;
 		}

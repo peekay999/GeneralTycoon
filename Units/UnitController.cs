@@ -83,6 +83,11 @@ public partial class UnitController : Node2D
 		}
 	}
 
+	public TileMapLayer GetUnitLayer()
+	{
+		return _unitLayer;
+	}
+
 	/// <summary>
 	/// Adds a unit to the unit layer at the specified cell.
 	/// </summary>
@@ -112,11 +117,19 @@ public partial class UnitController : Node2D
 		}
 	}
 
-	public void _on_unit_move_attempted(Unit unit, Vector2I cellTo)
+	public void _on_unit_move_attempted(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
 		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
+
+		if (_unitLayer.GetCellSourceId(cellTo) != -1)
+		{
+			// unit.
+		}
+
+		_unitLayer.SetCell(cellFrom, 2, new Vector2I(-1, -1));
+		_unitLayer.SetCell(cellTo, 2, UnitType.BLUE_INF.AtlasCoords);
+
 		unit.UpdateRealPosition(cellTo, topLayer);
-		GD.Print(topLayer.Position.Y);
 	}
 
 	public void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo, Direction direction)

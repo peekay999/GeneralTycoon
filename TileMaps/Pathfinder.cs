@@ -5,11 +5,13 @@ using System.Collections.Generic;
 public partial class Pathfinder : Node2D
 {
 	private TileMapController _tileMapController;
+	private UnitController _unitController;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		ZIndex = 1;
 		_tileMapController = GetParent<World>().GetNode<TileMapController>("TileMapController");
+		_unitController = GetParent<World>().GetNode<UnitController>("UnitController");
 	}
 
 	public List<Vector2I> FindPath(Vector2I start, Vector2I goal)
@@ -24,14 +26,20 @@ public partial class Pathfinder : Node2D
 		gScore[start] = 0;
 		fScore[start] = Heuristic(start, goal);
 
+		Vector2I closestPoint = start;
+		int closestPointHeuristic = Heuristic(start, goal);
+
 		while (openList.Count > 0)
 		{
 			Vector2I current = GetLowestFScore(openList, fScore);
+
 			if (current == goal)
 			{
 
 				QueueRedraw();
-				return ReconstructPath(cameFrom, current);
+				List<Vector2I> path = ReconstructPath(cameFrom, current);
+				path.RemoveAt(0);
+				return path;
 			}
 
 			openList.Remove(current);
@@ -44,7 +52,7 @@ public partial class Pathfinder : Node2D
 					continue;
 				}
 
-				int tentativeGScore = gScore[current] + 1;
+				int tentativeGScore = gScore[current] + GetMovementCost(current, neighbour);
 				if (!openList.Contains(neighbour))
 				{
 					openList.Add(neighbour);
@@ -56,10 +64,20 @@ public partial class Pathfinder : Node2D
 				cameFrom[neighbour] = current;
 				gScore[neighbour] = tentativeGScore;
 				fScore[neighbour] = gScore[neighbour] + Heuristic(neighbour, goal);
+
+				// Update closest point if this neighbour is closer to the goal
+				int neighbourHeuristic = Heuristic(neighbour, goal);
+				if (neighbourHeuristic < closestPointHeuristic)
+				{
+					closestPoint = neighbour;
+					closestPointHeuristic = neighbourHeuristic;
+				}
 			}
 		}
 
-		return null;
+		List<Vector2I> closestPath = ReconstructPath(cameFrom, closestPoint);
+		closestPath.RemoveAt(0);
+		return closestPath;
 	}
 
 	private int Heuristic(Vector2I start, Vector2I goal)
@@ -90,6 +108,24 @@ public partial class Pathfinder : Node2D
 		}
 		path.Reverse();
 		return path;
+	}
+
+	private int GetMovementCost(Vector2I from, Vector2I to)
+	{
+		int movementCost = 0;
+		// Check if the movement is diagonal
+		if (from.X != to.X && from.Y != to.Y)
+		{
+			movementCost = 14; // Diagonal movement cost (1.4 * 10)
+		}
+		movementCost = 10; // Horizontal or vertical movement cost (1 * 10)
+
+		if (_unitController.GetUnitLayer().GetCellSourceId(to) != -1)
+		{
+			movementCost += 24;
+		}
+
+		return movementCost;
 	}
 
 	private List<Vector2I> GetNeighbours(Vector2I cell)
@@ -128,7 +164,7 @@ public partial class Pathfinder : Node2D
 
 	private bool IsWalkable(Vector2I cellFrom, Vector2I cellTo)
 	{
-		if(!IsWalkable(cellTo))
+		if (!IsWalkable(cellTo))
 		{
 			return false;
 		}
@@ -138,4 +174,36 @@ public partial class Pathfinder : Node2D
 		}
 		return true;
 	}
+
+	// public Vector2I FindAlternateCell(Vector2I cell)
+	// {
+	// 	Vector2I NW = new Vector2I(cell.X - 1, cell.Y - 1);
+	// 	Vector2I N = new Vector2I(cell.X, cell.Y - 1);
+	// 	Vector2I NE = new Vector2I(cell.X + 1, cell.Y - 1);
+	// 	Vector2I E = new Vector2I(cell.X + 1, cell.Y);
+	// 	Vector2I SE = new Vector2I(cell.X + 1, cell.Y + 1);
+	// 	Vector2I S = new Vector2I(cell.X, cell.Y + 1);
+	// 	Vector2I SW = new Vector2I(cell.X - 1, cell.Y + 1);
+	// 	Vector2I W = new Vector2I(cell.X - 1, cell.Y);
+	// 	List<Vector2I> neighbors = new List<Vector2I>
+	// 	{
+	// 		NW,
+	// 		N,
+	// 		NE,
+	// 		E,
+	// 		SE,
+	// 		S,
+	// 		SW,
+	// 		W
+	// 	};
+
+	// 	foreach (Vector2I neighbor in neighbors)
+	// 	{
+	// 		if (IsWalkable(cell, neighbor) && _unitController.GetUnitLayer().GetCellSourceId(neighbor) == -1)
+	// 		{
+	// 			return neighbor;
+	// 		}
+	// 	}
+	// 	return new Vector2I(-1, -1);
+	// }
 }

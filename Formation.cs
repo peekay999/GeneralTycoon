@@ -27,7 +27,7 @@ public partial class Formation : Node2D
 			AddChild(unit);
 			unit.Name = "Unit " + X;
 			X++;
-			unit.MoveAttempted += (unit, targetCell) => _parentController._on_unit_move_attempted(unit, targetCell);
+			unit.MoveAttempted += (currentCell, targetCell) => _parentController._on_unit_move_attempted(unit, currentCell, targetCell);
 			unit.WaypointUpdated += (currentCell, targetCell, direction) => _parentController._on_unit_waypoint_updated(unit, currentCell, targetCell, direction);
 		}
 

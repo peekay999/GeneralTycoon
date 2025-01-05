@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -15,9 +14,10 @@ public partial class Unit : Node2D
 	private List<Vector2I> path;
 	private UnitType unitType;
 	private Vector2I currentCell = new Vector2I(-1, -1);
+	private Vector2I target = new Vector2I(-1, -1);
 
 	[Signal]
-	public delegate void MoveAttemptedEventHandler(Unit unit, Vector2I targetCell);
+	public delegate void MoveAttemptedEventHandler(Vector2I currentCell, Vector2I targetCell);
 	[Signal]
 	public delegate void WaypointUpdatedEventHandler(Vector2I currentCell, Vector2I targetCell, Direction direction);
 
@@ -64,7 +64,7 @@ public partial class Unit : Node2D
 	/// <param name="direction">The direction to face after moving.</param>
 	public void MoveToTile(Vector2I cellTo)
 	{
-		EmitSignal(SignalName.MoveAttempted, this, cellTo);
+		EmitSignal(SignalName.MoveAttempted, currentCell, cellTo);
 	}
 
 	/// <summary>
@@ -76,7 +76,6 @@ public partial class Unit : Node2D
 	/// <param name="tileMapLayer">The tile map layer to use for position calculations.</param>
 	public void UpdateRealPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
 	{
-		
 		UpdateDirection(UnitUtil.DetermineDirection(currentCell, cellTo));
 		currentCell = cellTo;
 
@@ -125,17 +124,29 @@ public partial class Unit : Node2D
 
 	public void SetPath(List<Vector2I> path)
 	{
-		this.path = path;
-		// QueueRedraw();
+		if (path != null && path.Count > 0)
+		{
+			this.path = path;
+			target = path[path.Count - 1];
+			// QueueRedraw();
+		}
 	}
 
 	public void MoveOnPath()
 	{
-		if (path.Count > 0)
+		if (path != null && path.Count > 0)
 		{
 			Vector2I nextCell = path[0];
 			path.RemoveAt(0);
 			MoveToTile(nextCell);
+		}
+	}
+
+	public void AvoidObstacle()
+	{
+		if (path.Count > 0)
+		{
+			SetWaypoint(path[path.Count - 1], Direction.CONTINUE);
 		}
 	}
 }

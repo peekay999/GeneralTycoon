@@ -29,7 +29,7 @@ public partial class Pathfinder : Node2D
 			Vector2I current = GetLowestFScore(openList, fScore);
 			if (current == goal)
 			{
-				
+
 				QueueRedraw();
 				return ReconstructPath(cameFrom, current);
 			}
@@ -119,7 +119,7 @@ public partial class Pathfinder : Node2D
 
 	private bool IsWalkable(Vector2I cell)
 	{
-		if (_tileMapController.GetTopLayer(cell) == null)
+		if (_tileMapController.GetTopLayer(cell) == null || _tileMapController.GetTopLayer(cell).GetCellSourceId(cell) == -1)
 		{
 			return false;
 		}

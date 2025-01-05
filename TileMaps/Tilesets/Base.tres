@@ -134,4 +134,4 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_kt113")
 sources/0 = SubResource("TileSetAtlasSource_vajw1")
 sources/1 = SubResource("TileSetAtlasSource_5saws")
-sources/3 = SubResource("TileSetAtlasSource_dwwgd")
+sources/2 = SubResource("TileSetAtlasSource_dwwgd")

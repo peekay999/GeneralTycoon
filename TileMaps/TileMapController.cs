@@ -27,7 +27,7 @@ public partial class TileMapController : Node2D
 	{
 		YSortEnabled = true;
 		_world = GetParent<Node2D>();
-		_pathfinder = GetNode<Pathfinder>("Pathfinder");
+		_pathfinder = _world.GetNode<Pathfinder>("Pathfinder");
 		_unitController = _world.GetNode<UnitController>("UnitController");
 
 		tileMapLayers = new List<TileMapLayer>();
@@ -120,7 +120,7 @@ public partial class TileMapController : Node2D
 	/// </summary>
 	public TileMapLayer GetTopLayer(Vector2I cell)
 	{
-		for (int i = tileMapLayers.Count; i > 0; i--)
+		for (int i = tileMapLayers.Count - 1; i > 0; i--)
 		{
 			if (tileMapLayers[i - 1].GetCellSourceId(cell) != -1)
 			{

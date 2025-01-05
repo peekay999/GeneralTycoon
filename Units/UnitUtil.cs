@@ -59,6 +59,12 @@ public static class UnitUtil
 /// </summary>
 public enum Direction
 {
+
+	/// <summary>
+	/// Used for when moving in the same direction as before.
+	/// </summary>
+	
+	CONTINUE = -1, 
 	NORTH_WEST = 0,
 	WEST = 1,
 	SOUTH_WEST = 2,

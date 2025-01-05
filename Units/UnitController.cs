@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -7,7 +8,9 @@ public partial class UnitController : Node2D
 {
 	private Node2D world;
 	private TileMapController _tileMapController;
+	private Pathfinder _pathfinder;
 	private TileMapLayer _unitLayer;
+	private HashSet<Formation> formations;
 
 	private Formation debugFormation;
 	private Direction direction;
@@ -16,10 +19,15 @@ public partial class UnitController : Node2D
 	{
 		world = GetParent<Node2D>();
 		_tileMapController = world.GetNode<TileMapController>("TileMapController");
+		_pathfinder = world.GetNode<Pathfinder>("Pathfinder");
+
 		_unitLayer = new TileMapLayer();
+		_unitLayer.ZIndex = 2;
 		_unitLayer.Name = "UnitLayer";
 		_unitLayer.TileSet = _tileMapController.GetTileSet();
 		AddChild(_unitLayer);
+
+		formations = new HashSet<Formation>();
 	}
 
 	public override void _Input(InputEvent @event)
@@ -30,14 +38,13 @@ public partial class UnitController : Node2D
 			Vector2I cell = _tileMapController.GetSelectionTile();
 			if (cell.X != -1 && cell.Y != -1)
 			{
-				AddUnit(cell);
+				AddFormation(cell);
 			}
 		}
 
-		// if is number 1 key
 		if (@event is InputEventKey key && key.Pressed)
 		{
-			switch(key.Keycode)
+			switch (key.Keycode)
 			{
 				case Key.Key1:
 					direction = Direction.NORTH;
@@ -63,6 +70,15 @@ public partial class UnitController : Node2D
 				case Key.Key8:
 					direction = Direction.NORTH_WEST;
 					break;
+				case Key.C:
+					MoveFormationsOnPath();
+					break;
+				case Key.Space:
+					if (debugFormation != null)
+					{
+						debugFormation.SetWaypoint(_tileMapController.GetSelectionTile(), direction);
+					}
+					break;
 			}
 		}
 	}
@@ -71,29 +87,42 @@ public partial class UnitController : Node2D
 	/// Adds a unit to the unit layer at the specified cell.
 	/// </summary>
 	/// <param name="cell">The cell on the map where the unit should be placed.</param>
-	public void AddUnit(Vector2I cell)
+	public void AddFormation(Vector2I cell)
 	{
 		if (debugFormation == null)
 		{
 			debugFormation = new Formation();
+			debugFormation.Name = "DebugFormation";
 			AddChild(debugFormation);
+			formations.Add(debugFormation);
 		}
-		// Formation formation = new Formation();
-		// AddChild(formation);
 		debugFormation.MoveToTile(cell, direction);
 	}
 
-	/// <summary>
-	/// Signal in. Handles the updating of a unit's position on the map.
-	/// </summary>
-	/// <param name="unit"></param>
-	/// <param name="cellFrom"></param>
-	/// <param name="cellTo"></param>
-	public void _on_unit_position_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo)
+	public void SetWaypoint(Formation formation, Vector2I cell, Direction direction)
 	{
-		_unitLayer.SetCell(cellFrom, -1);
-		_unitLayer.SetCell(cellTo, (int)TileSets.UNITS, unit.GetUnitTypeAtlasCoords());
+		formation.SetWaypoint(cell, direction);
+	}
 
-		unit.UpdateRealPosition(cellTo, _tileMapController.GetTopLayer(cellTo));
+	public void MoveFormationsOnPath()
+	{
+		foreach (Formation formation in formations)
+		{
+			formation.MoveUnitsOnPath();
+		}
+	}
+
+	public void _on_unit_move_attempted(Unit unit, Vector2I cellTo)
+	{
+		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
+		unit.UpdateRealPosition(cellTo, topLayer);
+		GD.Print(topLayer.Position.Y);
+	}
+
+	public void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo, Direction direction)
+	{
+		List<Vector2I> path = _pathfinder.FindPath(cellFrom, cellTo);
+		unit.SetPath(path);
+		unit.UpdateDirection(direction);
 	}
 }

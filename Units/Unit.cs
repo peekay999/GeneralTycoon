@@ -12,9 +12,8 @@ public partial class Unit : Node2D
 	private Direction _frameDirection;
 	private List<Vector2I> path;
 	private UnitType unitType;
-	private Vector2I currentCell = new Vector2I(-1, -1);
-	private Vector2I target = new Vector2I(-1, -1);
-
+	private Vector2I currentCell = Vector2I.Zero;
+	private Vector2I target = Vector2I.Zero;
 	private Area2D _area2D;
 
 	[Signal]

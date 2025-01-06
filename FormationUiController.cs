@@ -1,7 +1,6 @@
 using Godot;
-using System;
 
-public partial class FormationUiController : Node2D
+public partial class FormationUiController : Node2D, IDirectionAnchor
 {
 	private Control _advance;
 	private Control _rightWheel;
@@ -10,6 +9,10 @@ public partial class FormationUiController : Node2D
 	private Control _blockLeft;
 	private Control _blockRight;
 	private Formation _selectedFormation;
+
+	public Direction _direction { get; private set; }
+	public LocalisedDirections _localisedDirections { get; private set; }
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -19,8 +22,10 @@ public partial class FormationUiController : Node2D
 		_retire = GetNode<Control>("Retire");
 		_blockLeft = GetNode<Control>("BlockLeft");
 		_blockRight = GetNode<Control>("BlockRight");
+		_direction = Direction.CONTINUE;
 
 		Visible = false;
+		UpdateDirection(_direction);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,5 +37,12 @@ public partial class FormationUiController : Node2D
 	{
 		_selectedFormation = formation;
 		Visible = true;
+		Position = formation.GetCurrentPosition();
+	}
+
+	public void UpdateDirection(Direction direction)
+	{
+		_direction = direction;
+		_localisedDirections = Pathfinder.GetLocalisedDirections(_direction);
 	}
 }

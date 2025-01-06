@@ -176,4 +176,131 @@ public partial class Pathfinder : Node2D
 		}
 		return true;
 	}
+
+	public static LocalisedDirections GetLocalisedDirections(Direction facingDirection)
+	{
+		Vector2I front = Vector2I.Zero;
+		Vector2I back = Vector2I.Zero;
+		Vector2I left = Vector2I.Zero;
+		Vector2I right = Vector2I.Zero;
+		Vector2I front_left = Vector2I.Zero;
+		Vector2I front_right = Vector2I.Zero;
+		Vector2I back_left = Vector2I.Zero;
+		Vector2I back_right = Vector2I.Zero;
+
+		switch (facingDirection)
+		{
+			case Direction.NORTH:
+				left = new Vector2I(-1, 0);
+				right = new Vector2I(1, 0);
+				front = new Vector2I(0, -1);
+				back = new Vector2I(0, 1);
+				front_left = new Vector2I(-1, -1);
+				front_right = new Vector2I(1, -1);
+				back_left = new Vector2I(-1, 1);
+				back_right = new Vector2I(1, 1);
+
+				break;
+			case Direction.NORTH_EAST:
+				left = new Vector2I(-1, -1);
+				right = new Vector2I(1, 1);
+				front = new Vector2I(1, -1);
+				back = new Vector2I(-1, 1);
+				front_left = new Vector2I(0, -1);
+				front_right = new Vector2I(1, 0);
+				back_left = new Vector2I(-1, 0);
+				back_right = new Vector2I(0, 1);
+
+				break;
+			case Direction.EAST:
+				left = new Vector2I(0, -1);
+				right = new Vector2I(0, 1);
+				front = new Vector2I(1, 0);
+				back = new Vector2I(-1, 0);
+				front_left = new Vector2I(-1, 1);
+				front_right = new Vector2I(1, 1);
+				back_left = new Vector2I(-1, -1);
+				back_right = new Vector2I(-1, 1);
+
+				break;
+			case Direction.SOUTH_EAST:
+				left = new Vector2I(1, -1);
+				right = new Vector2I(-1, 1);
+				front = new Vector2I(1, 1);
+				back = new Vector2I(-1, -1);
+				front_left = new Vector2I(1, 0);
+				front_right = new Vector2I(0, 1);
+				back_left = new Vector2I(0, -1);
+				back_right = new Vector2I(-1, 0);
+
+				break;
+			case Direction.SOUTH:
+				left = new Vector2I(1, 0);
+				right = new Vector2I(-1, 0);
+				front = new Vector2I(0, 1);
+				back = new Vector2I(0, -1);
+				front_left = new Vector2I(1, 1);
+				front_right = new Vector2I(-1, 1);
+				back_left = new Vector2I(1, -1);
+				back_right = new Vector2I(-1, -1);
+				break;
+			case Direction.SOUTH_WEST:
+				left = new Vector2I(1, 1);
+				right = new Vector2I(-1, -1);
+				front = new Vector2I(-1, 1);
+				back = new Vector2I(1, -1);
+				front_left = new Vector2I(0, 1);
+				front_right = new Vector2I(-1, 0);
+				back_left = new Vector2I(1, 0);
+				back_right = new Vector2I(0, -1);
+				break;
+			case Direction.WEST:
+				left = new Vector2I(0, 1);
+				right = new Vector2I(0, -1);
+				front = new Vector2I(-1, 0);
+				back = new Vector2I(1, 0);
+				front_left = new Vector2I(1, 1);
+				front_right = new Vector2I(-1, -1);
+				back_left = new Vector2I(1, 1);
+				back_right = new Vector2I(1, -1);
+				break;
+			case Direction.NORTH_WEST:
+				left = new Vector2I(-1, 1);
+				right = new Vector2I(1, -1);
+				front = new Vector2I(-1, -1);
+				back = new Vector2I(1, 1);
+				front_left = new Vector2I(-1, 0);
+				front_right = new Vector2I(0, -1);
+				back_left = new Vector2I(0, 1);
+				back_right = new Vector2I(1, 0);
+				break;
+				case Direction.CONTINUE:
+				break;
+		}
+		return new LocalisedDirections(front, back, left, right, front_left, front_right, back_left, back_right);
+	}
+
+}
+public class LocalisedDirections
+{
+	public Vector2I forward;
+	public Vector2I back;
+	public Vector2I left;
+	public Vector2I right;
+	public Vector2I front_left;
+	public Vector2I front_right;
+	public Vector2I back_left;
+	public Vector2I back_right;
+
+	public LocalisedDirections(Vector2I forward, Vector2I back, Vector2I left, Vector2I right, Vector2I front_left, Vector2I front_right, Vector2I back_left, Vector2I back_right)
+	{
+		this.forward = forward;
+		this.back = back;
+		this.left = left;
+		this.right = right;
+		this.front_left = front_left;
+		this.front_right = front_right;
+		this.back_left = back_left;
+		this.back_right = back_right;
+	}
 }

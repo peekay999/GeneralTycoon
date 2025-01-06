@@ -28,6 +28,7 @@ public partial class UnitController : Node2D
 		_selectionLayer = _world.GetNode<SelectionLayer>("SelectionLayer");
 		_formationUiController = GetNode<FormationUiController>("FormationUiController");
 		_selectedFormation = null;
+		_units = new Dictionary<Unit, Vector2I>();
 
 		_unitLayer = new TileMapLayer();
 		_unitLayer.ZIndex = -1;
@@ -172,7 +173,7 @@ public partial class UnitController : Node2D
 	{
 		GD.Print("Formation " + formation.Name + " selected");
 		_selectedFormation = formation;
-		_formationUiController.SetFormation(formation);	
+		_formationUiController.SetFormation(formation);
 	}
 
 	public void SetWaypoint(Formation formation, Vector2I cell, Direction direction)

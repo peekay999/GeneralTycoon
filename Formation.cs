@@ -21,6 +21,8 @@ public partial class Formation : Node2D
 	private Vector2I back_left = Vector2I.Zero;
 	private Vector2I back_right = Vector2I.Zero;
 
+	[Signal]
+	public delegate void FormationSelectedEventHandler();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -40,8 +42,8 @@ public partial class Formation : Node2D
 			unit.Name = "Unit " + _units.IndexOf(unit);
 			unit.MoveAttempted += (currentCell, targetCell) => _parentController._on_unit_move_attempted(unit, currentCell, targetCell);
 			unit.WaypointUpdated += (currentCell, targetCell, direction) => _parentController._on_unit_waypoint_updated(unit, currentCell, targetCell, direction);
-			unit.MouseEntered += () => _on_mouse_entered(unit);
-			unit.MouseExited += () => _on_mouse_exited(unit);
+			unit.MouseEntered += () => _on_mouse_entered();
+			unit.MouseExited += () => _on_mouse_exited();
 		}
 
 		commander = _units[0];
@@ -56,17 +58,18 @@ public partial class Formation : Node2D
 
 	public override void _Input(InputEvent @event)
 	{
-		if (_hoverStatus.isHovered == true)
+		if (_hoverStatus.isHovered == true && _isSelected == false)
 		{
 			if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
 			{
-				SelectUnit();
+				SelectFormation(this);
+				_hoverStatus = (0, false);
 			}
 		}
 	}
 
 
-	private void _on_mouse_entered(Unit unit)
+	private void _on_mouse_entered()
 	{
 		_hoverStatus.hoverCount++;
 		if (_hoverStatus.hoverCount > 0)
@@ -75,7 +78,7 @@ public partial class Formation : Node2D
 			Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
 		}
 	}
-	private void _on_mouse_exited(Unit unit)
+	private void _on_mouse_exited()
 	{
 		_hoverStatus.hoverCount--;
 		if (_hoverStatus.hoverCount <= 0)
@@ -86,10 +89,10 @@ public partial class Formation : Node2D
 	}
 
 
-	private void SelectUnit()
+	private static void SelectFormation(Formation formation)
 	{
-		_isSelected = true;
-		GD.Print("Formation " + Name + " selected");
+		formation._isSelected = true;
+		formation.EmitSignal("FormationSelected");
 	}
 
 	public void PivotRight()

@@ -27,4 +27,10 @@ public partial class FormationUiController : Node2D
 	public override void _Process(double delta)
 	{
 	}
+
+	public void SetFormation(Formation formation)
+	{
+		_selectedFormation = formation;
+		Visible = true;
+	}
 }

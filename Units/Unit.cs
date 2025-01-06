@@ -82,7 +82,7 @@ public partial class Unit : Node2D
 	/// </summary>
 	/// <param name="cellTo">The target cell to move to.</param>
 	/// <param name="tileMapLayer">The tile map layer to use for position calculations.</param>
-	public void UpdateRealPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
+	public void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
 	{
 		UpdateDirection(UnitUtil.DetermineDirection(currentCell, cellTo));
 		currentCell = cellTo;

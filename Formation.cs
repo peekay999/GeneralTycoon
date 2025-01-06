@@ -8,8 +8,7 @@ public partial class Formation : Node2D
 	private List<Unit> _units;
 	private Unit commander;
 	private UnitController _parentController;
-
-	private int _hoveredUnitsCount = 0;
+	private (int hoverCount, bool isHovered) _hoverStatus = (0, false);
 	private bool _isSelected = false;
 
 	private Vector2I left = Vector2I.Zero;
@@ -57,7 +56,7 @@ public partial class Formation : Node2D
 
 	public override void _Input(InputEvent @event)
 	{
-		if (_hoveredUnitsCount > 0)
+		if (_hoverStatus.isHovered == true)
 		{
 			if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
 			{
@@ -69,11 +68,21 @@ public partial class Formation : Node2D
 
 	private void _on_mouse_entered(Unit unit)
 	{
-		_hoveredUnitsCount++;
+		_hoverStatus.hoverCount++;
+		if (_hoverStatus.hoverCount > 0)
+		{
+			_hoverStatus.isHovered = true;
+			Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
+		}
 	}
 	private void _on_mouse_exited(Unit unit)
 	{
-		_hoveredUnitsCount--;
+		_hoverStatus.hoverCount--;
+		if (_hoverStatus.hoverCount <= 0)
+		{
+			_hoverStatus.isHovered = false;
+			Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
+		}
 	}
 
 

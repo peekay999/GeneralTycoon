@@ -15,16 +15,25 @@ public partial class Unit : Node2D
 	private Vector2I currentCell = new Vector2I(-1, -1);
 	private Vector2I target = new Vector2I(-1, -1);
 
+	private Area2D _area2D;
+
 	[Signal]
 	public delegate void MoveAttemptedEventHandler(Vector2I currentCell, Vector2I targetCell);
 	[Signal]
 	public delegate void WaypointUpdatedEventHandler(Vector2I currentCell, Vector2I targetCell, Direction direction);
+	[Signal]
+	public delegate void MouseEnteredEventHandler();
+	[Signal]
+	public delegate void MouseExitedEventHandler();
 
 	public override void _Ready()
 	{
 		_Ysort = GetNode<Node2D>("YSort");
 		_sprites = _Ysort.GetNode<Node2D>("Sprites");
 		_frameDirection = Direction.NORTH_EAST;
+		_area2D = GetNode<Area2D>("Area2D");
+		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
+		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
 		// _parentController = GetParent<UnitController>();
 		animatedSprite2Ds = new List<AnimatedSprite2D>();
 		foreach (Node node in _sprites.GetChildren())
@@ -77,6 +86,11 @@ public partial class Unit : Node2D
 	{
 		UpdateDirection(UnitUtil.DetermineDirection(currentCell, cellTo));
 		currentCell = cellTo;
+
+		if (tileMapLayer == null)
+		{
+			return;
+		}
 
 		Vector2 worldPosition = tileMapLayer.MapToLocal(cellTo);
 		_Ysort.Position = Vector2.Zero;

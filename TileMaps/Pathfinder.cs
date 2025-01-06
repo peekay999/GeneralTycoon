@@ -126,10 +126,6 @@ public partial class Pathfinder : Node2D
 		{
 			movementCost = 10; // Horizontal or vertical movement cost (1 * 10)
 		}
-		if (_unitController.GetUnitLayer().GetCellSourceId(to) != -1)
-		{
-			movementCost += 100;
-		}
 
 		return movementCost;
 	}

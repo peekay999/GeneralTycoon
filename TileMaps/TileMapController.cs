@@ -19,7 +19,6 @@ public partial class TileMapController : Node2D
 
 	private TileMapGenerator _tileMapGenerator;
 	private List<TileMapLayer> tileMapLayers;
-	private TileMapLayer _selectionLayer;
 	private Node2D _world;
 	private Pathfinder _pathfinder;
 	private UnitController _unitController;
@@ -35,12 +34,6 @@ public partial class TileMapController : Node2D
 		_unitController = _world.GetNode<UnitController>("UnitController");
 
 		tileMapLayers = new List<TileMapLayer>();
-		_selectionLayer = new TileMapLayer();
-		_selectionLayer.Name = "SelectionLayer";
-		_selectionLayer.TileSet = _tileSet;
-		_selectionLayer.TextureFilter = TextureFilterEnum.Nearest;
-		AddChild(_selectionLayer);
-		_selectionLayer.ZIndex = 1;
 
 		_tileMapGenerator = GetChild<TileMapGenerator>(0);
 
@@ -59,44 +52,11 @@ public partial class TileMapController : Node2D
 
 	public override void _Process(double delta)
 	{
-		GetSelectionTile();
 	}
 
-	/// <summary>
-	/// Gets the tile at the current mouse position.
-	/// </summary>
-	/// <returns>The tile at the mouse's current position</returns>
-	public Vector2I GetSelectionTile()
+	public List<TileMapLayer> GetTileMapLayers()
 	{
-		for (int i = tileMapLayers.Count - 1; i > 0; i--)
-		{
-			Vector2 mousePos = GetGlobalMousePosition() - tileMapLayers[i - 1].Position + new Vector2(0, 2);
-			_selectionLayer.Clear();
-			Vector2I cell = tileMapLayers[i].LocalToMap(ToLocal(mousePos));
-
-			int layer = i - 1;
-			if (tileMapLayers[layer].GetCellSourceId(cell) != -1 && (tileMapLayers[layer].GetCellAtlasCoords(cell) != TileMapUtil.tile_corner_double_SE))
-			{
-				// check the layer above for a tile
-				while (i < _totalLayers)
-				{
-					if (tileMapLayers[i].GetCellSourceId(cell) != -1)
-					{
-						layer = i;
-					}
-					i++;
-				}
-
-				_selectionLayer.Position = tileMapLayers[layer].Position;
-				_selectionLayer.ZIndex = tileMapLayers[layer].ZIndex;
-				_selectionLayer.YSortEnabled = true;
-				_selectionLayer.YSortOrigin = tileMapLayers[layer].YSortOrigin + 1;
-				Vector2I cellAtlasCoords = tileMapLayers[layer].GetCellAtlasCoords(cell);
-				_selectionLayer.SetCell(cell, 1, cellAtlasCoords);
-				return cell;
-			}
-		}
-		return new Vector2I(-1, -1);
+		return tileMapLayers;
 	}
 
 	/// <summary>

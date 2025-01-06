@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bufsvbmaiccdc"]
+[gd_scene load_steps=17 format=3 uid="uid://bufsvbmaiccdc"]
 
 [ext_resource type="Script" path="res://TileMaps/TileMapController.cs" id="1_luie1"]
 [ext_resource type="Script" path="res://World.cs" id="1_ux6xs"]
@@ -8,6 +8,20 @@
 [ext_resource type="Script" path="res://TileMaps/TileMapGenerator.cs" id="6_ee2ii"]
 [ext_resource type="Script" path="res://Units/UnitController.cs" id="6_fvck0"]
 [ext_resource type="Script" path="res://TileMaps/Pathfinder.cs" id="6_qqpqo"]
+[ext_resource type="Script" path="res://SelectionLayer.cs" id="7_noex6"]
+[ext_resource type="Script" path="res://FormationUiController.cs" id="8_2eqc8"]
+[ext_resource type="Theme" uid="uid://ccj8jituat0aw" path="res://UI_formationControl_theme_button.tres" id="9_3gf4e"]
+[ext_resource type="Texture2D" uid="uid://junn4wtjo6jx" path="res://Sprites/UI/UI_formation_control_highlight/UI_formation_control_highlgiht_E.png" id="9_pb56b"]
+[ext_resource type="Texture2D" uid="uid://dj5lx3km7clbf" path="res://Sprites/UI/UI_formation_control/UI_formation_control_E.png" id="10_kmttu"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eg7qk"]
+texture = ExtResource("9_pb56b")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q3nem"]
+texture = ExtResource("10_kmttu")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8dj2a"]
+texture = ExtResource("10_kmttu")
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -17,6 +31,9 @@ script = ExtResource("1_ux6xs")
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("3_4f6d4")
 MoveSpeed = 400.0
+
+[node name="SelectionLayer" type="TileMapLayer" parent="."]
+script = ExtResource("7_noex6")
 
 [node name="TileMapController" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -32,6 +49,153 @@ script = ExtResource("6_ee2ii")
 [node name="UnitController" type="Node2D" parent="."]
 y_sort_enabled = true
 script = ExtResource("6_fvck0")
+
+[node name="FormationUiController" type="Node2D" parent="UnitController"]
+script = ExtResource("8_2eqc8")
+
+[node name="Advance" type="Control" parent="UnitController/FormationUiController"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Button" type="Button" parent="UnitController/FormationUiController/Advance"]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_3gf4e")
+theme_override_styles/hover = SubResource("StyleBoxTexture_eg7qk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_q3nem")
+theme_override_styles/normal = SubResource("StyleBoxTexture_8dj2a")
+
+[node name="RightWheel" type="Control" parent="UnitController/FormationUiController"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Button" type="Button" parent="UnitController/FormationUiController/RightWheel"]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_3gf4e")
+theme_override_styles/hover = SubResource("StyleBoxTexture_eg7qk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_q3nem")
+theme_override_styles/normal = SubResource("StyleBoxTexture_8dj2a")
+
+[node name="LeftWheel" type="Control" parent="UnitController/FormationUiController"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Button" type="Button" parent="UnitController/FormationUiController/LeftWheel"]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_3gf4e")
+theme_override_styles/hover = SubResource("StyleBoxTexture_eg7qk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_q3nem")
+theme_override_styles/normal = SubResource("StyleBoxTexture_8dj2a")
+
+[node name="Retire" type="Control" parent="UnitController/FormationUiController"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Button" type="Button" parent="UnitController/FormationUiController/Retire"]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_3gf4e")
+theme_override_styles/hover = SubResource("StyleBoxTexture_eg7qk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_q3nem")
+theme_override_styles/normal = SubResource("StyleBoxTexture_8dj2a")
+
+[node name="BlockLeft" type="Control" parent="UnitController/FormationUiController"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Button" type="Button" parent="UnitController/FormationUiController/BlockLeft"]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_3gf4e")
+theme_override_styles/hover = SubResource("StyleBoxTexture_eg7qk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_q3nem")
+theme_override_styles/normal = SubResource("StyleBoxTexture_8dj2a")
+
+[node name="BlockRight" type="Control" parent="UnitController/FormationUiController"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Button" type="Button" parent="UnitController/FormationUiController/BlockRight"]
+z_index = 1
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_3gf4e")
+theme_override_styles/hover = SubResource("StyleBoxTexture_eg7qk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_q3nem")
+theme_override_styles/normal = SubResource("StyleBoxTexture_8dj2a")
 
 [node name="Pathfinder" type="Node2D" parent="."]
 position = Vector2(0, 1)

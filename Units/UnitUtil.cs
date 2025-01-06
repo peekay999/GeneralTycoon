@@ -51,6 +51,56 @@ public static class UnitUtil
 		}
 		return Direction.NORTH;
 	}
+
+	public static Direction GetClockwiseDirection(Direction direction)
+	{
+		switch (direction)
+		{
+			case Direction.NORTH:
+				return Direction.NORTH_EAST;
+			case Direction.NORTH_EAST:
+				return Direction.EAST;
+			case Direction.EAST:
+				return Direction.SOUTH_EAST;
+			case Direction.SOUTH_EAST:
+				return Direction.SOUTH;
+			case Direction.SOUTH:
+				return Direction.SOUTH_WEST;
+			case Direction.SOUTH_WEST:
+				return Direction.WEST;
+			case Direction.WEST:
+				return Direction.NORTH_WEST;
+			case Direction.NORTH_WEST:
+				return Direction.NORTH;
+			default:
+				return Direction.NORTH;
+		}
+	}
+
+	public static Direction GetAntiClockwiseDirection(Direction direction)
+	{
+		switch (direction)
+		{
+			case Direction.NORTH:
+				return Direction.NORTH_WEST;
+			case Direction.NORTH_WEST:
+				return Direction.WEST;
+			case Direction.WEST:
+				return Direction.SOUTH_WEST;
+			case Direction.SOUTH_WEST:
+				return Direction.SOUTH;
+			case Direction.SOUTH:
+				return Direction.SOUTH_EAST;
+			case Direction.SOUTH_EAST:
+				return Direction.EAST;
+			case Direction.EAST:
+				return Direction.NORTH_EAST;
+			case Direction.NORTH_EAST:
+				return Direction.NORTH;
+			default:
+				return Direction.NORTH;
+		}
+	}
 }
 
 

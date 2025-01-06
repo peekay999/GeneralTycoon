@@ -54,9 +54,9 @@ animation = &"walk"
 frame = 7
 
 [node name="Area2D" type="Area2D" parent="."]
-z_as_relative = false
+position = Vector2(0, -16)
+collision_layer = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
 z_as_relative = false
-position = Vector2(0, -16)
-polygon = PackedVector2Array(0, 0, 32, 16, 0, 32, -32, 16)
+polygon = PackedVector2Array(-32, -16, 0, -32, 32, -16, 32, 16, 0, 32, -32, 16)

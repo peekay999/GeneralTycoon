@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://diagvsd3k327l"
-path="res://.godot/imported/selection_overlay.png-1bcfacad5a4558db1ef19ee73afd263a.ctex"
+uid="uid://druo2wvtrvv6"
+path="res://.godot/imported/UI_formation_control_highlgiht6.png-7aaae37c0d19216d876215df2b9b4c0c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/selection_overlay.png"
-dest_files=["res://.godot/imported/selection_overlay.png-1bcfacad5a4558db1ef19ee73afd263a.ctex"]
+source_file="res://Sprites/UI/UI_formation_control_highlight/UI_formation_control_highlgiht6.png"
+dest_files=["res://.godot/imported/UI_formation_control_highlgiht6.png-7aaae37c0d19216d876215df2b9b4c0c.ctex"]
 
 [params]
 

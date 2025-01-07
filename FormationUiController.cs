@@ -2,12 +2,12 @@ using Godot;
 
 public partial class FormationUiController : Node2D, IDirectionAnchor
 {
-	private Control _advance;
-	private Control _rightWheel;
-	private Control _leftWheel;
-	private Control _retire;
-	private Control _blockLeft;
-	private Control _blockRight;
+	private Node2D _advance;
+	private Node2D _rightWheel;
+	private Node2D _leftWheel;
+	private Node2D _retire;
+	private Node2D _blockLeft;
+	private Node2D _blockRight;
 	private Formation _selectedFormation;
 
 	public Direction _direction { get; private set; }
@@ -16,12 +16,10 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_advance = GetNode<Control>("Advance");
-		_rightWheel = GetNode<Control>("RightWheel");
-		_leftWheel = GetNode<Control>("LeftWheel");
-		_retire = GetNode<Control>("Retire");
-		_blockLeft = GetNode<Control>("BlockLeft");
-		_blockRight = GetNode<Control>("BlockRight");
+		_advance = GetNode<Node2D>("Advance");
+		_rightWheel = GetNode<Node2D>("RightWheel");
+		_leftWheel = GetNode<Node2D>("LeftWheel");
+		_retire = GetNode<Node2D>("Retire");
 		_direction = Direction.CONTINUE;
 
 		Visible = false;

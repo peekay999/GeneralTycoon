@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a unit in the game.
 /// </summary>
-public partial class Unit : Node2D
+public partial class Unit : TileMover
 {
 	private Node2D _Ysort;
 	private Node2D _sprites;
@@ -12,14 +12,12 @@ public partial class Unit : Node2D
 	private Direction _frameDirection;
 	private List<Vector2I> path;
 	private UnitType unitType;
-	private Vector2I currentCell = Vector2I.Zero;
-	private Vector2I target = Vector2I.Zero;
+
 	private Area2D _area2D;
 
 	[Signal]
-	public delegate void MoveAttemptedEventHandler(Vector2I currentCell, Vector2I targetCell);
-	[Signal]
 	public delegate void WaypointUpdatedEventHandler(Vector2I currentCell, Vector2I targetCell, Direction direction);
+
 	[Signal]
 	public delegate void MouseEnteredEventHandler();
 	[Signal]
@@ -65,36 +63,21 @@ public partial class Unit : Node2D
 	}
 
 	/// <summary>
-	/// Moves the unit to a specific cell and updates its direction. Handles real position and tracking via the parent controller.
-	/// </summary>
-	/// <param name="cell">The target cell to move to.</param>
-	/// <param name="direction">The direction to face after moving.</param>
-	public void MoveToTile(Vector2I cellTo)
-	{
-		EmitSignal(SignalName.MoveAttempted, currentCell, cellTo);
-	}
-
-	/// <summary>
 	/// Adjusts the unit's real transform position and offsets for Y-sorting.
 	/// Used by the UnitController to update the unit's position.
 	/// For simply moving a unit around the map, use MoveToTile.
 	/// </summary>
 	/// <param name="cellTo">The target cell to move to.</param>
 	/// <param name="tileMapLayer">The tile map layer to use for position calculations.</param>
-	public void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
+	public override void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
 	{
+		base.UpdateTransformPosition(cellTo, tileMapLayer);
+
+
 		UpdateDirection(UnitUtil.DetermineDirection(currentCell, cellTo));
-		currentCell = cellTo;
 
-		if (tileMapLayer == null)
-		{
-			return;
-		}
-
-		Vector2 worldPosition = tileMapLayer.MapToLocal(cellTo);
 		_Ysort.Position = Vector2.Zero;
 		_sprites.Position = Vector2.Zero;
-		Position = worldPosition + tileMapLayer.Position;
 		// GD.Print(tileMapLayer.Position.Y);
 
 		_Ysort.MoveLocalY(-tileMapLayer.Position.Y);
@@ -129,11 +112,6 @@ public partial class Unit : Node2D
 		_frameDirection = direction;
 	}
 
-	public void SetWaypoint(Vector2I targetCell, Direction direction)
-	{
-		EmitSignal(SignalName.WaypointUpdated, currentCell, targetCell, (int)direction);
-	}
-
 	public void SetPath(List<Vector2I> path)
 	{
 		if (path != null && path.Count > 0)
@@ -153,5 +131,10 @@ public partial class Unit : Node2D
 			MoveToTile(nextCell);
 			SetWaypoint(target, Direction.CONTINUE);
 		}
+	}
+
+	public void SetWaypoint(Vector2I targetCell, Direction direction)
+	{
+		EmitSignal(SignalName.WaypointUpdated, currentCell, targetCell, (int)direction);
 	}
 }

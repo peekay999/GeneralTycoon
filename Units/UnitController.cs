@@ -200,14 +200,15 @@ public partial class UnitController : Node2D
 		_units[unit] = targetCell;
 	}
 
+	public void _on_tileMover_move_attempted(TileMover unit, Vector2I cellTo)
+	{
+		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
+		unit.UpdateTransformPosition(cellTo, topLayer);
+	}
+
 	public void _on_unit_move_attempted(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
 		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
-
-		// if (_unitLayer.GetCellSourceId(cellTo) != -1)
-		// {
-		// 	// unit.
-		// }
 
 		UpdateUnitPosition(unit, cellFrom, cellTo);
 		unit.UpdateTransformPosition(cellTo, topLayer);

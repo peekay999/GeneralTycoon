@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bufsvbmaiccdc"]
+[gd_scene load_steps=13 format=3 uid="uid://bufsvbmaiccdc"]
 
 [ext_resource type="Script" path="res://TileMaps/TileMapController.cs" id="1_luie1"]
 [ext_resource type="Script" path="res://World.cs" id="1_ux6xs"]
@@ -6,52 +6,12 @@
 [ext_resource type="Script" path="res://Util/CameraController.cs" id="3_4f6d4"]
 [ext_resource type="Texture2D" uid="uid://dimbf0et8fm5f" path="res://height.png" id="3_f1de7"]
 [ext_resource type="Script" path="res://TileMaps/TileMapGenerator.cs" id="6_ee2ii"]
-[ext_resource type="Script" path="res://Units/UnitController.cs" id="6_fvck0"]
+[ext_resource type="Script" path="res://Units/FormationController.cs" id="6_fvck0"]
 [ext_resource type="Script" path="res://TileMaps/Pathfinder.cs" id="6_qqpqo"]
 [ext_resource type="Script" path="res://SelectionLayer.cs" id="7_noex6"]
 [ext_resource type="Script" path="res://FormationUiController.cs" id="8_2eqc8"]
 [ext_resource type="Theme" uid="uid://ccj8jituat0aw" path="res://UI_formationControl_theme_button.tres" id="9_3gf4e"]
-[ext_resource type="Script" path="res://TileMover.cs" id="10_kkd7q"]
-[ext_resource type="Texture2D" uid="uid://c1bmcdan2gtp4" path="res://Sprites/UI/UI_formation_control_highlight/UI_formation_control_highlgiht3.png" id="11_ig1dw"]
-[ext_resource type="Texture2D" uid="uid://bwujh0kinjmwj" path="res://Sprites/UI/UI_formation_control_highlight/UI_formation_control_highlgiht15.png" id="11_rb2nh"]
-[ext_resource type="Texture2D" uid="uid://0bg6qc8inpp1" path="res://Sprites/UI/UI_formation_control_highlight/UI_formation_control_highlgiht2.png" id="12_ev7ml"]
-[ext_resource type="Texture2D" uid="uid://bgqkhlai135i2" path="res://Sprites/UI/UI_formation_control_highlight/UI_formation_control_highlgiht17.png" id="14_megq6"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lgy51"]
-texture = ExtResource("11_rb2nh")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5f54t"]
-texture = ExtResource("11_rb2nh")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6vfwl"]
-texture = ExtResource("11_rb2nh")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eg7qk"]
-texture = ExtResource("11_ig1dw")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q3nem"]
-texture = ExtResource("11_ig1dw")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8dj2a"]
-texture = ExtResource("11_ig1dw")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c47jr"]
-texture = ExtResource("12_ev7ml")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uci6l"]
-texture = ExtResource("12_ev7ml")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jm46u"]
-texture = ExtResource("12_ev7ml")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_780p5"]
-texture = ExtResource("14_megq6")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cuo46"]
-texture = ExtResource("14_megq6")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_obmsa"]
-texture = ExtResource("14_megq6")
+[ext_resource type="Script" path="res://FormationUI.cs" id="10_gabad"]
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -85,8 +45,7 @@ z_index = 1
 script = ExtResource("8_2eqc8")
 
 [node name="Advance" type="Node2D" parent="UnitController/FormationUiController"]
-position = Vector2(55, -48)
-script = ExtResource("10_kkd7q")
+script = ExtResource("10_gabad")
 
 [node name="Button" type="Button" parent="UnitController/FormationUiController/Advance"]
 z_index = 1
@@ -103,12 +62,9 @@ offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("9_3gf4e")
-theme_override_styles/hover = SubResource("StyleBoxTexture_lgy51")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_5f54t")
-theme_override_styles/normal = SubResource("StyleBoxTexture_6vfwl")
 
 [node name="RightWheel" type="Node2D" parent="UnitController/FormationUiController"]
-position = Vector2(124, 2)
+script = ExtResource("10_gabad")
 
 [node name="Button" type="Button" parent="UnitController/FormationUiController/RightWheel"]
 z_index = 1
@@ -125,12 +81,9 @@ offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("9_3gf4e")
-theme_override_styles/hover = SubResource("StyleBoxTexture_eg7qk")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_q3nem")
-theme_override_styles/normal = SubResource("StyleBoxTexture_8dj2a")
 
 [node name="LeftWheel" type="Node2D" parent="UnitController/FormationUiController"]
-position = Vector2(-31, -114)
+script = ExtResource("10_gabad")
 
 [node name="Button" type="Button" parent="UnitController/FormationUiController/LeftWheel"]
 z_index = 1
@@ -147,12 +100,9 @@ offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("9_3gf4e")
-theme_override_styles/hover = SubResource("StyleBoxTexture_c47jr")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_uci6l")
-theme_override_styles/normal = SubResource("StyleBoxTexture_jm46u")
 
 [node name="Retire" type="Node2D" parent="UnitController/FormationUiController"]
-position = Vector2(-70, 28)
+script = ExtResource("10_gabad")
 
 [node name="Button" type="Button" parent="UnitController/FormationUiController/Retire"]
 z_index = 1
@@ -169,9 +119,6 @@ offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("9_3gf4e")
-theme_override_styles/hover = SubResource("StyleBoxTexture_780p5")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_cuo46")
-theme_override_styles/normal = SubResource("StyleBoxTexture_obmsa")
 
 [node name="Pathfinder" type="Node2D" parent="."]
 position = Vector2(0, 1)

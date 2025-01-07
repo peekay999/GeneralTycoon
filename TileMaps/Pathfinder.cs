@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 public partial class Pathfinder : Node2D
 {
 	private TileMapController _tileMapController;
-	private UnitController _unitController;
+	private FormationController _unitController;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		ZIndex = 1;
 		_tileMapController = GetParent<World>().GetNode<TileMapController>("TileMapController");
-		_unitController = GetParent<World>().GetNode<UnitController>("UnitController");
+		_unitController = GetParent<World>().GetNode<FormationController>("UnitController");
 	}
 
 	public async Task<List<Vector2I>> FindPathAsync(Vector2I start, Vector2I goal)

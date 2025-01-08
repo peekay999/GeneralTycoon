@@ -7,7 +7,7 @@ public partial class TileMover : Node2D
 	protected Vector2I target = Vector2I.Zero;
 
 	[Signal]
-	public delegate void MoveAttemptedEventHandler(Vector2I currentCell, Vector2I targetCell);
+	public delegate void UnitMovedEventHandler(Vector2I currentCell, Vector2I targetCell);
 
 
 	// Called when the node enters the scene tree for the first time.
@@ -33,7 +33,7 @@ public partial class TileMover : Node2D
 			return;
 		}
 		UpdateTransformPosition(cellTo, topLayer);
-		EmitSignal(SignalName.MoveAttempted, currentCell, cellTo);
+		EmitSignal(SignalName.UnitMoved, currentCell, cellTo);
 	}
 
 	public virtual void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)

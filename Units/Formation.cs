@@ -7,9 +7,16 @@ public partial class Formation : Node2D, IDirectionAnchor
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
 	private List<Unit> _units;
-	private Unit commander;
+	private Unit _commander;
 	private FormationController _parentController;
 	private (int count, bool isHovered) _hoverStatus = (0, false);
+
+	[Export]
+	public int FormationSize { get; set; }
+	[Export]
+	public PackedScene Commander { get; set; }
+	[Export]
+	public PackedScene Ranks { get; set; }
 
 	[Signal]
 	public delegate void FormationSelectedEventHandler();
@@ -20,24 +27,45 @@ public partial class Formation : Node2D, IDirectionAnchor
 		YSortEnabled = true;
 		_parentController = GetParent<FormationController>();
 		_units = new List<Unit>();
-		for (int i = 0; i < 11; i++)
+
+		for (int i = 0; i < FormationSize; i++)
 		{
-			PackedScene unitScene = (PackedScene)ResourceLoader.Load("res://Units/British_troops_01.tscn");
-			Unit unit = (Unit)unitScene.Instantiate();
-			_units.Add(unit);
-		}
-		foreach (Unit unit in _units)
-		{
+			Unit unit = (Unit)Ranks.Instantiate();
 			AddChild(unit);
+			_units.Add(unit);
 			unit.Name = "Unit " + _units.IndexOf(unit);
 			unit.MoveAttempted += (currentCell, targetCell) => _parentController._on_unit_move_attempted(unit, currentCell, targetCell);
 			unit.WaypointUpdated += (currentCell, targetCell, direction) => _parentController._on_unit_waypoint_updated(unit, currentCell, targetCell, direction);
 			unit.MouseEntered += () => _on_mouse_entered();
 			unit.MouseExited += () => _on_mouse_exited();
 		}
+		Unit commander = (Unit)Commander.Instantiate();
+		AddChild(commander);
+		commander.Name = "Commander";
+		commander.MoveAttempted += (currentCell, targetCell) => _parentController._on_unit_move_attempted(commander, currentCell, targetCell);
+		commander.WaypointUpdated += (currentCell, targetCell, direction) => _parentController._on_unit_waypoint_updated(commander, currentCell, targetCell, direction);
+		commander.MouseEntered += () => _on_mouse_entered();
+		commander.MouseExited += () => _on_mouse_exited();
+		_commander = commander; 
 
-		commander = _units[0];
-		_units.RemoveAt(0);
+		// for (int i = 0; i < 11; i++)
+		// {
+		// 	PackedScene unitScene = (PackedScene)ResourceLoader.Load("res://Units/British/British_troops_01.tscn");
+		// 	Unit unit = (Unit)unitScene.Instantiate();
+		// 	_units.Add(unit);
+		// }
+		// foreach (Unit unit in _units)
+		// {
+		// 	AddChild(unit);
+		// 	unit.Name = "Unit " + _units.IndexOf(unit);
+		// 	unit.MoveAttempted += (currentCell, targetCell) => _parentController._on_unit_move_attempted(unit, currentCell, targetCell);
+		// 	unit.WaypointUpdated += (currentCell, targetCell, direction) => _parentController._on_unit_waypoint_updated(unit, currentCell, targetCell, direction);
+		// 	unit.MouseEntered += () => _on_mouse_entered();
+		// 	unit.MouseExited += () => _on_mouse_exited();
+		// }
+
+		// commander = _units[0];
+		// _units.RemoveAt(0);
 
 		UpdateDirection(Direction.NORTH);
 	}
@@ -46,7 +74,6 @@ public partial class Formation : Node2D, IDirectionAnchor
 	public override void _Process(double delta)
 	{
 	}
-
 
 	public override void _Input(InputEvent @event)
 	{
@@ -60,11 +87,6 @@ public partial class Formation : Node2D, IDirectionAnchor
 			}
 		}
 	}
-
-
-
-
-
 	private static void SelectFormation(Formation formation)
 	{
 		formation.EmitSignal("FormationSelected");
@@ -123,7 +145,7 @@ public partial class Formation : Node2D, IDirectionAnchor
 
 	public Vector2I GetCurrentCell()
 	{
-		return commander.GetCurrentCell();
+		return _commander.GetCurrentCell();
 	}
 
 	public Vector2I GetLeftMarkerCell()
@@ -138,13 +160,13 @@ public partial class Formation : Node2D, IDirectionAnchor
 
 	public Vector2 GetCurrentPosition()
 	{
-		return commander.Position;
+		return _commander.Position;
 	}
 
 	public void SetWaypoint(Vector2I cell, Direction direction)
 	{
 		UpdateDirection(direction);
-		commander.SetWaypoint(cell, direction);
+		_commander.SetWaypoint(cell, direction);
 		Vector2I[] targetCells = DressOffCommander(cell, direction);
 		for (int i = 0; i < _units.Count; i++)
 		{
@@ -154,7 +176,7 @@ public partial class Formation : Node2D, IDirectionAnchor
 
 	public void MoveToTile(Vector2I cell, Direction direction)
 	{
-		commander.MoveToTile(cell);
+		_commander.MoveToTile(cell);
 		Vector2I[] targetCells = DressOffCommander(cell, direction);
 		for (int i = 0; i < _units.Count; i++)
 		{
@@ -168,7 +190,7 @@ public partial class Formation : Node2D, IDirectionAnchor
 		{
 			unit.MoveOnPath();
 		}
-		commander.MoveOnPath();
+		_commander.MoveOnPath();
 	}
 
 	public void UpdateDirection(Direction direction)

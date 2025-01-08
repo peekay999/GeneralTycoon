@@ -6,13 +6,12 @@ using System.Collections.Generic;
 /// </summary>
 public partial class Unit : TileMover
 {
-	private Node2D _Ysort;
-	private Node2D _sprites;
+	protected Node2D _Ysort;
+	protected Node2D _sprites;
 	private List<AnimatedSprite2D> animatedSprite2Ds;
 	private Direction _frameDirection;
 	private List<Vector2I> path;
 	private UnitType unitType;
-
 	private Area2D _area2D;
 
 	[Signal]

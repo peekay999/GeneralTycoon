@@ -8,10 +8,10 @@
 [ext_resource type="Script" path="res://TileMaps/TileMapGenerator.cs" id="6_ee2ii"]
 [ext_resource type="Script" path="res://Units/FormationController.cs" id="6_fvck0"]
 [ext_resource type="Script" path="res://TileMaps/Pathfinder.cs" id="6_qqpqo"]
-[ext_resource type="Script" path="res://SelectionLayer.cs" id="7_noex6"]
-[ext_resource type="Script" path="res://FormationUiController.cs" id="8_2eqc8"]
+[ext_resource type="Script" path="res://TileMaps/SelectionLayer.cs" id="7_noex6"]
+[ext_resource type="Script" path="res://Units/UI/FormationUiController.cs" id="8_2eqc8"]
 [ext_resource type="Theme" uid="uid://ccj8jituat0aw" path="res://UI_formationControl_theme_button.tres" id="9_3gf4e"]
-[ext_resource type="Script" path="res://FormationUI.cs" id="10_gabad"]
+[ext_resource type="Script" path="res://Units/UI/FormationUI.cs" id="10_gabad"]
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -61,7 +61,6 @@ offset_right = 64.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_default_cursor_shape = 2
 theme = ExtResource("9_3gf4e")
 
 [node name="RightWheel" type="Node2D" parent="UnitController/FormationUiController"]

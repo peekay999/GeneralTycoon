@@ -38,11 +38,11 @@ public partial class FormationController : Node2D
 		_formations = new HashSet<Formation>();
 		// _formations = new Dictionary<Formation, Vector2I>();
 
-		AddFormation(new Vector2I(30, 30));
+		AddCompany(new Vector2I(30, 30));
 
-		AddFormation(new Vector2I(50, 40));
+		AddCompany(new Vector2I(50, 40));
 
-		AddFormation(new Vector2I(60, 50));
+		AddCompany(new Vector2I(60, 50));
 	}
 
 	public override void _Input(InputEvent @event)
@@ -63,81 +63,6 @@ public partial class FormationController : Node2D
 			{
 				MoveFormationsOnPath();
 			}
-			// switch (key.Keycode)
-			// {
-			// 	case Key.Key1:
-			// 		_direction = Direction.NORTH;
-			// 		break;
-			// 	case Key.Key2:
-			// 		_direction = Direction.NORTH_EAST;
-			// 		break;
-			// 	case Key.Key3:
-			// 		_direction = Direction.EAST;
-			// 		break;
-			// 	case Key.Key4:
-			// 		_direction = Direction.SOUTH_EAST;
-			// 		break;
-			// 	case Key.Key5:
-			// 		_direction = Direction.SOUTH;
-			// 		break;
-			// 	case Key.Key6:
-			// 		_direction = Direction.SOUTH_WEST;
-			// 		break;
-			// 	case Key.Key7:
-			// 		_direction = Direction.WEST;
-			// 		break;
-			// 	case Key.Key8:
-			// 		_direction = Direction.NORTH_WEST;
-			// 		break;
-			// 	case Key.C:
-			// 		MoveFormationsOnPath();
-			// 		break;
-			// 	case Key.Space:
-			// 		if (_selectedFormation != null)
-			// 		{
-			// 			_selectedFormation.SetWaypoint(_selectionLayer.GetSelectedCell(), _direction);
-			// 		}
-			// 		break;
-			// case Key.Y:
-			// 	if (_debugFormation != null)
-			// 	{
-			// 		_debugFormation.PivotLeft();
-			// 	}
-			// 	break;
-
-			// case Key.U:
-			// 	if (_debugFormation != null)
-			// 	{
-			// 		_debugFormation.PivotRight();
-			// 	}
-			// 	break;
-
-			// case Key.I:
-			// 	if (_debugFormation != null)
-			// 	{
-			// 		_debugFormation.RetireLeft();
-			// 	}
-			// 	break;
-			// case Key.O:
-			// 	if (_debugFormation != null)
-			// 	{
-			// 		_debugFormation.RetireRight();
-			// 	}
-			// 	break;
-			// 	case Key.P:
-			// 	if (_debugFormation != null)
-			// 	{
-			// 		_debugFormation.Retire();
-			// 	}
-			// 	break;
-			// 	case Key.L:
-			// 	if (_debugFormation != null)
-			// 	{
-			// 		_debugFormation.Advance();
-			// 	}
-			// 	break;
-
-			// }
 		}
 	}
 
@@ -150,23 +75,22 @@ public partial class FormationController : Node2D
 	/// Adds a unit to the unit layer at the specified cell.
 	/// </summary>
 	/// <param name="cell">The cell on the map where the unit should be placed.</param>
-	public void AddFormation(Vector2I cell)
+	public void AddCompany(Vector2I cell)
 	{
-		// if (_selectedFormation == null)
-		// {
-		// 	_selectedFormation = new Formation();
-		// 	_selectedFormation.Name = "DebugFormation";
-		// 	AddChild(_selectedFormation);
-		// 	_formations.Add(_selectedFormation);
-		// _selectedFormation.MoveToTile(cell, _direction);
-		// }
-
-		Formation formation = new Formation();
-		formation.FormationSelected += () => _on_formation_selected(formation);
-		AddChild(formation);
-		_formations.Add(formation);
-		formation.Name = "Formation " + _formations.Count;
-		formation.MoveToTile(cell, Direction.NORTH);
+		PackedScene companyScene = (PackedScene)ResourceLoader.Load("res://Units/company.tscn");
+		Company company = (Company)companyScene.Instantiate();
+		company.FormationSelected += () => _on_formation_selected(company);
+		AddChild(company);
+		_formations.Add(company);
+		company.Name = "Formation " + _formations.Count;
+		company.MoveToTile(cell, Direction.NORTH);
+		
+		// Company company = new Company();
+		// company.FormationSelected += () => _on_formation_selected(company);
+		// AddChild(company);
+		// _formations.Add(company);
+		// company.Name = "Formation " + _formations.Count;
+		// company.MoveToTile(cell, Direction.NORTH);
 	}
 
 	public Formation GetSelectedFormation()

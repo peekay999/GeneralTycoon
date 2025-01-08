@@ -56,11 +56,7 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		UpdateDirection(formation.Direction);
 
 		Vector2I commanderCell = formation.GetCurrentCell();
-		// Vector2I leftMarkerCell = formation.GetLeftMarkerCell();
-		// Vector2I rightMarkerCell = formation.GetRightMarkerCell();
 		_advance.MoveToTile(commanderCell + LocalisedDirections.forward * 3);
-		// _rightWheel.MoveToTile(commanderCell + LocalisedDirections.forward * 3 + LocalisedDirections.right * formation.GetWidth() / 2);
-		// _leftWheel.MoveToTile(commanderCell + LocalisedDirections.forward * 3 + LocalisedDirections.left * formation.GetWidth() / 2);
 		_rightWheel.MoveToTile(commanderCell + LocalisedDirections.forward * 3 + LocalisedDirections.right * 3);
 		_leftWheel.MoveToTile(commanderCell + LocalisedDirections.forward * 3 + LocalisedDirections.left * 3);
 		_retire.MoveToTile(commanderCell + LocalisedDirections.back * 2);

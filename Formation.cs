@@ -63,26 +63,7 @@ public partial class Formation : Node2D, IDirectionAnchor
 	}
 
 
-	private void _on_mouse_entered()
-	{
-		_hoverStatus.hoverCount++;
-		if (_hoverStatus.hoverCount > 0 && _parentController.GetSelectedFormation() != this)
-		{
-			GD.Print("Hovered");
-			_hoverStatus.isHovered = true;
-			Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
-		}
-	}
-	private void _on_mouse_exited()
-	{
-		_hoverStatus.hoverCount--;
-		if (_hoverStatus.hoverCount <= 0)
-		{
-			GD.Print("Not Hovered");
-			_hoverStatus.isHovered = false;
-			Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
-		}
-	}
+
 
 
 	private static void SelectFormation(Formation formation)
@@ -90,95 +71,56 @@ public partial class Formation : Node2D, IDirectionAnchor
 		formation.EmitSignal("FormationSelected");
 	}
 
-	public void PivotRight()
-	{
-		UpdateDirection(UnitUtil.GetClockwiseDirection(Direction));
-		Unit rightMarker = _units[_units.Count - 1];
-		Vector2I markerPos = rightMarker.GetCurrentCell();
+	// public void RightWheel()
+	// {
+	// 	UpdateDirection(UnitUtil.GetClockwiseDirection(Direction));
+	// 	Unit rightMarker = _units[_units.Count - 1];
+	// 	Vector2I markerPos = rightMarker.GetCurrentCell();
 
-		int files = 1;
-		for (int i = _units.Count - 2; i >= 0; i--)
-		{
-			Unit unit = _units[i];
-			Vector2I target = markerPos + LocalisedDirections.left * files;
-			unit.SetWaypoint(target, Direction);
-			files++;
-		}
+	// 	int files = 1;
+	// 	for (int i = _units.Count - 2; i >= 0; i--)
+	// 	{
+	// 		Unit unit = _units[i];
+	// 		Vector2I target = markerPos + LocalisedDirections.left * files;
+	// 		unit.SetWaypoint(target, Direction);
+	// 		files++;
+	// 	}
 
-		Vector2I commanderTarget = markerPos + LocalisedDirections.back + (LocalisedDirections.left * (files / 2));
-		commander.SetWaypoint(commanderTarget, Direction);
-	}
+	// 	Vector2I commanderTarget = markerPos + LocalisedDirections.back + (LocalisedDirections.left * (files / 2));
+	// 	commander.SetWaypoint(commanderTarget, Direction);
+	// }
 
-	public void PivotLeft()
-	{
-		UpdateDirection(UnitUtil.GetAntiClockwiseDirection(Direction));
-		Unit leftMarker = _units[0];
-		Vector2I markerPos = leftMarker.GetCurrentCell();
+	// public void LeftWheel()
+	// {
+	// 	UpdateDirection(UnitUtil.GetAntiClockwiseDirection(Direction));
+	// 	Unit leftMarker = _units[0];
+	// 	Vector2I markerPos = leftMarker.GetCurrentCell();
 
-		int files = 1;
-		for (int i = 1; i < _units.Count; i++)
-		{
-			Unit unit = _units[i];
-			Vector2I target = markerPos + LocalisedDirections.right * files;
-			unit.SetWaypoint(target, Direction);
-			files++;
-		}
+	// 	int files = 1;
+	// 	for (int i = 1; i < _units.Count; i++)
+	// 	{
+	// 		Unit unit = _units[i];
+	// 		Vector2I target = markerPos + LocalisedDirections.right * files;
+	// 		unit.SetWaypoint(target, Direction);
+	// 		files++;
+	// 	}
 
-		Vector2I commanderTarget = markerPos + LocalisedDirections.back + (LocalisedDirections.right * (files / 2));
-		commander.SetWaypoint(commanderTarget, Direction);
-	}
+	// 	Vector2I commanderTarget = markerPos + LocalisedDirections.back + (LocalisedDirections.right * (files / 2));
+	// 	commander.SetWaypoint(commanderTarget, Direction);
+	// }
+	// public void Advance()
+	// {
+	// 	Vector2I commanderCell = commander.GetCurrentCell();
+	// 	Vector2I targetCell = commanderCell + LocalisedDirections.forward * 3;
+	// 	SetWaypoint(targetCell, Direction);
+	// }
 
-	public void RetireLeft()
-	{
-		UpdateDirection(UnitUtil.GetClockwiseDirection(Direction));
-		Unit leftMarker = _units[0];
-		Vector2I markerPos = leftMarker.GetCurrentCell();
-
-		int files = 1;
-		for (int i = 1; i < _units.Count; i++)
-		{
-			Unit unit = _units[i];
-			Vector2I target = markerPos + LocalisedDirections.right * files;
-			unit.SetWaypoint(target, Direction);
-			files++;
-		}
-
-		Vector2I commanderTarget = markerPos + LocalisedDirections.back + (LocalisedDirections.right * (files / 2));
-		commander.SetWaypoint(commanderTarget, Direction);
-	}
-
-	public void RetireRight()
-	{
-		UpdateDirection(UnitUtil.GetAntiClockwiseDirection(Direction));
-		Unit rightMarker = _units[_units.Count - 1];
-		Vector2I markerPos = rightMarker.GetCurrentCell();
-
-		int files = 1;
-		for (int i = _units.Count - 2; i >= 0; i--)
-		{
-			Unit unit = _units[i];
-			Vector2I target = markerPos + LocalisedDirections.left * files;
-			unit.SetWaypoint(target, Direction);
-			files++;
-		}
-
-		Vector2I commanderTarget = markerPos + LocalisedDirections.back + (LocalisedDirections.left * (files / 2));
-		commander.SetWaypoint(commanderTarget, Direction);
-	}
-
-	public void Advance()
-	{
-		Vector2I commanderCell = commander.GetCurrentCell();
-		Vector2I targetCell = commanderCell + LocalisedDirections.forward * 3;
-		SetWaypoint(targetCell, Direction);
-	}
-
-	public void Retire()
-	{
-		Vector2I commanderCell = commander.GetCurrentCell();
-		Vector2I targetCell = commanderCell + LocalisedDirections.back;
-		SetWaypoint(targetCell, Direction.CONTINUE);
-	}
+	// public void Retire()
+	// {
+	// 	Vector2I commanderCell = commander.GetCurrentCell();
+	// 	Vector2I targetCell = commanderCell + LocalisedDirections.back;
+	// 	SetWaypoint(targetCell, Direction);
+	// }
 
 	public Vector2I GetCurrentCell()
 	{
@@ -253,5 +195,24 @@ public partial class Formation : Node2D, IDirectionAnchor
 	public int GetWidth()
 	{
 		return _units.Count;
-	}	
+	}
+
+	private void _on_mouse_entered()
+	{
+		_hoverStatus.hoverCount++;
+		if (_hoverStatus.hoverCount > 0 && _parentController.GetSelectedFormation() != this)
+		{
+			_hoverStatus.isHovered = true;
+			Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
+		}
+	}
+	private void _on_mouse_exited()
+	{
+		_hoverStatus.hoverCount--;
+		if (_hoverStatus.hoverCount <= 0)
+		{
+			_hoverStatus.isHovered = false;
+			Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
+		}
+	}
 }

@@ -31,13 +31,11 @@ public partial class TileMover : Node2D
 
 	public virtual void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
 	{
-		currentCell = cellTo;
-
 		if (tileMapLayer == null)
 		{
 			return;
 		}
-
+		currentCell = cellTo;
 		Vector2 worldPosition = tileMapLayer.MapToLocal(cellTo);
 		Position = worldPosition + tileMapLayer.Position;
 	}

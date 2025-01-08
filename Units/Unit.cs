@@ -27,7 +27,7 @@ public partial class Unit : TileMover
 	{
 		_Ysort = GetNode<Node2D>("YSort");
 		_sprites = _Ysort.GetNode<Node2D>("Sprites");
-		_frameDirection = Direction.NORTH_EAST;
+		_frameDirection = Direction.NORTH;
 		_area2D = GetNode<Area2D>("Area2D");
 		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
 		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
@@ -72,13 +72,10 @@ public partial class Unit : TileMover
 	public override void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
 	{
 		base.UpdateTransformPosition(cellTo, tileMapLayer);
-
-
 		UpdateDirection(UnitUtil.DetermineDirection(currentCell, cellTo));
 
 		_Ysort.Position = Vector2.Zero;
 		_sprites.Position = Vector2.Zero;
-		// GD.Print(tileMapLayer.Position.Y);
 
 		_Ysort.MoveLocalY(-tileMapLayer.Position.Y);
 		_sprites.MoveLocalY(tileMapLayer.Position.Y);

@@ -17,7 +17,7 @@ public partial class FormationController : Node2D
 	private Dictionary<Unit, Vector2I> _units;
 
 	private Formation _selectedFormation;
-	private Direction _direction;
+	// private Direction _direction;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -38,15 +38,9 @@ public partial class FormationController : Node2D
 		_formations = new HashSet<Formation>();
 		// _formations = new Dictionary<Formation, Vector2I>();
 
-		_direction = Direction.NORTH_WEST;
-
 		AddFormation(new Vector2I(30, 30));
 
-		_direction = Direction.NORTH;
-
 		AddFormation(new Vector2I(50, 40));
-
-		_direction = Direction.EAST;
 
 		AddFormation(new Vector2I(60, 50));
 	}
@@ -63,84 +57,88 @@ public partial class FormationController : Node2D
 			// }
 		}
 
-		// if (@event is InputEventKey key && key.Pressed)
-		// {
-		// 	// switch (key.Keycode)
-		// 	// {
-		// 	// 	case Key.Key1:
-		// 	// 		_direction = Direction.NORTH;
-		// 	// 		break;
-		// 	// 	case Key.Key2:
-		// 	// 		_direction = Direction.NORTH_EAST;
-		// 	// 		break;
-		// 	// 	case Key.Key3:
-		// 	// 		_direction = Direction.EAST;
-		// 	// 		break;
-		// 	// 	case Key.Key4:
-		// 	// 		_direction = Direction.SOUTH_EAST;
-		// 	// 		break;
-		// 	// 	case Key.Key5:
-		// 	// 		_direction = Direction.SOUTH;
-		// 	// 		break;
-		// 	// 	case Key.Key6:
-		// 	// 		_direction = Direction.SOUTH_WEST;
-		// 	// 		break;
-		// 	// 	case Key.Key7:
-		// 	// 		_direction = Direction.WEST;
-		// 	// 		break;
-		// 	// 	case Key.Key8:
-		// 	// 		_direction = Direction.NORTH_WEST;
-		// 	// 		break;
-		// 	// 	case Key.C:
-		// 	// 		MoveFormationsOnPath();
-		// 	// 		break;
-		// 	// 	case Key.Space:
-		// 	// 		if (_selectedFormation != null)
-		// 	// 		{
-		// 	// 			_selectedFormation.SetWaypoint(_selectionLayer.GetSelectedCell(), _direction);
-		// 	// 		}
-		// 	// 		break;
-		// 		// case Key.Y:
-		// 		// 	if (_debugFormation != null)
-		// 		// 	{
-		// 		// 		_debugFormation.PivotLeft();
-		// 		// 	}
-		// 		// 	break;
+		if (@event is InputEventKey key && key.Pressed)
+		{
+			if (key.Keycode == Key.C)
+			{
+				MoveFormationsOnPath();
+			}
+			// switch (key.Keycode)
+			// {
+			// 	case Key.Key1:
+			// 		_direction = Direction.NORTH;
+			// 		break;
+			// 	case Key.Key2:
+			// 		_direction = Direction.NORTH_EAST;
+			// 		break;
+			// 	case Key.Key3:
+			// 		_direction = Direction.EAST;
+			// 		break;
+			// 	case Key.Key4:
+			// 		_direction = Direction.SOUTH_EAST;
+			// 		break;
+			// 	case Key.Key5:
+			// 		_direction = Direction.SOUTH;
+			// 		break;
+			// 	case Key.Key6:
+			// 		_direction = Direction.SOUTH_WEST;
+			// 		break;
+			// 	case Key.Key7:
+			// 		_direction = Direction.WEST;
+			// 		break;
+			// 	case Key.Key8:
+			// 		_direction = Direction.NORTH_WEST;
+			// 		break;
+			// 	case Key.C:
+			// 		MoveFormationsOnPath();
+			// 		break;
+			// 	case Key.Space:
+			// 		if (_selectedFormation != null)
+			// 		{
+			// 			_selectedFormation.SetWaypoint(_selectionLayer.GetSelectedCell(), _direction);
+			// 		}
+			// 		break;
+			// case Key.Y:
+			// 	if (_debugFormation != null)
+			// 	{
+			// 		_debugFormation.PivotLeft();
+			// 	}
+			// 	break;
 
-		// 		// case Key.U:
-		// 		// 	if (_debugFormation != null)
-		// 		// 	{
-		// 		// 		_debugFormation.PivotRight();
-		// 		// 	}
-		// 		// 	break;
+			// case Key.U:
+			// 	if (_debugFormation != null)
+			// 	{
+			// 		_debugFormation.PivotRight();
+			// 	}
+			// 	break;
 
-		// 		// case Key.I:
-		// 		// 	if (_debugFormation != null)
-		// 		// 	{
-		// 		// 		_debugFormation.RetireLeft();
-		// 		// 	}
-		// 		// 	break;
-		// 		// case Key.O:
-		// 		// 	if (_debugFormation != null)
-		// 		// 	{
-		// 		// 		_debugFormation.RetireRight();
-		// 		// 	}
-		// 		// 	break;
-		// 		// 	case Key.P:
-		// 		// 	if (_debugFormation != null)
-		// 		// 	{
-		// 		// 		_debugFormation.Retire();
-		// 		// 	}
-		// 		// 	break;
-		// 		// 	case Key.L:
-		// 		// 	if (_debugFormation != null)
-		// 		// 	{
-		// 		// 		_debugFormation.Advance();
-		// 		// 	}
-		// 		// 	break;
+			// case Key.I:
+			// 	if (_debugFormation != null)
+			// 	{
+			// 		_debugFormation.RetireLeft();
+			// 	}
+			// 	break;
+			// case Key.O:
+			// 	if (_debugFormation != null)
+			// 	{
+			// 		_debugFormation.RetireRight();
+			// 	}
+			// 	break;
+			// 	case Key.P:
+			// 	if (_debugFormation != null)
+			// 	{
+			// 		_debugFormation.Retire();
+			// 	}
+			// 	break;
+			// 	case Key.L:
+			// 	if (_debugFormation != null)
+			// 	{
+			// 		_debugFormation.Advance();
+			// 	}
+			// 	break;
 
-		// 	// }
-		// }
+			// }
+		}
 	}
 
 	public TileMapLayer GetUnitLayer()
@@ -167,15 +165,14 @@ public partial class FormationController : Node2D
 		formation.FormationSelected += () => _on_formation_selected(formation);
 		AddChild(formation);
 		_formations.Add(formation);
-		// _formations.Add(formation, cell);
 		formation.Name = "Formation " + _formations.Count;
-		formation.MoveToTile(cell, _direction);
+		formation.MoveToTile(cell, Direction.NORTH);
 	}
 
 	public Formation GetSelectedFormation()
 	{
 		return _selectedFormation;
-	}	
+	}
 
 	public void _on_formation_selected(Formation formation)
 	{

@@ -27,6 +27,12 @@ public partial class TileMover : Node2D
 	/// <param name="direction">The direction to face after moving.</param>
 	public void MoveToTile(Vector2I cellTo)
 	{
+		TileMapLayer topLayer = World.Instance.GetTopLayer(cellTo);
+		if (topLayer == null)
+		{
+			return;
+		}
+		UpdateTransformPosition(cellTo, topLayer);
 		EmitSignal(SignalName.MoveAttempted, currentCell, cellTo);
 	}
 

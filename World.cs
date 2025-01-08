@@ -4,6 +4,7 @@ using System;
 public partial class World : Node2D
 {
 	private TileMapController _tileMapController;
+	private FormationController _formationController;
 	private SelectionLayer _selectionLayer;
 	private static World _instance;
 	// Called when the node enters the scene tree for the first time.
@@ -18,10 +19,12 @@ public partial class World : Node2D
 		{
 			GD.PrintErr("Multiple instances of World detected. This should be a singleton.");
 		}
+		_tileMapController = GetNode<TileMapController>("TileMapController");
+		_formationController = GetNode<FormationController>("FormationController");
 	}
 	public override void _Ready()
 	{
-		_tileMapController = GetNode<TileMapController>("TileMapController");
+		// _tileMapController = GetNode<TileMapController>("TileMapController");
 
 	}
 
@@ -48,5 +51,15 @@ public partial class World : Node2D
 			_selectionLayer = GetNode<SelectionLayer>("SelectionLayer");
 		}
 		return _selectionLayer;
+	}
+
+	public Vector2 MapToWorld(Vector2I cell)
+	{
+		return _tileMapController.GetTopLayer(cell).MapToLocal(cell);
+	}
+
+	public TileMapLayer GetTopLayer(Vector2I cell)
+	{
+		return _tileMapController.GetTopLayer(cell);
 	}
 }

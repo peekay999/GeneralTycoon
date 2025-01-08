@@ -110,7 +110,7 @@ public partial class FormationController : Node2D
 
 	public void _on_formation_selected(ControlledFormation formation)
 	{
-		_formationUiController.SetFormation(formation);
+		_formationUiController.SetSelectedFormation(formation);
 	}
 
 	public void _on_tileMover_move_attempted(TileMover unit, Vector2I cellTo)
@@ -125,20 +125,19 @@ public partial class FormationController : Node2D
 
 	public void _on_unit_move_attempted(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
-		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
+		// TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
 
-		if (topLayer == null)
-		{
-			return;
-		}
+		// if (topLayer == null)
+		// {
+		// 	return;
+		// }
 		UpdateUnitPosition(unit, cellFrom, cellTo);
-		unit.UpdateTransformPosition(cellTo, topLayer);
+		// unit.UpdateTransformPosition(cellTo, topLayer);
 	}
 
 	public async void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo, Direction direction)
 	{
 		List<Vector2I> path = await _pathfinder.FindPathAsync(cellFrom, cellTo);
 		unit.SetPath(path);
-		unit.UpdateDirection(direction);
 	}
 }

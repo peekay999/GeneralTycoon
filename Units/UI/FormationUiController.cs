@@ -1,6 +1,6 @@
 
-using System.Numerics;
 using Godot;
+using System.Collections.Generic;
 
 public partial class FormationUiController : Node2D, IDirectionAnchor
 {
@@ -12,20 +12,19 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 	private FormationUI _leftWheel;
 	private FormationUI _rightWheel;
 	private FormationUI _retire;
-	private FormationUI _blockLeft;
-	private FormationUI _blockRight;
 	private GhostFormation _ghostFormation;
 	private Direction _ghostDirection;
+	private bool _isGhostPlaced;
+	private bool _isGhostGrabbed;
 
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
 
-	[Signal]
-	public delegate void MouseCellRequestedEventHandler();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		ZIndex = 1;
 		_parentController = GetParent<FormationController>();
 		_selectionLayer = World.Instance.GetSelectionLayer();
 
@@ -47,14 +46,14 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 
 	public override void _Input(InputEvent @event)
 	{
-		//if is a left mouse click
 		if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
 		{
-			// Vector2I cell = _selectionLayer.GetSelectedCell();
-			// if (cell.X != -1 && cell.Y != -1)
-			// {
-			// 	AddFormation(cell);
-			// }
+			if (_ghostFormation != null && _selectedFormation != null)
+			{
+				_selectedFormation.SetWaypoint(_ghostFormation.GetCurrentCell(), _ghostDirection);
+				RemoveGhostCompany();
+				ClearSelectedFormation();
+			}
 		}
 
 		if (@event is InputEventKey key && key.Pressed)
@@ -69,18 +68,36 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 				{
 					_ghostDirection = UnitUtil.GetClockwiseDirection(_ghostDirection);
 				}
+
 				else if (key.Keycode == Key.Escape)
 				{
-					// if (_ghostFormation != null)
-					// {
-					// 	RemoveGhostCompany();
-					// 	return;
-					// }
 					RemoveGhostCompany();
-					ClearSelection();
-
+					ShowUI();
 				}
 			}
+			else
+			{
+				if (key.Keycode == Key.Escape)
+				{
+					ClearSelectedFormation();
+				}
+				else if (key.Keycode == Key.Space)
+				{
+					AddGhostCompany();
+					HideUI();
+				}
+			}
+		}
+	}
+
+	public override void _Draw()
+	{
+		if (_ghostFormation != null && _selectedFormation != null)
+		{
+			Unit commander = _selectedFormation.GetCommander();
+			Unit ghostCommander = _ghostFormation.GetCommander();
+			// DrawLine(commander.Position, ghostCommander.Position, new Color(1, 1, 1, 0.5f));
+			DrawDashedLine(commander.Position, ghostCommander.Position, new Color(1, 1, 1, 0.75f), 4.0f, 16.0f, false, false);
 		}
 	}
 
@@ -89,12 +106,15 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		if (_ghostFormation != null && _selectionLayer.GetUsedCells().Count > 0)
 		{
 			_ghostFormation.MoveToTile(_selectionLayer.GetUsedCells()[0], _ghostDirection);
-
+			QueueRedraw();
 		}
 	}
-
 	private void AddGhostCompany()
 	{
+		if (_selectedFormation == null)
+		{
+			return;
+		}
 		RemoveGhostCompany();
 		PackedScene companyScene = (PackedScene)ResourceLoader.Load("res://Units/Ghost/ghost_formation.tscn");
 		_ghostFormation = (GhostFormation)companyScene.Instantiate();
@@ -112,14 +132,32 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		{
 			_ghostFormation.QueueFree();
 			_ghostFormation = null;
+			QueueRedraw();
 		}
 	}
 
-	public void ClearSelection()
+	public void ClearSelectedFormation()
 	{
 		_selectedFormation = null;
-		Visible = false;
 		_selectionLayer.Visible = true;
+		Visible = false;
+		ShowUI();
+	}
+
+	public void HideUI()
+	{
+		_advance.Visible = false;
+		_leftWheel.Visible = false;
+		_rightWheel.Visible = false;
+		_retire.Visible = false;
+	}
+
+	public void ShowUI()
+	{
+		_advance.Visible = true;
+		_leftWheel.Visible = true;
+		_rightWheel.Visible = true;
+		_retire.Visible = true;
 	}
 
 	public ControlledFormation GetSelectedFormation()
@@ -127,9 +165,9 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		return _selectedFormation;
 	}
 
-	public void SetFormation(ControlledFormation formation)
+	public void SetSelectedFormation(ControlledFormation formation)
 	{
-		RemoveGhostCompany();
+		_selectionLayer.Visible = false;
 		_selectedFormation = formation;
 		Visible = true;
 		UpdateDirection(formation.Direction);
@@ -139,9 +177,6 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		_rightWheel.MoveToTile(commanderCell + LocalisedDirections.forward * 3 + LocalisedDirections.right * 3);
 		_leftWheel.MoveToTile(commanderCell + LocalisedDirections.forward * 3 + LocalisedDirections.left * 3);
 		_retire.MoveToTile(commanderCell + LocalisedDirections.back * 2);
-
-		AddGhostCompany();
-
 	}
 
 	public void UpdateDirection(Direction direction)

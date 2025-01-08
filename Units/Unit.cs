@@ -128,6 +128,11 @@ public partial class Unit : TileMover
 		}
 	}
 
+	public List<Vector2I> GetTilePath()
+	{
+		return path;
+	}
+
 	public void SetWaypoint(Vector2I targetCell, Direction direction)
 	{
 		EmitSignal(SignalName.WaypointUpdated, currentCell, targetCell, (int)direction);

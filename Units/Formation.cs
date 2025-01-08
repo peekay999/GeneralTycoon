@@ -82,6 +82,11 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	{
 	}
 
+	public Unit GetCommander()
+	{
+		return _commander;
+	}
+
 	private static void SelectFormation(Formation formation)
 	{
 		formation.EmitSignal("FormationSelected");

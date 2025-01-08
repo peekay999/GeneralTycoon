@@ -42,7 +42,8 @@ y_sort_enabled = true
 script = ExtResource("6_fvck0")
 
 [node name="FormationUiController" type="Node2D" parent="FormationController"]
-z_index = 1
+y_sort_enabled = true
+position = Vector2(0, 1)
 script = ExtResource("8_2eqc8")
 
 [node name="Advance" type="Node2D" parent="FormationController/FormationUiController"]

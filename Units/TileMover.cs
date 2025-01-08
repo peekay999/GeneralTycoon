@@ -5,7 +5,7 @@ public partial class TileMover : Node2D
 {
 	protected Vector2I currentCell = Vector2I.Zero;
 	protected Vector2I target = Vector2I.Zero;
-	
+
 	[Signal]
 	public delegate void MoveAttemptedEventHandler(Vector2I currentCell, Vector2I targetCell);
 
@@ -32,10 +32,6 @@ public partial class TileMover : Node2D
 
 	public virtual void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
 	{
-		if (tileMapLayer == null)
-		{
-			return;
-		}
 		currentCell = cellTo;
 		Vector2 worldPosition = tileMapLayer.MapToLocal(cellTo);
 		Position = worldPosition + tileMapLayer.Position;

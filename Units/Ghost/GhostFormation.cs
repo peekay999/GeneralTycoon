@@ -7,7 +7,8 @@ public partial class GhostFormation : Formation
     public override void _Ready()
     {
         base._Ready();
-        ZIndex = 1;
+        Modulate = new Color(1, 1, 1, 0.75f);
+        YSortEnabled = true;
         _foromationIUcontroller = GetParent<FormationUiController>();
         _formationController = _foromationIUcontroller.GetParent<FormationController>();
 

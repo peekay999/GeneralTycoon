@@ -11,10 +11,42 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	protected Unit _commander;
 	[Export]
 	public int FormationSize { get; set; }
+	private PackedScene _commanderScene;
+	private PackedScene _ranksScene;
+
 	[Export]
-	public PackedScene Commander { get; set; }
+	public PackedScene Commander
+	{
+		get => _commanderScene;
+		set
+		{
+			if (value.Instantiate() is Unit)
+			{
+				_commanderScene = value;
+			}
+			else
+			{
+				GD.PrintErr("Assigned scene is not of type Unit.");
+			}
+		}
+	}
+
 	[Export]
-	public PackedScene Ranks { get; set; }
+	public PackedScene Ranks
+	{
+		get => _ranksScene;
+		set
+		{
+			if (value.Instantiate() is Unit)
+			{
+				_ranksScene = value;
+			}
+			else
+			{
+				GD.PrintErr("Assigned scene is not of type Unit.");
+			}
+		}
+	}
 
 	[Signal]
 	public delegate void FormationSelectedEventHandler();
@@ -23,6 +55,12 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public override void _Ready()
 	{
 		_units = new List<Unit>();
+
+		if (_ranksScene == null || _commanderScene == null)
+		{
+			GD.PrintErr("Ranks or Commander scene is not assigned.");
+			return;
+		}
 
 		for (int i = 0; i < FormationSize; i++)
 		{

@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=3 uid="uid://bcdfk0c7ep24b"]
+
+[ext_resource type="Script" path="res://Units/Unit.cs" id="1_cpo7t"]
+[ext_resource type="Texture2D" uid="uid://5kgu808e0tnn" path="res://sprites/Character/GhostCommander.png" id="2_gi6n8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_otqcx"]
+atlas = ExtResource("2_gi6n8")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_riwiy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otqcx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="GhostCommander" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_cpo7t")
+
+[node name="YSort" type="Node2D" parent="."]
+
+[node name="Sprites" type="Node2D" parent="YSort"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="YSort/Sprites"]
+modulate = Color(1, 1, 1, 0.65098)
+texture_filter = 1
+position = Vector2(0, -24)
+sprite_frames = SubResource("SpriteFrames_riwiy")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(0, -16)
+collision_layer = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+z_as_relative = false
+polygon = PackedVector2Array(-32, -16, 0, -32, 32, -16, 32, 16, 0, 32, -32, 16)

@@ -1,0 +1,91 @@
+[gd_scene load_steps=12 format=3 uid="uid://co6f7a42mif2f"]
+
+[ext_resource type="Script" path="res://Units/Unit.cs" id="1_s0q0b"]
+[ext_resource type="Texture2D" uid="uid://c6jrno68igsdx" path="res://sprites/UI/GhostUnit.png" id="2_ygt0a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xugqh"]
+atlas = ExtResource("2_ygt0a")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3acu7"]
+atlas = ExtResource("2_ygt0a")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_domi3"]
+atlas = ExtResource("2_ygt0a")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_luvat"]
+atlas = ExtResource("2_ygt0a")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bp7vd"]
+atlas = ExtResource("2_ygt0a")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_llhls"]
+atlas = ExtResource("2_ygt0a")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_20gwv"]
+atlas = ExtResource("2_ygt0a")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj4aj"]
+atlas = ExtResource("2_ygt0a")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2f7h8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xugqh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3acu7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_domi3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_luvat")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bp7vd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_llhls")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_20gwv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj4aj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="GhostUnit" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_s0q0b")
+
+[node name="YSort" type="Node2D" parent="."]
+position = Vector2(0, 1)
+
+[node name="Sprites" type="Node2D" parent="YSort"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="YSort/Sprites"]
+modulate = Color(1, 1, 1, 0.65098)
+texture_filter = 1
+position = Vector2(0, -18)
+sprite_frames = SubResource("SpriteFrames_2f7h8")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(0, -15)
+collision_layer = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+z_as_relative = false
+polygon = PackedVector2Array(-32, -16, 0, -32, 32, -16, 32, 16, 0, 32, -32, 16)

@@ -44,7 +44,7 @@ public partial class TileMapController : Node2D
 		}
 		else
 		{
-			GenerateTileMap();
+			GetGeneratedTileMapLayers();
 
 		}
 
@@ -70,7 +70,7 @@ public partial class TileMapController : Node2D
 	/// <summary>
 	/// Generates the tile map using the height map and tile set. Adds the layers to the scene.
 	/// </summary>
-	private void GenerateTileMap()
+	private void GetGeneratedTileMapLayers()
 	{
 		tileMapLayers = _tileMapGenerator.GenerateTileMapLayers(_heightMap, _totalLayers, _tileSet);
 		foreach (TileMapLayer layer in tileMapLayers)
@@ -113,7 +113,7 @@ public partial class TileMapController : Node2D
 
 	private TileMapLayer DetermineTopLayer(Vector2I cell)
 	{
-		for (int i = tileMapLayers.Count - 1; i > 0; i--)
+		for (int i = tileMapLayers.Count; i > 0; i--)
 		{
 			if (tileMapLayers[i - 1].GetCellSourceId(cell) != -1)
 			{
@@ -121,40 +121,6 @@ public partial class TileMapController : Node2D
 			}
 		}
 		return null;
-	}
-
-	public Vector2 MapToTopLayerLocal(Vector2I cell)
-	{
-		Vector2 YOffset = new Vector2(0, GetTopLayerOffset(cell));
-		Vector2 cellPos = GetTileMapLayers()[0].MapToLocal(cell);
-		return cellPos + YOffset;
-	}
-
-	public (Vector2I cell, int YOffset) GetCellFromMousePos()
-	{
-		for (int i = tileMapLayers.Count - 1; i > 0; i--)
-		{
-			Vector2 mousePos = GetGlobalMousePosition() - tileMapLayers[i - 1].Position;
-			Vector2I cell = tileMapLayers[i].LocalToMap(ToLocal(mousePos));
-
-			int layer = i - 1;
-			int totalLayers = tileMapLayers.Count;
-			if (tileMapLayers[layer].GetCellSourceId(cell) != -1 && (tileMapLayers[layer].GetCellAtlasCoords(cell) != TileMapUtil.tile_corner_double_SE))
-			{
-				// check the layer above for a tile
-				while (i < totalLayers)
-				{
-					if (tileMapLayers[i].GetCellSourceId(cell) != -1)
-					{
-						layer = i;
-					}
-					i++;
-				}
-
-				return (cell, (int)tileMapLayers[layer].Position.Y);
-			}
-		}
-		return (new Vector2I(-1, -1), 0);
 	}
 }
 

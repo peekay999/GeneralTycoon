@@ -95,19 +95,15 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 
 	private void AddGhostCompany()
 	{
-		if (_ghostFormation != null)
-			_ghostFormation.QueueFree();
-
-		PackedScene companyScene = (PackedScene)ResourceLoader.Load("res://Units/ghost_formation.tscn");
+		RemoveGhostCompany();
+		PackedScene companyScene = (PackedScene)ResourceLoader.Load("res://Units/Ghost/ghost_formation.tscn");
 		_ghostFormation = (GhostFormation)companyScene.Instantiate();
 		_ghostDirection = _selectedFormation.Direction;
 		_ghostFormation.FormationSize = _selectedFormation.FormationSize;
 		_ghostFormation.Name = "GhostCompany";
-		_ghostFormation.Commander = (PackedScene)ResourceLoader.Load("res://Units/ghost_unit.tscn");
-		_ghostFormation.Ranks = (PackedScene)ResourceLoader.Load("res://Units/ghost_unit.tscn");
+		// _ghostFormation.Commander = _selectedFormation.Commander;
+		// _ghostFormation.Ranks = _selectedFormation.Ranks;
 		AddChild(_ghostFormation);
-
-		_ghostFormation.MoveToTile(new Vector2I(20, 20), _ghostDirection);
 	}
 
 	private void RemoveGhostCompany()

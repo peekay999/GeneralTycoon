@@ -2,11 +2,21 @@ using Godot;
 
 public partial class GhostFormation : Formation
 {
-    private FormationUiController _parentController;
+    private FormationUiController _foromationIUcontroller;
 
     public override void _Ready()
     {
         base._Ready();
-        _parentController = GetParent<FormationUiController>();
+        ZIndex = 1;
+        _foromationIUcontroller = GetParent<FormationUiController>();
+        _formationController = _foromationIUcontroller.GetParent<FormationController>();
+
+        foreach (Unit unit in _units)
+        {
+            unit.MoveAttempted += (currentCell, targetCell) => _formationController._on_unit_move_attempted(unit, currentCell, targetCell);
+            unit.WaypointUpdated += (currentCell, targetCell, direction) => _formationController._on_unit_waypoint_updated(unit, currentCell, targetCell, direction);
+        }
+        _commander.MoveAttempted += (currentCell, targetCell) => _formationController._on_unit_move_attempted(_commander, currentCell, targetCell);
+        _commander.WaypointUpdated += (currentCell, targetCell, direction) => _formationController._on_unit_waypoint_updated(_commander, currentCell, targetCell, direction);
     }
 }

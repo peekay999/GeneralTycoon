@@ -12,11 +12,14 @@ public partial class SelectionLayer : TileMapLayer
 	{
 		_world = GetParent<World>();
 		_tileMapController = _world.GetNode<TileMapController>("TileMapController");
+		Visible = true;
+		ZIndex = 1;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		DetermineSelectionCell();
 	}
 
 	/// <summary>
@@ -25,39 +28,32 @@ public partial class SelectionLayer : TileMapLayer
 	/// <returns>The tile at the mouse's current position</returns>
 	public void DetermineSelectionCell()
 	{
+		Position = Vector2.Zero;
 		List<TileMapLayer> tileMapLayers = _tileMapController.GetTileMapLayers();
-		if (!_isSelecting)
+		int layerCount = tileMapLayers.Count;
+		Clear();
+		for (int i = layerCount - 1; i >= 0; i--)
 		{
-			Clear();
-			return;
-		}
-		for (int i = tileMapLayers.Count - 1; i > 0; i--)
-		{
-			Vector2 mousePos = GetGlobalMousePosition() - tileMapLayers[i - 1].Position + new Vector2(0, 2);
-			Clear();
-			Vector2I cell = tileMapLayers[i].LocalToMap(ToLocal(mousePos));
+			Position = tileMapLayers[i].Position;
+			TileMapLayer tileMapLayer = tileMapLayers[i];
+			Vector2 localMousePos = ToLocal(GetGlobalMousePosition());
+			Vector2I cell = tileMapLayer.LocalToMap(localMousePos);
 
-			int layer = i - 1;
-			int totalLayers = tileMapLayers.Count;
-			if (tileMapLayers[layer].GetCellSourceId(cell) != -1 && (tileMapLayers[layer].GetCellAtlasCoords(cell) != TileMapUtil.tile_corner_double_SE))
+			int layer = i;
+			if (tileMapLayer.GetCellSourceId(cell) != -1)
 			{
 				// check the layer above for a tile
-				while (i < totalLayers)
+				while (i < layerCount)
 				{
 					if (tileMapLayers[i].GetCellSourceId(cell) != -1)
 					{
 						layer = i;
 					}
-					i++;
+						i++;
 				}
-
-				Position = tileMapLayers[layer].Position;
-				ZIndex = tileMapLayers[layer].ZIndex;
-				YSortEnabled = true;
-				YSortOrigin = tileMapLayers[layer].YSortOrigin + 1;
-				YSortOrigin = tileMapLayers[layer].YSortOrigin + 1;
-				Vector2I cellAtlasCoords = tileMapLayers[layer].GetCellAtlasCoords(cell);
-				SetCell(cell, 1, cellAtlasCoords);
+				tileMapLayer = tileMapLayers[layer];
+				Position = tileMapLayer.Position;
+				SetCell(cell, 1, tileMapLayer.GetCellAtlasCoords(cell));
 				return;
 			}
 		}

@@ -89,6 +89,7 @@ public partial class FormationController : Node2D
 	public Formation GetSelectedFormation()
 	{
 		return _selectedFormation;
+
 	}
 
 	public void _on_formation_selected(Formation formation)

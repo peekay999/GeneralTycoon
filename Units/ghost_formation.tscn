@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2utkog71hafu"]
+
+[ext_resource type="Script" path="res://Units/GhostFormation.cs" id="1_kyh1a"]
+[ext_resource type="PackedScene" uid="uid://co6f7a42mif2f" path="res://Units/ghost_unit.tscn" id="2_ktdxm"]
+
+[node name="GhostFormation" type="Node2D"]
+script = ExtResource("1_kyh1a")
+Commander = ExtResource("2_ktdxm")
+Ranks = ExtResource("2_ktdxm")

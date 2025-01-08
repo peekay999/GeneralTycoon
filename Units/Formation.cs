@@ -6,6 +6,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 {
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
+	protected FormationController _formationController;
 	protected List<Unit> _units;
 	protected Unit _commander;
 	[Export]

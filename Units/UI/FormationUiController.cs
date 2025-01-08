@@ -6,6 +6,7 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 {
 	private Formation _selectedFormation;
 	private FormationController _parentController;
+	private SelectionLayer _selectionLayer;
 
 	private FormationUI _advance;
 	private FormationUI _leftWheel;
@@ -13,16 +14,20 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 	private FormationUI _retire;
 	private FormationUI _blockLeft;
 	private FormationUI _blockRight;
-	private Formation _ghostFormation;
+	private GhostFormation _ghostFormation;
 	private Direction _ghostDirection;
 
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
 
+	[Signal]
+	public delegate void MouseCellRequestedEventHandler();
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_parentController = GetParent<FormationController>();
+		_selectionLayer = World.Instance.GetSelectionLayer();
 
 		_advance = GetNode<FormationUI>("Advance");
 		_leftWheel = GetNode<FormationUI>("RightWheel");
@@ -40,25 +45,70 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		UpdateDirection(Direction);
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Input(InputEvent @event)
+	{
+		//if is a left mouse click
+		if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
+		{
+			// Vector2I cell = _selectionLayer.GetSelectedCell();
+			// if (cell.X != -1 && cell.Y != -1)
+			// {
+			// 	AddFormation(cell);
+			// }
+		}
+
+		if (@event is InputEventKey key && key.Pressed)
+		{
+			if (_ghostFormation != null)
+			{
+				if (key.Keycode == Key.Q)
+				{
+					_ghostDirection = UnitUtil.GetAntiClockwiseDirection(_ghostDirection);
+				}
+				else if (key.Keycode == Key.E)
+				{
+					_ghostDirection = UnitUtil.GetClockwiseDirection(_ghostDirection);
+				}
+				else if (key.Keycode == Key.Escape)
+				{
+					RemoveGhostCompany();
+				}
+			}
+		}
+	}
+
 	public override void _Process(double delta)
 	{
-		if (_ghostFormation != null)
-		{
-			// Vector2I cell = _parentController.GetSelectedCell();
-		}
+		// if (_ghostFormation != null)
+		// {
+		// 	_ghostFormation.MoveToTile(_selectionLayer.GetUsedCells()[0], _ghostDirection);
+		// }
 	}
 
 	private void AddGhostCompany()
 	{
 		if (_ghostFormation != null)
 			_ghostFormation.QueueFree();
-		_ghostFormation = new Company();
+
+		PackedScene companyScene = (PackedScene)ResourceLoader.Load("res://Units/ghost_formation.tscn");
+		_ghostFormation = (GhostFormation)companyScene.Instantiate();
+		_ghostDirection = _selectedFormation.Direction;
 		_ghostFormation.FormationSize = _selectedFormation.FormationSize;
+		_ghostFormation.Name = "GhostCompany";
 		_ghostFormation.Commander = (PackedScene)ResourceLoader.Load("res://Units/ghost_unit.tscn");
 		_ghostFormation.Ranks = (PackedScene)ResourceLoader.Load("res://Units/ghost_unit.tscn");
-
 		AddChild(_ghostFormation);
+
+		_ghostFormation.MoveToTile(new Vector2I(20, 20), _ghostDirection);
+	}
+
+	private void RemoveGhostCompany()
+	{
+		if (_ghostFormation != null)
+		{
+			_ghostFormation.QueueFree();
+			_ghostFormation = null;
+		}
 	}
 
 	public void ClearSelection()
@@ -69,6 +119,7 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 
 	public void SetFormation(Formation formation)
 	{
+		RemoveGhostCompany();
 		_selectedFormation = formation;
 		Visible = true;
 		UpdateDirection(formation.Direction);
@@ -78,6 +129,8 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		_rightWheel.MoveToTile(commanderCell + LocalisedDirections.forward * 3 + LocalisedDirections.right * 3);
 		_leftWheel.MoveToTile(commanderCell + LocalisedDirections.forward * 3 + LocalisedDirections.left * 3);
 		_retire.MoveToTile(commanderCell + LocalisedDirections.back * 2);
+
+		AddGhostCompany();
 
 	}
 

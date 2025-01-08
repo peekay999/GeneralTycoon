@@ -122,5 +122,39 @@ public partial class TileMapController : Node2D
 		}
 		return null;
 	}
+
+	public Vector2 MapToTopLayerLocal(Vector2I cell)
+	{
+		Vector2 YOffset = new Vector2(0, GetTopLayerOffset(cell));
+		Vector2 cellPos = GetTileMapLayers()[0].MapToLocal(cell);
+		return cellPos + YOffset;
+	}
+
+	public (Vector2I cell, int YOffset) GetCellFromMousePos()
+	{
+		for (int i = tileMapLayers.Count - 1; i > 0; i--)
+		{
+			Vector2 mousePos = GetGlobalMousePosition() - tileMapLayers[i - 1].Position;
+			Vector2I cell = tileMapLayers[i].LocalToMap(ToLocal(mousePos));
+
+			int layer = i - 1;
+			int totalLayers = tileMapLayers.Count;
+			if (tileMapLayers[layer].GetCellSourceId(cell) != -1 && (tileMapLayers[layer].GetCellAtlasCoords(cell) != TileMapUtil.tile_corner_double_SE))
+			{
+				// check the layer above for a tile
+				while (i < totalLayers)
+				{
+					if (tileMapLayers[i].GetCellSourceId(cell) != -1)
+					{
+						layer = i;
+					}
+					i++;
+				}
+
+				return (cell, (int)tileMapLayers[layer].Position.Y);
+			}
+		}
+		return (new Vector2I(-1, -1), 0);
+	}
 }
 

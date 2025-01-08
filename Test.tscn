@@ -15,7 +15,7 @@
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
-position = Vector2(-1, 0)
+position = Vector2(-1, 1)
 script = ExtResource("1_ux6xs")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -23,6 +23,7 @@ script = ExtResource("3_4f6d4")
 MoveSpeed = 400.0
 
 [node name="SelectionLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_htakq")
 script = ExtResource("7_noex6")
 
 [node name="TileMapController" type="Node2D" parent="."]

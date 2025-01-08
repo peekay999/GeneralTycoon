@@ -29,13 +29,11 @@ public partial class FormationUI : TileMover
 
 	private void _on_mouse_entered()
 	{
-		GD.Print("Mouse entered button");
 		button.Modulate = new Color(0.7f, 0.7f, 0.7f, 1.0f);
 	}
 
 	private void _on_mouse_exited()
 	{
-		GD.Print("Mouse exited button");
 		button.Modulate = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 

@@ -102,7 +102,9 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		for (int i = 0; i < _units.Count; i++)
 		{
 			_units[i].MoveToTile(targetCells[i]);
+			_units[i].UpdateDirection(direction);
 		}
+		_commander.UpdateDirection(direction);
 	}
 
 	public void MoveUnitsOnPath()

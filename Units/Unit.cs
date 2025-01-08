@@ -16,7 +16,6 @@ public partial class Unit : TileMover
 
 	[Signal]
 	public delegate void WaypointUpdatedEventHandler(Vector2I currentCell, Vector2I targetCell, Direction direction);
-
 	[Signal]
 	public delegate void MouseEnteredEventHandler();
 	[Signal]

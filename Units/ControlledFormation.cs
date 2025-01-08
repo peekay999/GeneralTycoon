@@ -24,7 +24,7 @@ public abstract partial class ControlledFormation : Formation
 
     public override void _Input(InputEvent @event)
     {
-        if (_hoverStatus.isHovered == true && _formationController.GetSelectedFormation() != this)
+        if (_hoverStatus.isHovered == true && _formationController.GetSelectedFormation() == null)
         {
             if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
             {
@@ -42,10 +42,11 @@ public abstract partial class ControlledFormation : Formation
     private void _on_mouse_entered()
     {
         _hoverStatus.count++;
-        if (_hoverStatus.count > 0 && _formationController.GetSelectedFormation() != this)
+        if (_hoverStatus.count > 0 && _formationController.GetSelectedFormation() == null)
         {
             _hoverStatus.isHovered = true;
             Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
+            World.Instance.GetSelectionLayer().Visible = false;
         }
     }
     private void _on_mouse_exited()

@@ -4,7 +4,7 @@ using Godot;
 
 public partial class FormationUiController : Node2D, IDirectionAnchor
 {
-	private Formation _selectedFormation;
+	private ControlledFormation _selectedFormation;
 	private FormationController _parentController;
 	private SelectionLayer _selectionLayer;
 
@@ -71,7 +71,14 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 				}
 				else if (key.Keycode == Key.Escape)
 				{
+					// if (_ghostFormation != null)
+					// {
+					// 	RemoveGhostCompany();
+					// 	return;
+					// }
 					RemoveGhostCompany();
+					ClearSelection();
+
 				}
 			}
 		}
@@ -79,10 +86,11 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 
 	public override void _Process(double delta)
 	{
-		// if (_ghostFormation != null)
-		// {
-		// 	_ghostFormation.MoveToTile(_selectionLayer.GetUsedCells()[0], _ghostDirection);
-		// }
+		if (_ghostFormation != null && _selectionLayer.GetUsedCells().Count > 0)
+		{
+			_ghostFormation.MoveToTile(_selectionLayer.GetUsedCells()[0], _ghostDirection);
+
+		}
 	}
 
 	private void AddGhostCompany()
@@ -115,9 +123,15 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 	{
 		_selectedFormation = null;
 		Visible = false;
+		_selectionLayer.Visible = true;
 	}
 
-	public void SetFormation(Formation formation)
+	public ControlledFormation GetSelectedFormation()
+	{
+		return _selectedFormation;
+	}
+
+	public void SetFormation(ControlledFormation formation)
 	{
 		RemoveGhostCompany();
 		_selectedFormation = formation;

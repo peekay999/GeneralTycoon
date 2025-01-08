@@ -15,8 +15,6 @@ public partial class FormationController : Node2D
 	private HashSet<Formation> _formations;
 	// private Dictionary<Formation, Vector2I> _formations;
 	private Dictionary<Unit, Vector2I> _units;
-
-	private Formation _selectedFormation;
 	// private Direction _direction;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -26,7 +24,6 @@ public partial class FormationController : Node2D
 		_pathfinder = _world.GetNode<Pathfinder>("Pathfinder");
 		_selectionLayer = _world.GetNode<SelectionLayer>("SelectionLayer");
 		_formationUiController = GetNode<FormationUiController>("FormationUiController");
-		_selectedFormation = null;
 		_units = new Dictionary<Unit, Vector2I>();
 
 		_unitLayer = new TileMapLayer();
@@ -88,15 +85,7 @@ public partial class FormationController : Node2D
 
 	public Formation GetSelectedFormation()
 	{
-		return _selectedFormation;
-
-	}
-
-	public void _on_formation_selected(Formation formation)
-	{
-		GD.Print("Formation " + formation.Name + " selected");
-		_selectedFormation = formation;
-		_formationUiController.SetFormation(formation);
+		return _formationUiController.GetSelectedFormation();
 	}
 
 	public void SetWaypoint(Formation formation, Vector2I cell, Direction direction)
@@ -110,10 +99,6 @@ public partial class FormationController : Node2D
 		{
 			formation.MoveUnitsOnPath();
 		}
-		// foreach (Formation formation in _formations.Keys)
-		// {
-		// 	formation.MoveUnitsOnPath();
-		// }
 	}
 
 	private void UpdateUnitPosition(Unit unit, Vector2I cell, Vector2I targetCell)
@@ -123,9 +108,18 @@ public partial class FormationController : Node2D
 		_units[unit] = targetCell;
 	}
 
+	public void _on_formation_selected(ControlledFormation formation)
+	{
+		_formationUiController.SetFormation(formation);
+	}
+
 	public void _on_tileMover_move_attempted(TileMover unit, Vector2I cellTo)
 	{
 		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
+		if (topLayer == null)
+		{
+			return;
+		}
 		unit.UpdateTransformPosition(cellTo, topLayer);
 	}
 
@@ -133,6 +127,10 @@ public partial class FormationController : Node2D
 	{
 		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
 
+		if (topLayer == null)
+		{
+			return;
+		}
 		UpdateUnitPosition(unit, cellFrom, cellTo);
 		unit.UpdateTransformPosition(cellTo, topLayer);
 	}
@@ -140,7 +138,6 @@ public partial class FormationController : Node2D
 	public async void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo, Direction direction)
 	{
 		List<Vector2I> path = await _pathfinder.FindPathAsync(cellFrom, cellTo);
-		// List<Vector2I> path = _pathfinder.FindPath(cellFrom, cellTo);
 		unit.SetPath(path);
 		unit.UpdateDirection(direction);
 	}

@@ -11,7 +11,6 @@ script = ExtResource("1_4g2mf")
 [node name="Sprites" type="Node2D" parent="YSort"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="YSort/Sprites"]
-modulate = Color(0, 0, 0, 1)
 texture_filter = 1
 position = Vector2(0, -32)
 sprite_frames = ExtResource("2_p5q4c")

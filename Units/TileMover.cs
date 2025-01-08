@@ -5,6 +5,7 @@ public partial class TileMover : Node2D
 {
 	protected Vector2I currentCell = Vector2I.Zero;
 	protected Vector2I target = Vector2I.Zero;
+	
 	[Signal]
 	public delegate void MoveAttemptedEventHandler(Vector2I currentCell, Vector2I targetCell);
 

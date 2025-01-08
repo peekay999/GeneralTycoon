@@ -31,7 +31,7 @@ public partial class TileMapController : Node2D
 		YSortEnabled = true;
 		_world = GetParent<Node2D>();
 		_pathfinder = _world.GetNode<Pathfinder>("Pathfinder");
-		_unitController = _world.GetNode<FormationController>("UnitController");
+		_unitController = _world.GetNode<FormationController>("FormationController");
 
 		tileMapLayers = new List<TileMapLayer>();
 

@@ -36,18 +36,18 @@ _tileSet = ExtResource("2_htakq")
 [node name="TileMapGenerator" type="Node2D" parent="TileMapController"]
 script = ExtResource("6_ee2ii")
 
-[node name="UnitController" type="Node2D" parent="."]
+[node name="FormationController" type="Node2D" parent="."]
 y_sort_enabled = true
 script = ExtResource("6_fvck0")
 
-[node name="FormationUiController" type="Node2D" parent="UnitController"]
+[node name="FormationUiController" type="Node2D" parent="FormationController"]
 z_index = 1
 script = ExtResource("8_2eqc8")
 
-[node name="Advance" type="Node2D" parent="UnitController/FormationUiController"]
+[node name="Advance" type="Node2D" parent="FormationController/FormationUiController"]
 script = ExtResource("10_gabad")
 
-[node name="Button" type="Button" parent="UnitController/FormationUiController/Advance"]
+[node name="Button" type="Button" parent="FormationController/FormationUiController/Advance"]
 z_index = 1
 texture_filter = 1
 anchors_preset = 8
@@ -63,10 +63,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("9_3gf4e")
 
-[node name="RightWheel" type="Node2D" parent="UnitController/FormationUiController"]
+[node name="RightWheel" type="Node2D" parent="FormationController/FormationUiController"]
 script = ExtResource("10_gabad")
 
-[node name="Button" type="Button" parent="UnitController/FormationUiController/RightWheel"]
+[node name="Button" type="Button" parent="FormationController/FormationUiController/RightWheel"]
 z_index = 1
 texture_filter = 1
 anchors_preset = 8
@@ -82,10 +82,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("9_3gf4e")
 
-[node name="LeftWheel" type="Node2D" parent="UnitController/FormationUiController"]
+[node name="LeftWheel" type="Node2D" parent="FormationController/FormationUiController"]
 script = ExtResource("10_gabad")
 
-[node name="Button" type="Button" parent="UnitController/FormationUiController/LeftWheel"]
+[node name="Button" type="Button" parent="FormationController/FormationUiController/LeftWheel"]
 z_index = 1
 texture_filter = 1
 anchors_preset = 8
@@ -101,10 +101,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("9_3gf4e")
 
-[node name="Retire" type="Node2D" parent="UnitController/FormationUiController"]
+[node name="Retire" type="Node2D" parent="FormationController/FormationUiController"]
 script = ExtResource("10_gabad")
 
-[node name="Button" type="Button" parent="UnitController/FormationUiController/Retire"]
+[node name="Button" type="Button" parent="FormationController/FormationUiController/Retire"]
 z_index = 1
 texture_filter = 1
 anchors_preset = 8

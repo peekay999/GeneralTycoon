@@ -84,13 +84,6 @@ public partial class FormationController : Node2D
 		_formations.Add(company);
 		company.Name = "Formation " + _formations.Count;
 		company.MoveToTile(cell, Direction.NORTH);
-		
-		// Company company = new Company();
-		// company.FormationSelected += () => _on_formation_selected(company);
-		// AddChild(company);
-		// _formations.Add(company);
-		// company.Name = "Formation " + _formations.Count;
-		// company.MoveToTile(cell, Direction.NORTH);
 	}
 
 	public Formation GetSelectedFormation()

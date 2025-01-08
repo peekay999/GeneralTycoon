@@ -12,7 +12,7 @@ public partial class Pathfinder : Node2D
 	{
 		ZIndex = 1;
 		_tileMapController = GetParent<World>().GetNode<TileMapController>("TileMapController");
-		_unitController = GetParent<World>().GetNode<FormationController>("UnitController");
+		_unitController = GetParent<World>().GetNode<FormationController>("FormationController");
 	}
 
 	public async Task<List<Vector2I>> FindPathAsync(Vector2I start, Vector2I goal)

@@ -5,7 +5,7 @@ using Godot;
 public partial class FormationUiController : Node2D, IDirectionAnchor
 {
 	private Formation _selectedFormation;
-	private FormationController _unitController;
+	private FormationController _parentController;
 
 	private FormationUI _advance;
 	private FormationUI _leftWheel;
@@ -13,6 +13,8 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 	private FormationUI _retire;
 	private FormationUI _blockLeft;
 	private FormationUI _blockRight;
+	private Formation _ghostFormation;
+	private Direction _ghostDirection;
 
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
@@ -20,17 +22,17 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_unitController = GetParent<FormationController>();
+		_parentController = GetParent<FormationController>();
 
 		_advance = GetNode<FormationUI>("Advance");
 		_leftWheel = GetNode<FormationUI>("RightWheel");
 		_rightWheel = GetNode<FormationUI>("LeftWheel");
 		_retire = GetNode<FormationUI>("Retire");
 
-		_advance.MoveAttempted += (currentCell, targetCell) => _unitController._on_tileMover_move_attempted(_advance, targetCell);
-		_leftWheel.MoveAttempted += (currentCell, targetCell) => _unitController._on_tileMover_move_attempted(_leftWheel, targetCell);
-		_rightWheel.MoveAttempted += (currentCell, targetCell) => _unitController._on_tileMover_move_attempted(_rightWheel, targetCell);
-		_retire.MoveAttempted += (currentCell, targetCell) => _unitController._on_tileMover_move_attempted(_retire, targetCell);
+		_advance.MoveAttempted += (currentCell, targetCell) => _parentController._on_tileMover_move_attempted(_advance, targetCell);
+		_leftWheel.MoveAttempted += (currentCell, targetCell) => _parentController._on_tileMover_move_attempted(_leftWheel, targetCell);
+		_rightWheel.MoveAttempted += (currentCell, targetCell) => _parentController._on_tileMover_move_attempted(_rightWheel, targetCell);
+		_retire.MoveAttempted += (currentCell, targetCell) => _parentController._on_tileMover_move_attempted(_retire, targetCell);
 
 		Direction = Direction.CONTINUE;
 
@@ -41,6 +43,22 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (_ghostFormation != null)
+		{
+			// Vector2I cell = _parentController.GetSelectedCell();
+		}
+	}
+
+	private void AddGhostCompany()
+	{
+		if (_ghostFormation != null)
+			_ghostFormation.QueueFree();
+		_ghostFormation = new Company();
+		_ghostFormation.FormationSize = _selectedFormation.FormationSize;
+		_ghostFormation.Commander = (PackedScene)ResourceLoader.Load("res://Units/ghost_unit.tscn");
+		_ghostFormation.Ranks = (PackedScene)ResourceLoader.Load("res://Units/ghost_unit.tscn");
+
+		AddChild(_ghostFormation);
 	}
 
 	public void ClearSelection()

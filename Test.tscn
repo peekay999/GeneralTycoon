@@ -61,6 +61,7 @@ offset_right = 64.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_default_cursor_shape = 2
 theme = ExtResource("9_3gf4e")
 
 [node name="RightWheel" type="Node2D" parent="UnitController/FormationUiController"]

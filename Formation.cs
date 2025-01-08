@@ -9,7 +9,7 @@ public partial class Formation : Node2D, IDirectionAnchor
 	private List<Unit> _units;
 	private Unit commander;
 	private FormationController _parentController;
-	private (int hoverCount, bool isHovered) _hoverStatus = (0, false);
+	private (int count, bool isHovered) _hoverStatus = (0, false);
 
 	[Signal]
 	public delegate void FormationSelectedEventHandler();
@@ -57,7 +57,6 @@ public partial class Formation : Node2D, IDirectionAnchor
 				SelectFormation(this);
 				// _hoverStatus = (1, false);
 				_hoverStatus.isHovered = false;
-				Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
 			}
 		}
 	}
@@ -199,8 +198,8 @@ public partial class Formation : Node2D, IDirectionAnchor
 
 	private void _on_mouse_entered()
 	{
-		_hoverStatus.hoverCount++;
-		if (_hoverStatus.hoverCount > 0 && _parentController.GetSelectedFormation() != this)
+		_hoverStatus.count++;
+		if (_hoverStatus.count > 0 && _parentController.GetSelectedFormation() != this)
 		{
 			_hoverStatus.isHovered = true;
 			Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
@@ -208,8 +207,8 @@ public partial class Formation : Node2D, IDirectionAnchor
 	}
 	private void _on_mouse_exited()
 	{
-		_hoverStatus.hoverCount--;
-		if (_hoverStatus.hoverCount <= 0)
+		_hoverStatus.count--;
+		if (_hoverStatus.count <= 0)
 		{
 			_hoverStatus.isHovered = false;
 			Input.SetDefaultCursorShape(Input.CursorShape.Arrow);

@@ -11,12 +11,10 @@ public partial class FormationUI : TileMover
 	public override void _Ready()
 	{
 		button = GetNode<Button>("Button");
-		button.MouseEntered += () => button.Modulate = new Color(0.7f, 0.7f, 0.7f, 1.0f);
-		button.MouseEntered += () => Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
-		button.MouseExited += () => button.Modulate = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-		button.MouseExited += () => Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
-
-		button.Pressed += ButtonPressed;
+		button.MouseEntered += _on_mouse_entered;
+		button.MouseExited += _on_mouse_exited;
+		button.Pressed += _on_button_pressed;
+		button.MouseDefaultCursorShape = Control.CursorShape.PointingHand;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -24,9 +22,21 @@ public partial class FormationUI : TileMover
 	{
 	}
 
-	private void ButtonPressed()
+	private void _on_button_pressed()
 	{
 		EmitSignal(SignalName.Selected);
+	}
+
+	private void _on_mouse_entered()
+	{
+		GD.Print("Mouse entered button");
+		button.Modulate = new Color(0.7f, 0.7f, 0.7f, 1.0f);
+	}
+
+	private void _on_mouse_exited()
+	{
+		GD.Print("Mouse exited button");
+		button.Modulate = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	public void UpdateButtonIcons(CompressedTexture2D normal)

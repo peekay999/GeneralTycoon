@@ -75,8 +75,6 @@ public partial class Unit : TileMover
 		_Ysort.Position = Vector2.Zero;
 		_sprites.Position = Vector2.Zero;
 
-		GD.Print(tileMapLayer.Position.Y);
-
 		_Ysort.MoveLocalY(-tileMapLayer.Position.Y);
 		_sprites.MoveLocalY(tileMapLayer.Position.Y);
 

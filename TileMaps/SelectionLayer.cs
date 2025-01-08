@@ -13,7 +13,6 @@ public partial class SelectionLayer : TileMapLayer
 		_world = GetParent<World>();
 		_tileMapController = _world.GetNode<TileMapController>("TileMapController");
 		Visible = true;
-		ZIndex = 1;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -52,7 +51,8 @@ public partial class SelectionLayer : TileMapLayer
 						i++;
 				}
 				tileMapLayer = tileMapLayers[layer];
-				Position = tileMapLayer.Position;
+				Position = tileMapLayer.Position - new Vector2(0, 1);
+				YSortOrigin = tileMapLayer.YSortOrigin - 1;
 				SetCell(cell, 1, tileMapLayer.GetCellAtlasCoords(cell));
 				return;
 			}

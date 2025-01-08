@@ -23,6 +23,8 @@ script = ExtResource("3_4f6d4")
 MoveSpeed = 400.0
 
 [node name="SelectionLayer" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+position = Vector2(0, 4)
 tile_set = ExtResource("2_htakq")
 script = ExtResource("7_noex6")
 

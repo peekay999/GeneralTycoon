@@ -4,7 +4,6 @@ using System;
 public partial class TileMover : Node2D
 {
 	protected Vector2I currentCell = Vector2I.Zero;
-	protected Vector2I target = Vector2I.Zero;
 
 	[Signal]
 	public delegate void UnitMovedEventHandler(Vector2I currentCell, Vector2I targetCell);
@@ -32,11 +31,11 @@ public partial class TileMover : Node2D
 			return;
 		}
 		currentCell = cellTo;
-		UpdateTransformPosition(cellTo);
+		UpdatePosition(cellTo);
 		EmitSignal(SignalName.UnitMoved, currentCell, cellTo);
 	}
 
-	public virtual void UpdateTransformPosition(Vector2I cellTo)
+	public virtual void UpdatePosition(Vector2I cellTo)
 	{
 		Position = World.Instance.MapToWorld(cellTo);
 	}

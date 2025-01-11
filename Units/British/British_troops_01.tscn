@@ -10,48 +10,55 @@ script = ExtResource("1_hdj73")
 [node name="YSort" type="Node2D" parent="."]
 
 [node name="Sprites" type="Node2D" parent="YSort"]
+y_sort_enabled = true
 
 [node name="troop_0" type="AnimatedSprite2D" parent="YSort/Sprites"]
+z_as_relative = false
+y_sort_enabled = true
 texture_filter = 1
-position = Vector2(-5, -37)
+position = Vector2(21, -25)
 sprite_frames = ExtResource("2_r7kfa")
-animation = &"walk"
-frame = 7
+frame = 4
 
 [node name="troop_1" type="AnimatedSprite2D" parent="YSort/Sprites"]
+z_as_relative = false
+y_sort_enabled = true
 texture_filter = 1
-position = Vector2(5, -32)
+position = Vector2(-1, -25)
 sprite_frames = ExtResource("2_r7kfa")
-animation = &"walk"
-frame = 7
+frame = 4
 
 [node name="troop_2" type="AnimatedSprite2D" parent="YSort/Sprites"]
+z_as_relative = false
+y_sort_enabled = true
 texture_filter = 1
-position = Vector2(15, -27)
+position = Vector2(-22, -25)
 sprite_frames = ExtResource("2_r7kfa")
-animation = &"walk"
-frame = 7
+frame = 4
 
 [node name="troop_3" type="AnimatedSprite2D" parent="YSort/Sprites"]
+z_as_relative = false
+y_sort_enabled = true
 texture_filter = 1
-position = Vector2(-16, -32)
+position = Vector2(20, -34)
 sprite_frames = ExtResource("2_r7kfa")
-animation = &"walk"
-frame = 7
+frame = 4
 
 [node name="troop_4" type="AnimatedSprite2D" parent="YSort/Sprites"]
+z_as_relative = false
+y_sort_enabled = true
 texture_filter = 1
-position = Vector2(-6, -26)
+position = Vector2(-1, -35)
 sprite_frames = ExtResource("2_r7kfa")
-animation = &"walk"
-frame = 7
+frame = 4
 
 [node name="troop_5" type="AnimatedSprite2D" parent="YSort/Sprites"]
+z_as_relative = false
+y_sort_enabled = true
 texture_filter = 1
-position = Vector2(5, -22)
+position = Vector2(-22, -34)
 sprite_frames = ExtResource("2_r7kfa")
-animation = &"walk"
-frame = 7
+frame = 4
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2(0, -16)

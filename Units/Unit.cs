@@ -8,18 +8,16 @@ public partial class Unit : TileMover
 {
 	private Node2D _Ysort;
 	private Node2D _sprites;
-	private List<AnimatedSprite2D> animatedSprite2Ds;
-	private Direction _frameDirection;
+	private List<AnimatedSprite2D> _animatedSprite2Ds;
+	private Direction _direction;
 	// private List<Vector2I> path;
-	private UnitType unitType;
+	private UnitType _unitType;
 	private Area2D _area2D;
 	private ActionQueue _actionQueue;
 
 	private float _moveSpeed = 1.0f;
 	public float _skewAmplitude;
 	public float _skewPhaseOffset;
-	[Signal]
-	public delegate void WaypointUpdatedEventHandler(Vector2I currentCell, Vector2I targetCell, Direction direction);
 	[Signal]
 	public delegate void MouseEnteredEventHandler();
 	[Signal]
@@ -29,23 +27,23 @@ public partial class Unit : TileMover
 	{
 		_Ysort = GetNode<Node2D>("YSort");
 		_sprites = _Ysort.GetNode<Node2D>("Sprites");
-		_frameDirection = Direction.NORTH;
+		_direction = Direction.NORTH;
 		_area2D = GetNode<Area2D>("Area2D");
 		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
 		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
 		_actionQueue = new ActionQueue(100000);
 		AddChild(_actionQueue);
 		// _parentController = GetParent<UnitController>();
-		animatedSprite2Ds = new List<AnimatedSprite2D>();
+		_animatedSprite2Ds = new List<AnimatedSprite2D>();
 		foreach (Node node in _sprites.GetChildren())
 		{
 			if (node is AnimatedSprite2D)
 			{
-				animatedSprite2Ds.Add((AnimatedSprite2D)node);
+				_animatedSprite2Ds.Add((AnimatedSprite2D)node);
 			}
 		}
 
-		unitType = UnitType.BLUE_INF;
+		_unitType = UnitType.BLUE_INF;
 
 		RandomNumberGenerator _rng = new RandomNumberGenerator();
 
@@ -73,7 +71,7 @@ public partial class Unit : TileMover
 	/// <returns>The atlas coordinates as a Vector2I.</returns>
 	public Vector2I GetUnitTypeAtlasCoords()
 	{
-		return unitType.AtlasCoords;
+		return _unitType.AtlasCoords;
 	}
 
 	/// <summary>
@@ -83,9 +81,9 @@ public partial class Unit : TileMover
 	/// </summary>
 	/// <param name="cellTo">The target cell to move to.</param>
 	/// <param name="tileMapLayer">The tile map layer to use for position calculations.</param>
-	public override void UpdateTransformPosition(Vector2I cellTo)
+	public override void UpdatePosition(Vector2I cellTo)
 	{
-		base.UpdateTransformPosition(cellTo);
+		base.UpdatePosition(cellTo);
 		UpdateSpritesYoffset(DetermineSpritesYoffset(cellTo));
 		UpdateDirection(Direction.CONTINUE);
 	}
@@ -94,23 +92,6 @@ public partial class Unit : TileMover
 	{
 		_Ysort.Position = new Vector2(0, offset);
 		_sprites.Position = new Vector2(0, -offset);
-		// _Ysort.Position = Vector2.Zero;
-		// _sprites.Position = Vector2.Zero;
-
-		// TileMapLayer topLayer = World.Instance.GetTopLayer(cell);
-
-		// _Ysort.MoveLocalY(-topLayer.Position.Y);
-		// _sprites.MoveLocalY(topLayer.Position.Y);
-
-		// if (topLayer.GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
-		// {
-		// 	MoveLocalY(8);
-		// 	_Ysort.MoveLocalY(-8);
-		// 	_sprites.MoveLocalY(8);
-		// }
-
-		// _Ysort.MoveLocalY(-1);
-		// _sprites.MoveLocalY(1);
 	}
 
 	public static float DetermineSpritesYoffset(Vector2I cell)
@@ -136,36 +117,55 @@ public partial class Unit : TileMover
 		{
 			return;
 		}
-		foreach (AnimatedSprite2D sprite in animatedSprite2Ds)
+		foreach (AnimatedSprite2D sprite in _animatedSprite2Ds)
 		{
 			sprite.Frame = (int)direction;
 		}
-		_frameDirection = direction;
+		if (_animatedSprite2Ds.Count > 1)
+		{
+			Vector2[] positions = UnitUtil.GetSpritePositions(direction);
+			for (int i = 0; i < _animatedSprite2Ds.Count; i++)
+			{
+				if (i > positions.Length - 1)
+				{
+					break;
+				}
+				_animatedSprite2Ds[i].Position = positions[i];
+			}
+		}
+		_direction = direction;
 	}
 
-	public void SetTilePath(List<Vector2I> path)
+	public void SetAnimation(string animation)
+	{
+		foreach (AnimatedSprite2D sprite in _animatedSprite2Ds)
+		{
+			sprite.Animation = animation;
+		}
+	}
+
+	public async void AssignPath(Vector2I cell, Direction direction)
 	{
 		_actionQueue.ClearQueue();
+		List<Vector2I> path = await World.Instance.GetPathfinder().FindPathAsync(currentCell, cell);
 		for (int i = 0; i < path.Count - 1; i++)
 		{
-			int cost = Pathfinder.GetMovementCost(path[i], path[i + 1]);
-			MoveAction moveAction = new MoveAction(cost, this, path[i], path[i + 1]);
+			MoveAction moveAction = new MoveAction(this, path[i], path[i + 1]);
 			_actionQueue.EnqueueAction(moveAction);
 		}
-	}
 
-	public void SetTilePath(List<MoveAction> moveActions)
-	{
-		foreach (MoveAction moveAction in moveActions)
-		{
-			_actionQueue.EnqueueAction(moveAction);
-		}
+		// add in a final turn action
+		_actionQueue.EnqueueAction(new TurnAction(this, direction));
 	}
 
 	public void ExecuteNextAction()
 	{
-		_actionQueue.ResetPoints();
 		_actionQueue.ExecuteQueue();
+	}
+
+	public void ResetActionPoints()
+	{
+		_actionQueue.ResetPoints();
 	}
 
 	public List<Vector2I> GetTilePath()
@@ -180,10 +180,5 @@ public partial class Unit : TileMover
 			}
 		}
 		return path;
-	}
-
-	public void SetWaypoint(Vector2I targetCell, Direction direction)
-	{
-		EmitSignal(SignalName.WaypointUpdated, currentCell, targetCell, (int)direction);
 	}
 }

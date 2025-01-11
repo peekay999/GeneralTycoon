@@ -10,27 +10,16 @@ public partial class FormationController : Node2D
 	private TileMapController _tileMapController;
 	private SelectionLayer _selectionLayer;
 	private FormationUiController _formationUiController;
-	private Pathfinder _pathfinder;
-	private TileMapLayer _unitLayer;
 	private HashSet<Formation> _formations;
-	// private Dictionary<Formation, Vector2I> _formations;
 	private Dictionary<Unit, Vector2I> _units;
-	// private Direction _direction;
-	// Called when the node enters the scene tree for the first time.
+
 	public override void _Ready()
 	{
 		_world = GetParent<Node2D>();
 		_tileMapController = _world.GetNode<TileMapController>("TileMapController");
-		_pathfinder = _world.GetNode<Pathfinder>("Pathfinder");
 		_selectionLayer = _world.GetNode<SelectionLayer>("SelectionLayer");
 		_formationUiController = GetNode<FormationUiController>("FormationUiController");
 		_units = new Dictionary<Unit, Vector2I>();
-
-		_unitLayer = new TileMapLayer();
-		_unitLayer.ZIndex = -1;
-		_unitLayer.Name = "UnitLayer";
-		_unitLayer.TileSet = _tileMapController.GetTileSet();
-		AddChild(_unitLayer);
 
 		_formations = new HashSet<Formation>();
 		// _formations = new Dictionary<Formation, Vector2I>();
@@ -63,11 +52,6 @@ public partial class FormationController : Node2D
 		}
 	}
 
-	public TileMapLayer GetUnitLayer()
-	{
-		return _unitLayer;
-	}
-
 	/// <summary>
 	/// Adds a unit to the unit layer at the specified cell.
 	/// </summary>
@@ -88,11 +72,6 @@ public partial class FormationController : Node2D
 		return _formationUiController.GetSelectedFormation();
 	}
 
-	public void SetWaypoint(Formation formation, Vector2I cell, Direction direction)
-	{
-		formation.SetWaypoint(cell, direction);
-	}
-
 	public void AllUnitsPerformActions()
 	{
 		foreach (Formation formation in _formations)
@@ -106,26 +85,8 @@ public partial class FormationController : Node2D
 		_formationUiController.SetSelectedFormation(formation);
 	}
 
-	public void _on_tileMover_move_attempted(TileMover unit, Vector2I cellTo)
-	{
-		TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
-		if (topLayer == null)
-		{
-			return;
-		}
-		unit.UpdateTransformPosition(cellTo);
-	}
-
 	public void _on_unit_moved(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
-		_unitLayer.SetCell(cellFrom, 2, new Vector2I(-1, -1));
-		_unitLayer.SetCell(cellTo, 2, UnitType.BLUE_INF.AtlasCoords);
 		_units[unit] = cellTo;
-	}
-
-	public async void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo)
-	{
-		List<Vector2I> path = await _pathfinder.FindPathAsync(cellFrom, cellTo);
-		unit.SetTilePath(path);
 	}
 }

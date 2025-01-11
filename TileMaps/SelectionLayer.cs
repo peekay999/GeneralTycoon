@@ -1,17 +1,13 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class SelectionLayer : TileMapLayer
 {
-	public bool _isSelecting;
-	private World _world;
 	private TileMapController _tileMapController;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_world = GetParent<World>();
-		_tileMapController = _world.GetNode<TileMapController>("TileMapController");
+		_tileMapController = GetParent<World>().GetNode<TileMapController>("TileMapController");
 		Visible = true;
 	}
 

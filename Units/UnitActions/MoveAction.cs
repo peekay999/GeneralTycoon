@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Godot;
 
 public partial class MoveAction : UnitAction
@@ -8,12 +6,11 @@ public partial class MoveAction : UnitAction
     private Vector2I _startCell;
     private Vector2 _targetPos;
     private Vector2 _startPos;
-    private float _t = 0.0f;
-    private float pauseTime = 1.20f;
 
-
-    public MoveAction(int cost, Unit unit, Vector2I startCell, Vector2I targetCell) : base(cost, unit)
+    public MoveAction(Unit unit, Vector2I startCell, Vector2I targetCell) : base(unit)
     {
+        _t = 0.0f;
+        _cost = Pathfinder.GetMovementCost(startCell, targetCell);
         _targetCell = targetCell;
         _startCell = startCell;
         _targetPos = World.Instance.MapToWorld(targetCell);
@@ -30,18 +27,14 @@ public partial class MoveAction : UnitAction
         _t += (float)delta * _unit.GetWalkSpeed();
 
         _unit.Position = _startPos.Lerp(_targetPos, _t);
+        _unit.SetAnimation(Animations.WALK);
         _unit.Skew = Mathf.Sin(_t * Mathf.Pi * 2 + _unit._skewPhaseOffset) * _unit._skewAmplitude;
 
         float startYoffset = Unit.DetermineSpritesYoffset(_startCell);
         float targetYoffset = Unit.DetermineSpritesYoffset(_targetCell);
         float Yoffset = Mathf.Lerp(startYoffset, targetYoffset, _t);
         _unit.UpdateSpritesYoffset(Yoffset);
-
         _unit.UpdateDirection(UnitUtil.DetermineDirection(_startCell, _targetCell));
-        // if (_t >= 0.5f)
-        // {
-        //     _unit.UpdateSpritesYoffset(_targetCell);
-        // }
         if (_t >= 1.0f)
         {
             _unit.MoveToTile(_targetCell);

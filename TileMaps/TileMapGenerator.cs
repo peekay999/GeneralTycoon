@@ -4,11 +4,6 @@ using System.Collections.Generic;
 
 public partial class TileMapGenerator : Node2D
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-	}
-
 	public List<TileMapLayer> GenerateTileMapLayers(Texture2D heightmap, int numberOfLayers, TileSet tileSet)
 	{
 		Image image = heightmap.GetImage();

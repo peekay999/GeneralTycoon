@@ -28,16 +28,6 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		_parentController = GetParent<FormationController>();
 		_selectionLayer = World.Instance.GetSelectionLayer();
 
-		// _advance = GetNode<FormationUI>("Advance");
-		// _leftWheel = GetNode<FormationUI>("RightWheel");
-		// _rightWheel = GetNode<FormationUI>("LeftWheel");
-		// _retire = GetNode<FormationUI>("Retire");
-
-		// _advance.UnitMoved += (currentCell, targetCell) => _parentController._on_tileMover_move_attempted(_advance, targetCell);
-		// _leftWheel.UnitMoved += (currentCell, targetCell) => _parentController._on_tileMover_move_attempted(_leftWheel, targetCell);
-		// _rightWheel.UnitMoved += (currentCell, targetCell) => _parentController._on_tileMover_move_attempted(_rightWheel, targetCell);
-		// _retire.UnitMoved += (currentCell, targetCell) => _parentController._on_tileMover_move_attempted(_retire, targetCell);
-
 		Direction = Direction.CONTINUE;
 
 		Visible = false;

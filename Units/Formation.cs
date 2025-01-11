@@ -77,21 +77,20 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		UpdateDirection(Direction.NORTH);
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
-
 	public Unit GetCommander()
 	{
 		return _commander;
+	}
+
+	public int GetWidth()
+	{
+		return _units.Count;
 	}
 
 	private static void SelectFormation(Formation formation)
 	{
 		formation.EmitSignal("FormationSelected");
 	}
-
 
 	public Vector2I GetCurrentCell()
 	{
@@ -130,11 +129,11 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public void SetWaypoint(Vector2I cell, Direction direction)
 	{
 		UpdateDirection(direction);
-		_commander.SetWaypoint(cell, direction);
+		_commander.AssignPath(cell, direction);
 		Vector2I[] targetCells = DressOffCommander(cell, direction);
 		for (int i = 0; i < _units.Count; i++)
 		{
-			_units[i].SetWaypoint(targetCells[i], direction);
+			_units[i].AssignPath(targetCells[i], direction);
 		}
 	}
 
@@ -150,15 +149,6 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		_commander.UpdateDirection(direction);
 	}
 
-	// public void MoveUnitsOnPath()
-	// {
-	// 	// foreach (Unit unit in _units)
-	// 	// {
-	// 	// 	unit.MoveOnPath();
-	// 	// }
-	// 	// _commander.MoveOnPath();
-	// }
-
 	public void ExecuteAllUnitActions()
 	{
 		_commander.ExecuteNextAction();
@@ -168,15 +158,11 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		}
 	}
 
-
 	public void UpdateDirection(Direction direction)
 	{
 		Direction = direction;
 		LocalisedDirections = Pathfinder.GetLocalisedDirections(Direction);
 	}
 
-	public int GetWidth()
-	{
-		return _units.Count;
-	}
+
 }

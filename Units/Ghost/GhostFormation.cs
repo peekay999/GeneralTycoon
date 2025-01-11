@@ -16,9 +16,7 @@ public partial class GhostFormation : Formation
         foreach (Unit unit in _units)
         {
             unit.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(unit, currentCell, targetCell);
-            unit.WaypointUpdated += (currentCell, targetCell, direction) => _formationController._on_unit_waypoint_updated(unit, currentCell, targetCell);
         }
         _commander.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(_commander, currentCell, targetCell);
-        _commander.WaypointUpdated += (currentCell, targetCell, direction) => _formationController._on_unit_waypoint_updated(_commander, currentCell, targetCell);
     }
 }

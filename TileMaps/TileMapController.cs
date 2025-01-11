@@ -19,9 +19,6 @@ public partial class TileMapController : Node2D
 
 	private TileMapGenerator _tileMapGenerator;
 	private List<TileMapLayer> tileMapLayers;
-	private Node2D _world;
-	private Pathfinder _pathfinder;
-	private FormationController _unitController;
 	private Dictionary<Vector2I, int> _tileHeights;
 	private Dictionary<Vector2I, TileMapLayer> _topLayers;
 	private readonly object _tileHeightsLock = new object();
@@ -29,9 +26,6 @@ public partial class TileMapController : Node2D
 	public override void _Ready()
 	{
 		YSortEnabled = true;
-		_world = GetParent<Node2D>();
-		_pathfinder = _world.GetNode<Pathfinder>("Pathfinder");
-		_unitController = _world.GetNode<FormationController>("FormationController");
 
 		tileMapLayers = new List<TileMapLayer>();
 

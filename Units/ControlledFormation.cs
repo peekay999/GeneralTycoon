@@ -12,12 +12,10 @@ public abstract partial class ControlledFormation : Formation
         foreach (Unit unit in _units)
         {
             unit.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(unit, currentCell, targetCell);
-            unit.WaypointUpdated += (currentCell, targetCell, direction) => _formationController._on_unit_waypoint_updated(unit, currentCell, targetCell);
             unit.MouseEntered += () => _on_mouse_entered();
             unit.MouseExited += () => _on_mouse_exited();
         }
         _commander.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(_commander, currentCell, targetCell);
-        _commander.WaypointUpdated += (currentCell, targetCell, direction) => _formationController._on_unit_waypoint_updated(_commander, currentCell, targetCell);
         _commander.MouseEntered += () => _on_mouse_entered();
         _commander.MouseExited += () => _on_mouse_exited();
     }

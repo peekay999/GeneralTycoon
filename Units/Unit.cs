@@ -10,10 +10,12 @@ public partial class Unit : TileMover
 	private Node2D _sprites;
 	private List<AnimatedSprite2D> animatedSprite2Ds;
 	private Direction _frameDirection;
-	private List<Vector2I> path;
+	// private List<Vector2I> path;
 	private UnitType unitType;
 	private Area2D _area2D;
+	private ActionQueue _actionQueue;
 
+	private float _moveSpeed = 1.0f;
 	[Signal]
 	public delegate void WaypointUpdatedEventHandler(Vector2I currentCell, Vector2I targetCell, Direction direction);
 	[Signal]
@@ -29,6 +31,8 @@ public partial class Unit : TileMover
 		_area2D = GetNode<Area2D>("Area2D");
 		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
 		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
+		_actionQueue = new ActionQueue(100000);
+		AddChild(_actionQueue);
 		// _parentController = GetParent<UnitController>();
 		animatedSprite2Ds = new List<AnimatedSprite2D>();
 		foreach (Node node in _sprites.GetChildren())
@@ -51,6 +55,11 @@ public partial class Unit : TileMover
 		return currentCell;
 	}
 
+	public float GetWalkSpeed()
+	{
+		return _moveSpeed;
+	}
+
 	/// <summary>
 	/// Gets the atlas coordinates of the unit type.
 	/// </summary>
@@ -67,18 +76,24 @@ public partial class Unit : TileMover
 	/// </summary>
 	/// <param name="cellTo">The target cell to move to.</param>
 	/// <param name="tileMapLayer">The tile map layer to use for position calculations.</param>
-	public override void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
+	public override void UpdateTransformPosition(Vector2I cellTo)
 	{
-		base.UpdateTransformPosition(cellTo, tileMapLayer);
-		UpdateDirection(UnitUtil.DetermineDirection(currentCell, cellTo));
+		base.UpdateTransformPosition(cellTo);
+		UpdateSpritesYoffset(cellTo);
+		UpdateDirection(Direction.CONTINUE);
+	}
 
+	public void UpdateSpritesYoffset(Vector2I cell)
+	{
 		_Ysort.Position = Vector2.Zero;
 		_sprites.Position = Vector2.Zero;
 
-		_Ysort.MoveLocalY(-tileMapLayer.Position.Y);
-		_sprites.MoveLocalY(tileMapLayer.Position.Y);
+		TileMapLayer topLayer = World.Instance.GetTopLayer(cell);
 
-		if (tileMapLayer.GetCellAtlasCoords(cellTo) != TileMapUtil.tile_base)
+		_Ysort.MoveLocalY(-topLayer.Position.Y);
+		_sprites.MoveLocalY(topLayer.Position.Y);
+
+		if (topLayer.GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
 		{
 			MoveLocalY(8);
 			_Ysort.MoveLocalY(-8);
@@ -87,7 +102,22 @@ public partial class Unit : TileMover
 
 		_Ysort.MoveLocalY(-1);
 		_sprites.MoveLocalY(1);
+	}
 
+		public void UpdateSpritesYoffset(Vector2I cell, float Yoffset)
+	{
+		_Ysort.Position = Vector2.Zero + new Vector2(0, Yoffset);
+		_sprites.Position = Vector2.Zero + new Vector2(0, Yoffset);
+
+		if (World.Instance.GetTopLayer(cell).GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
+		{
+			MoveLocalY(8);
+			_Ysort.MoveLocalY(-8);
+			_sprites.MoveLocalY(8);
+		}
+
+		_Ysort.MoveLocalY(-1);
+		_sprites.MoveLocalY(1);
 	}
 
 	/// <summary>
@@ -107,29 +137,42 @@ public partial class Unit : TileMover
 		_frameDirection = direction;
 	}
 
-	public void SetPath(List<Vector2I> path)
+	public void SetTilePath(List<Vector2I> path)
 	{
-		if (path != null && path.Count > 0)
+		_actionQueue.ClearQueue();
+		for (int i = 0; i < path.Count - 1; i++)
 		{
-			this.path = path;
-			target = path[path.Count - 1];
-			// QueueRedraw();
+			int cost = Pathfinder.GetMovementCost(path[i], path[i + 1]);
+			MoveAction moveAction = new MoveAction(cost, this, path[i], path[i + 1]);
+			_actionQueue.EnqueueAction(moveAction);
 		}
 	}
 
-	public void MoveOnPath()
+	public void SetTilePath(List<MoveAction> moveActions)
 	{
-		if (path != null && path.Count > 0)
+		foreach (MoveAction moveAction in moveActions)
 		{
-			Vector2I nextCell = path[0];
-			path.RemoveAt(0);
-			MoveToTile(nextCell);
-			SetWaypoint(target, Direction.CONTINUE);
+			_actionQueue.EnqueueAction(moveAction);
 		}
+	}
+
+	public void ExecuteNextAction()
+	{
+		_actionQueue.ResetPoints();
+		_actionQueue.ExecuteQueue();
 	}
 
 	public List<Vector2I> GetTilePath()
 	{
+		List<UnitAction> actions = new List<UnitAction>(_actionQueue.GetActionQueue());
+		List<Vector2I> path = new List<Vector2I>();
+		foreach (UnitAction action in actions)
+		{
+			if (action is MoveAction moveAction)
+			{
+				path.Add(moveAction.GetTargetCell());
+			}
+		}
 		return path;
 	}
 

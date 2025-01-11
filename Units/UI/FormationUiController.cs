@@ -96,8 +96,10 @@ public partial class FormationUiController : Node2D, IDirectionAnchor
 		{
 			Unit commander = _selectedFormation.GetCommander();
 			Unit ghostCommander = _ghostFormation.GetCommander();
+			Vector2I commanderCell = _selectedFormation.GetCurrentCell();
+			Vector2 commanderPos = World.Instance.MapToWorld(commanderCell);
 			// DrawLine(commander.Position, ghostCommander.Position, new Color(1, 1, 1, 0.5f));
-			DrawDashedLine(commander.Position, ghostCommander.Position, new Color(1, 1, 1, 0.75f), 4.0f, 16.0f, false, false);
+			DrawDashedLine(commanderPos, ghostCommander.Position, new Color(1, 1, 1, 0.75f), 4.0f, 16.0f, false, false);
 		}
 	}
 

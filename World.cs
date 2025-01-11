@@ -55,7 +55,7 @@ public partial class World : Node2D
 
 	public Vector2 MapToWorld(Vector2I cell)
 	{
-		return _tileMapController.GetTopLayer(cell).MapToLocal(cell);
+		return _tileMapController.GetTopLayer(cell).MapToLocal(cell) + _tileMapController.GetTopLayer(cell).Position;
 	}
 
 	public TileMapLayer GetTopLayer(Vector2I cell)

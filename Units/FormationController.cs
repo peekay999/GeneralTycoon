@@ -58,7 +58,7 @@ public partial class FormationController : Node2D
 		{
 			if (key.Keycode == Key.C)
 			{
-				MoveFormationsOnPath();
+				AllUnitsPerformActions();
 			}
 		}
 	}
@@ -93,19 +93,12 @@ public partial class FormationController : Node2D
 		formation.SetWaypoint(cell, direction);
 	}
 
-	public void MoveFormationsOnPath()
+	public void AllUnitsPerformActions()
 	{
 		foreach (Formation formation in _formations)
 		{
-			formation.MoveUnitsOnPath();
+			formation.ExecuteAllUnitActions();
 		}
-	}
-
-	private void UpdateUnitPosition(Unit unit, Vector2I cell, Vector2I targetCell)
-	{
-		_unitLayer.SetCell(cell, 2, new Vector2I(-1, -1));
-		_unitLayer.SetCell(targetCell, 2, UnitType.BLUE_INF.AtlasCoords);
-		_units[unit] = targetCell;
 	}
 
 	public void _on_formation_selected(ControlledFormation formation)
@@ -120,24 +113,19 @@ public partial class FormationController : Node2D
 		{
 			return;
 		}
-		unit.UpdateTransformPosition(cellTo, topLayer);
+		unit.UpdateTransformPosition(cellTo);
 	}
 
-	public void _on_unit_move_attempted(Unit unit, Vector2I cellFrom, Vector2I cellTo)
+	public void _on_unit_moved(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
-		// TileMapLayer topLayer = _tileMapController.GetTopLayer(cellTo);
-
-		// if (topLayer == null)
-		// {
-		// 	return;
-		// }
-		UpdateUnitPosition(unit, cellFrom, cellTo);
-		// unit.UpdateTransformPosition(cellTo, topLayer);
+		_unitLayer.SetCell(cellFrom, 2, new Vector2I(-1, -1));
+		_unitLayer.SetCell(cellTo, 2, UnitType.BLUE_INF.AtlasCoords);
+		_units[unit] = cellTo;
 	}
 
-	public async void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo, Direction direction)
+	public async void _on_unit_waypoint_updated(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
 		List<Vector2I> path = await _pathfinder.FindPathAsync(cellFrom, cellTo);
-		unit.SetPath(path);
+		unit.SetTilePath(path);
 	}
 }

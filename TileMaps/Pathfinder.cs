@@ -42,7 +42,6 @@ public partial class Pathfinder : Node2D
 			if (current == goal)
 			{
 				List<Vector2I> path = ReconstructPath(cameFrom, current);
-				path.RemoveAt(0);
 				return path;
 			}
 
@@ -80,7 +79,6 @@ public partial class Pathfinder : Node2D
 		}
 
 		List<Vector2I> closestPath = ReconstructPath(cameFrom, closestPoint);
-		closestPath.RemoveAt(0);
 		return closestPath;
 	}
 
@@ -114,11 +112,11 @@ public partial class Pathfinder : Node2D
 		return path;
 	}
 
-	private int GetMovementCost(Vector2I from, Vector2I to)
+	public static int GetMovementCost(Vector2I from, Vector2I to)
 	{
 		int movementCost;
 		// Check if the movement is diagonal
-		if (from.X != to.X && from.Y != to.Y)
+		if (IsDiagonal(from, to))
 		{
 			movementCost = 14; // Diagonal movement cost (1.4 * 10)
 		}
@@ -175,6 +173,15 @@ public partial class Pathfinder : Node2D
 			return false;
 		}
 		return true;
+	}
+
+	public static bool IsDiagonal(Vector2I cellFrom, Vector2I cellTo)
+	{
+		if (cellFrom.X != cellTo.X && cellFrom.Y != cellTo.Y)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	public static LocalisedDirections GetLocalisedDirections(Direction facingDirection)

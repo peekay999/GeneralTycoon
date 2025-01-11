@@ -9,7 +9,6 @@ public partial class TileMover : Node2D
 	[Signal]
 	public delegate void UnitMovedEventHandler(Vector2I currentCell, Vector2I targetCell);
 
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -32,14 +31,13 @@ public partial class TileMover : Node2D
 		{
 			return;
 		}
-		UpdateTransformPosition(cellTo, topLayer);
+		currentCell = cellTo;
+		UpdateTransformPosition(cellTo);
 		EmitSignal(SignalName.UnitMoved, currentCell, cellTo);
 	}
 
-	public virtual void UpdateTransformPosition(Vector2I cellTo, TileMapLayer tileMapLayer)
+	public virtual void UpdateTransformPosition(Vector2I cellTo)
 	{
-		currentCell = cellTo;
-		Vector2 worldPosition = tileMapLayer.MapToLocal(cellTo);
-		Position = worldPosition + tileMapLayer.Position;
+		Position = World.Instance.MapToWorld(cellTo);
 	}
 }

@@ -150,14 +150,24 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		_commander.UpdateDirection(direction);
 	}
 
-	public void MoveUnitsOnPath()
+	// public void MoveUnitsOnPath()
+	// {
+	// 	// foreach (Unit unit in _units)
+	// 	// {
+	// 	// 	unit.MoveOnPath();
+	// 	// }
+	// 	// _commander.MoveOnPath();
+	// }
+
+	public void ExecuteAllUnitActions()
 	{
+		_commander.ExecuteNextAction();
 		foreach (Unit unit in _units)
 		{
-			unit.MoveOnPath();
+			unit.ExecuteNextAction();
 		}
-		_commander.MoveOnPath();
 	}
+
 
 	public void UpdateDirection(Direction direction)
 	{

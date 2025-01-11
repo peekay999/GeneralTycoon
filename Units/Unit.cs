@@ -16,6 +16,8 @@ public partial class Unit : TileMover
 	private ActionQueue _actionQueue;
 
 	private float _moveSpeed = 1.0f;
+	public float _skewAmplitude;
+	public float _skewPhaseOffset;
 	[Signal]
 	public delegate void WaypointUpdatedEventHandler(Vector2I currentCell, Vector2I targetCell, Direction direction);
 	[Signal]
@@ -44,6 +46,11 @@ public partial class Unit : TileMover
 		}
 
 		unitType = UnitType.BLUE_INF;
+
+		RandomNumberGenerator _rng = new RandomNumberGenerator();
+
+		_skewAmplitude = _rng.RandfRange(0.075f, 0.125f);
+		_skewPhaseOffset = _rng.RandfRange(0.0f, Mathf.Pi * 0.5f);
 	}
 
 	/// <summary>
@@ -79,45 +86,44 @@ public partial class Unit : TileMover
 	public override void UpdateTransformPosition(Vector2I cellTo)
 	{
 		base.UpdateTransformPosition(cellTo);
-		UpdateSpritesYoffset(cellTo);
+		UpdateSpritesYoffset(DetermineSpritesYoffset(cellTo));
 		UpdateDirection(Direction.CONTINUE);
 	}
 
-	public void UpdateSpritesYoffset(Vector2I cell)
+	public void UpdateSpritesYoffset(float offset)
 	{
-		_Ysort.Position = Vector2.Zero;
-		_sprites.Position = Vector2.Zero;
+		_Ysort.Position = new Vector2(0, offset);
+		_sprites.Position = new Vector2(0, -offset);
+		// _Ysort.Position = Vector2.Zero;
+		// _sprites.Position = Vector2.Zero;
 
-		TileMapLayer topLayer = World.Instance.GetTopLayer(cell);
+		// TileMapLayer topLayer = World.Instance.GetTopLayer(cell);
 
-		_Ysort.MoveLocalY(-topLayer.Position.Y);
-		_sprites.MoveLocalY(topLayer.Position.Y);
+		// _Ysort.MoveLocalY(-topLayer.Position.Y);
+		// _sprites.MoveLocalY(topLayer.Position.Y);
 
-		if (topLayer.GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
-		{
-			MoveLocalY(8);
-			_Ysort.MoveLocalY(-8);
-			_sprites.MoveLocalY(8);
-		}
+		// if (topLayer.GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
+		// {
+		// 	MoveLocalY(8);
+		// 	_Ysort.MoveLocalY(-8);
+		// 	_sprites.MoveLocalY(8);
+		// }
 
-		_Ysort.MoveLocalY(-1);
-		_sprites.MoveLocalY(1);
+		// _Ysort.MoveLocalY(-1);
+		// _sprites.MoveLocalY(1);
 	}
 
-		public void UpdateSpritesYoffset(Vector2I cell, float Yoffset)
+	public static float DetermineSpritesYoffset(Vector2I cell)
 	{
-		_Ysort.Position = Vector2.Zero + new Vector2(0, Yoffset);
-		_sprites.Position = Vector2.Zero + new Vector2(0, Yoffset);
-
-		if (World.Instance.GetTopLayer(cell).GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
+		float offset = 0.0f;
+		TileMapLayer tileMapLayer = World.Instance.GetTopLayer(cell);
+		offset -= tileMapLayer.Position.Y;
+		if (tileMapLayer.GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
 		{
-			MoveLocalY(8);
-			_Ysort.MoveLocalY(-8);
-			_sprites.MoveLocalY(8);
+			offset += 8;
 		}
-
-		_Ysort.MoveLocalY(-1);
-		_sprites.MoveLocalY(1);
+		offset += 1;
+		return offset;
 	}
 
 	/// <summary>

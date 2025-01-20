@@ -7,7 +7,7 @@ public partial class SelectionLayer : TileMapLayer
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_tileMapController = GetParent<World>().GetNode<TileMapController>("TileMapController");
+		_tileMapController = World.Instance.GetNode<TileMapController>("TileMapController");
 		Visible = true;
 	}
 

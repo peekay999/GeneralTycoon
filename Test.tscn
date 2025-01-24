@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bufsvbmaiccdc"]
+[gd_scene load_steps=11 format=3 uid="uid://bufsvbmaiccdc"]
 
 [ext_resource type="Script" path="res://TileMaps/TileMapController.cs" id="1_luie1"]
 [ext_resource type="Script" path="res://World.cs" id="1_ux6xs"]
@@ -10,8 +10,6 @@
 [ext_resource type="Script" path="res://TileMaps/Pathfinder.cs" id="6_qqpqo"]
 [ext_resource type="Script" path="res://TileMaps/SelectionLayer.cs" id="7_noex6"]
 [ext_resource type="Script" path="res://Units/UI/FormationUiController.cs" id="8_2eqc8"]
-[ext_resource type="Theme" uid="uid://ccj8jituat0aw" path="res://UI_formationControl_theme_button.tres" id="9_3gf4e"]
-[ext_resource type="Script" path="res://Units/UI/FormationUI.cs" id="10_gabad"]
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -47,82 +45,6 @@ script = ExtResource("6_fvck0")
 y_sort_enabled = true
 position = Vector2(0, 1)
 script = ExtResource("8_2eqc8")
-
-[node name="Advance" type="Node2D" parent="FormationController/FormationUiController"]
-script = ExtResource("10_gabad")
-
-[node name="Button" type="Button" parent="FormationController/FormationUiController/Advance"]
-z_index = 1
-texture_filter = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("9_3gf4e")
-
-[node name="RightWheel" type="Node2D" parent="FormationController/FormationUiController"]
-script = ExtResource("10_gabad")
-
-[node name="Button" type="Button" parent="FormationController/FormationUiController/RightWheel"]
-z_index = 1
-texture_filter = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("9_3gf4e")
-
-[node name="LeftWheel" type="Node2D" parent="FormationController/FormationUiController"]
-script = ExtResource("10_gabad")
-
-[node name="Button" type="Button" parent="FormationController/FormationUiController/LeftWheel"]
-z_index = 1
-texture_filter = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("9_3gf4e")
-
-[node name="Retire" type="Node2D" parent="FormationController/FormationUiController"]
-script = ExtResource("10_gabad")
-
-[node name="Button" type="Button" parent="FormationController/FormationUiController/Retire"]
-z_index = 1
-texture_filter = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 64.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("9_3gf4e")
 
 [node name="Pathfinder" type="Node2D" parent="."]
 position = Vector2(0, 1)

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Units/Unit.cs" id="1_s0q0b"]
 [ext_resource type="SpriteFrames" uid="uid://csf4pi8ap8jjt" path="res://Units/Ghost/ghost_unit_sprites.tres" id="2_wqbsf"]
-[ext_resource type="Texture2D" uid="uid://c6jrno68igsdx" path="res://Sprites/UI/GhostUnit.png" id="2_ygt0a"]
+[ext_resource type="Texture2D" uid="uid://c6jrno68igsdx" path="res://Sprites/Character/GhostUnit.png" id="2_ygt0a"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xugqh"]
 atlas = ExtResource("2_ygt0a")

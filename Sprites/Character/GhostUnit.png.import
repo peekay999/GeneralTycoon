@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bymjdtub41hm0"
-path="res://.godot/imported/UI_formation_controls23.png-55e57b1f9b5465ab6ee20f3d95907911.ctex"
+uid="uid://c6jrno68igsdx"
+path="res://.godot/imported/GhostUnit.png-c1a71ce84c22e16e8a4e851de2a7d72f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/UI/UI_formation_control/UI_formation_controls23.png"
-dest_files=["res://.godot/imported/UI_formation_controls23.png-55e57b1f9b5465ab6ee20f3d95907911.ctex"]
+source_file="res://Sprites/Character/GhostUnit.png"
+dest_files=["res://.godot/imported/GhostUnit.png-c1a71ce84c22e16e8a4e851de2a7d72f.ctex"]
 
 [params]
 

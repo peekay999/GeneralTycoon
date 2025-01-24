@@ -48,6 +48,7 @@ public partial class FormationController : Node2D
 			if (key.Keycode == Key.C)
 			{
 				AllUnitsPerformActions();
+				_formationUiController.ClearSelectedFormation();
 			}
 		}
 	}

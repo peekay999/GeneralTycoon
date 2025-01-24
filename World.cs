@@ -7,6 +7,7 @@ public partial class World : Node2D
 	private FormationController _formationController;
 	private Pathfinder _pathfinder;
 	private SelectionLayer _selectionLayer;
+	private Camera2D _worldCamera;
 	private static World _instance;
 	// Called when the node enters the scene tree for the first time.
 
@@ -23,6 +24,7 @@ public partial class World : Node2D
 		_tileMapController = GetNode<TileMapController>("TileMapController");
 		_formationController = GetNode<FormationController>("FormationController");
 		_pathfinder = GetNode<Pathfinder>("Pathfinder");
+		_worldCamera = GetNode<Camera2D>("Camera2D");
 	}
 	public override void _Ready()
 	{
@@ -62,6 +64,15 @@ public partial class World : Node2D
 			_pathfinder = GetNode<Pathfinder>("Pathfinder");
 		}
 		return _pathfinder;
+	}
+
+	public Camera2D GetWorldCamera()
+	{
+		if (_worldCamera == null)
+		{
+			_worldCamera = GetNode<Camera2D>("Camera2D");
+		}
+		return _worldCamera;
 	}
 
 	public Vector2 MapToWorld(Vector2I cell)

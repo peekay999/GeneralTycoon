@@ -164,5 +164,29 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		LocalisedDirections = Pathfinder.GetLocalisedDirections(Direction);
 	}
 
+	public Waypoint GetWaypoint()
+	{
+		Waypoint waypoint;
+        List<TurnAction> turnActions = new List<TurnAction>();
+		List<MoveAction> moveActions = new List<MoveAction>();
+		if (_commander.GetActionQueue().GetActions() == null || _commander.GetActionQueue().GetActions().Length == 0)
+		{
+			return null;
+		}
+		foreach (UnitAction action in _commander.GetActionQueue().GetActions())
+		{
+			if (action is TurnAction turnAction)
+			{
+				turnActions.Add(turnAction);
+			}
+			else if (action is MoveAction moveAction)
+			{
+				moveActions.Add(moveAction);
+			}
+		}
+        waypoint = new Waypoint(moveActions[moveActions.Count - 1].GetTargetCell(), turnActions[turnActions.Count - 1].GetDirection());
+        return waypoint;
+	}
+
 
 }

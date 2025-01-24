@@ -12,6 +12,8 @@ public partial class Unit : TileMover
 	SpriteFrames unitSprite;
 	[Export(PropertyHint.Range, "0.5,1.5")]
 	private float _moveSpeed = 1.0f;
+	[Export]
+	private float _spriteOffset_Y = 0.0f;
 	public float _skewAmplitude;
 	public float _skewPhaseOffset;
 	private List<AnimatedSprite2D> _animatedSprite2Ds;
@@ -39,7 +41,7 @@ public partial class Unit : TileMover
 			AnimatedSprite2D sprite = new AnimatedSprite2D();
 			sprite.TextureFilter = TextureFilterEnum.Nearest;
 			sprite.SpriteFrames = unitSprite;
-			sprite.Offset = new Vector2(0, -32);
+			sprite.Offset = new Vector2(0, _spriteOffset_Y);
 			sprite.Frame = 0;
 			sprite.Position = Vector2.Zero;
 			_animatedSprite2Ds.Add(sprite);
@@ -120,9 +122,9 @@ public partial class Unit : TileMover
 
 	public List<Vector2I> GetTilePath()
 	{
-		List<UnitAction> actions = new List<UnitAction>(_actionQueue.GetActionQueue());
+		UnitAction[] unitActions = _actionQueue.GetActions();
 		List<Vector2I> path = new List<Vector2I>();
-		foreach (UnitAction action in actions)
+		foreach (UnitAction action in unitActions)
 		{
 			if (action is MoveAction moveAction)
 			{
@@ -130,6 +132,11 @@ public partial class Unit : TileMover
 			}
 		}
 		return path;
+	}
+
+	public ActionQueue GetActionQueue()
+	{
+		return _actionQueue;
 	}
 
 	public override void MoveToTile(Vector2I cellTo)

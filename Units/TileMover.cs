@@ -55,7 +55,7 @@ public abstract partial class TileMover : Node2D
 
 	public static float DetermineSpritesYoffset(Vector2I cell)
 	{
-		return World.Instance.GetCellHeight(cell);;
+		return World.Instance.GetCellHeight(cell);
 	}
 
 	/// <summary>

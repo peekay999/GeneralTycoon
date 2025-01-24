@@ -23,9 +23,19 @@ public partial class ActionQueue : Node
 		_actionPoints = (actionPoints, actionPoints);
 	}
 
-	public Queue<UnitAction> GetActionQueue()
+	private Queue<UnitAction> GetActionQueue()
 	{
 		return _actionQueue;
+	}
+
+	public UnitAction[] GetActions()
+	{
+		return _actionQueue.Count > 0 ? _actionQueue.ToArray() : null;
+	}
+
+	public UnitAction GetLastAction()
+	{
+		return _actionQueue.Count > 0 ? _actionQueue.ToArray()[_actionQueue.Count - 1] : null;
 	}
 
 	public void EnqueueAction(UnitAction action)

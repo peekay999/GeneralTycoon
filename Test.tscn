@@ -46,6 +46,48 @@ y_sort_enabled = true
 position = Vector2(0, 1)
 script = ExtResource("8_2eqc8")
 
+[node name="FormationUI" type="CanvasLayer" parent="FormationController/FormationUiController"]
+
+[node name="UIcontrol" type="Control" parent="FormationController/FormationUiController/FormationUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FormationButtonsHBox" type="HBoxContainer" parent="FormationController/FormationUiController/FormationUI/UIcontrol"]
+offset_left = -1.0
+offset_top = 1.0
+offset_right = 39.0
+offset_bottom = 41.0
+
+[node name="b_Walk" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+layout_mode = 2
+focus_mode = 0
+text = "Walk
+"
+
+[node name="b_Run" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+layout_mode = 2
+focus_mode = 0
+text = "Run"
+
+[node name="b_Fire" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+layout_mode = 2
+focus_mode = 0
+text = "Fire"
+
+[node name="b_Charge" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+layout_mode = 2
+focus_mode = 0
+text = "Charge"
+
+[node name="b_Cancel" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+layout_mode = 2
+focus_mode = 0
+text = "Cancel"
+
 [node name="Pathfinder" type="Node2D" parent="."]
 position = Vector2(0, 1)
 script = ExtResource("6_qqpqo")

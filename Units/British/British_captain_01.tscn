@@ -7,6 +7,7 @@
 y_sort_enabled = true
 script = ExtResource("1_v8l5a")
 unitSprite = ExtResource("2_vaiuk")
+_spriteOffset_Y = -32.0
 
 [node name="YSort" type="Node2D" parent="."]
 

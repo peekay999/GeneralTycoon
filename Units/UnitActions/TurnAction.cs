@@ -9,6 +9,11 @@ public partial class TurnAction : UnitAction
         _direction = direction;
     }
 
+    public Direction GetDirection()
+    {
+        return _direction;
+    }
+
     protected override void ProcessAction(double delta)
     {
         _t += (float)delta * _unit.GetWalkSpeed();

@@ -3,11 +3,13 @@ using Godot;
 public abstract partial class ControlledFormation : Formation
 {
     protected (int count, bool isHovered) _hoverStatus = (0, false);
+    public GhostFormation GhostFormation { get; private set; }
 
     public override void _Ready()
     {
         base._Ready();
         YSortEnabled = true;
+
         _formationController = GetParent<FormationController>();
         foreach (Unit unit in _units)
         {
@@ -18,6 +20,26 @@ public abstract partial class ControlledFormation : Formation
         _commander.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(_commander, currentCell, targetCell);
         _commander.MouseEntered += () => _on_mouse_entered();
         _commander.MouseExited += () => _on_mouse_exited();
+
+        // Ensure the resource path is correct
+        PackedScene ghostFormationScene = (PackedScene)ResourceLoader.Load("res://Units/Ghost/ghost_formation.tscn");
+        if (ghostFormationScene == null)
+        {
+            GD.PrintErr("Failed to load ghost_formation.tscn");
+            return;
+        }
+
+        // Instantiate and cast to GhostFormation
+        GhostFormation ghostFormation = (GhostFormation)ghostFormationScene.Instantiate();
+
+        GhostFormation = ghostFormation;
+        GhostFormation.UpdateDirection(Direction.NORTH);
+        GhostFormation.FormationSize = FormationSize;
+        GhostFormation.Name = "GhostCompany";
+        GhostFormation.Visible = false;
+        GhostFormation.SetFormation(this);
+        AddChild(GhostFormation);
+
     }
 
     public override void _Input(InputEvent @event)

@@ -17,10 +17,8 @@ public partial class FormationUiController : Node2D
 	private ControlledFormation _selectedFormation;
 	private FormationController _parentController;
 	private SelectionLayer _selectionLayer;
-	private GhostFormation _ghostFormation;
+	private GhostFormation _grabbedGhostFormation;
 	private Direction _ghostDirection;
-	private bool _isGhostPlaced;
-	private bool _isGhostGrabbed;
 
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
@@ -40,7 +38,7 @@ public partial class FormationUiController : Node2D
 		_formationButtonsHBox = UIcontrol.GetNode<HBoxContainer>("FormationButtonsHBox");
 
 		b_Walk = _formationButtonsHBox.GetNode<Button>("b_Walk");
-		b_Walk.Pressed += () => _isGhostGrabbed = true;
+		b_Walk.Pressed += _on_walk_pressed;
 		b_Run = _formationButtonsHBox.GetNode<Button>("b_Run");
 		b_Fire = _formationButtonsHBox.GetNode<Button>("b_Fire");
 		b_Charge = _formationButtonsHBox.GetNode<Button>("b_Charge");
@@ -57,28 +55,18 @@ public partial class FormationUiController : Node2D
 	{
 		base._Process(delta);
 		AdjustUIPosition();
-
-		if (_isGhostGrabbed)
+		if (_grabbedGhostFormation != null && _grabbedGhostFormation.isGrabbed) 
 		{
-			if (_ghostFormation != null)
-			{
-				_ghostFormation.Visible = true;
-				_ghostFormation.MoveToTile(_selectionLayer.GetSelectedCell(), _ghostDirection);
-				QueueRedraw();
-			}
+			_grabbedGhostFormation.MoveToTile(_selectionLayer.GetSelectedCell(), _ghostDirection);
+			_grabbedGhostFormation.QueueRedraw();
 		}
 	}
 
-	public override void _Draw()
+	private void _on_walk_pressed()
 	{
-		if ((_isGhostGrabbed || _isGhostPlaced) && _selectedFormation != null && _ghostFormation != null)
+		if (_selectedFormation != null)
 		{
-			// Unit commander = _selectedFormation.GetCommander();
-			Unit ghostCommander = _ghostFormation.GetCommander();
-			Vector2I commanderCell = _selectedFormation.GetCurrentCell();
-			Vector2 commanderPos = World.Instance.MapToWorld(commanderCell);
-			// DrawLine(commander.Position, ghostCommander.Position, new Color(1, 1, 1, 0.5f));
-			DrawDashedLine(commanderPos, ghostCommander.Position, new Color(1, 1, 1, 0.75f), 4.0f, 16.0f, false, false);
+			_grabbedGhostFormation = _selectedFormation.GhostFormation.Grab();
 		}
 	}
 
@@ -105,11 +93,8 @@ public partial class FormationUiController : Node2D
 	{
 		_selectionLayer.Visible = false;
 		_selectedFormation = formation;
-		_isGhostGrabbed = false;
-		_isGhostPlaced = false;
 		Visible = true;
 		_canvasLayer.Visible = true;
-		AddGhostCompany();
 	}
 
 	public void ClearSelectedFormation()
@@ -124,57 +109,27 @@ public partial class FormationUiController : Node2D
 		return _selectedFormation;
 	}
 
-	private void AddGhostCompany()
-	{
-		if (_selectedFormation == null)
-		{
-			return;
-		}
-		RemoveGhostCompany();
-		PackedScene companyScene = (PackedScene)ResourceLoader.Load("res://Units/Ghost/ghost_formation.tscn");
-		_ghostFormation = (GhostFormation)companyScene.Instantiate();
-		_ghostDirection = _selectedFormation.Direction;
-		_ghostFormation.FormationSize = _selectedFormation.FormationSize;
-		_ghostFormation.Name = "GhostCompany";
-		_ghostFormation.Visible = false;
-
-		AddChild(_ghostFormation);
-
-		if (_selectedFormation.GetWaypoint() != null)
-		{
-			Waypoint waypoint = _selectedFormation.GetWaypoint();
-			_ghostFormation.MoveToTile(waypoint.cell, waypoint.direction);
-		}
-
-	}
-
-	private void RemoveGhostCompany()
-	{
-		if (_ghostFormation != null)
-		{
-			_ghostFormation.QueueFree();
-			_ghostFormation = null;
-			QueueRedraw();
-		}
-	}
-
-
-
 	public override void _Input(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
 		{
-			if (_isGhostGrabbed && _selectedFormation != null)
+			if (_grabbedGhostFormation != null && _grabbedGhostFormation.isGrabbed)
 			{
-				_selectedFormation.SetWaypoint(_ghostFormation.GetCurrentCell(), _ghostDirection);
-				_isGhostGrabbed = false;
-				_isGhostPlaced = true;
+				if (mouseButton.ButtonIndex == MouseButton.Left)
+				{
+					_grabbedGhostFormation.Place(_selectionLayer.GetSelectedCell(), _ghostDirection);
+					_grabbedGhostFormation = null;
+				}
 			}
 		}
-
 		if (@event is InputEventKey key && key.Pressed)
 		{
-			if (_isGhostGrabbed)
+			if (key.Keycode == Key.Escape)
+			{
+				ClearSelectedFormation();
+			}
+
+			if (_grabbedGhostFormation != null)
 			{
 				if (key.Keycode == Key.Q)
 				{
@@ -186,18 +141,10 @@ public partial class FormationUiController : Node2D
 				}
 				else if (key.Keycode == Key.Escape)
 				{
-					RemoveGhostCompany();
-				}
-			}
-			else
-			{
-				if (key.Keycode == Key.Escape)
-				{
-					ClearSelectedFormation();
+					_selectedFormation.GhostFormation.Release();
+					_grabbedGhostFormation = null;
 				}
 			}
 		}
 	}
-
-
 }

@@ -3,20 +3,64 @@ using Godot;
 
 public partial class GhostFormation : Formation
 {
-    private FormationUiController _foromationIUcontroller;
+    // private FormationUiController _foromationIUcontroller;
+    private Formation _formation;
+    public bool isPlaced = false;
+    public bool isGrabbed = false;
+
+    private LineDrawer lineDrawer;
 
     public override void _Ready()
     {
         base._Ready();
         Modulate = new Color(1, 1, 1, 0.75f);
-        // YSortEnabled = true;
-        _foromationIUcontroller = GetParent<FormationUiController>();
-        _formationController = _foromationIUcontroller.GetParent<FormationController>();
+        YSortEnabled = true;
 
-        foreach (Unit unit in _units)
+        lineDrawer = new LineDrawer();
+        lineDrawer.SetPoints(Vector2.Zero, Vector2.Zero);
+        lineDrawer.ZIndex = 1;
+        AddChild(lineDrawer);
+    }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        if (_formation == null || Visible == false)
         {
-            unit.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(unit, currentCell, targetCell);
+            return;
         }
-        _commander.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(_commander, currentCell, targetCell);
+        lineDrawer.SetPoints(_formation.GetCurrentPosition(), GetCurrentPosition());
+        lineDrawer.QueueRedraw();
+    }
+
+    public void SetFormation(Formation formation)
+    {
+        _formation = formation;
+    }
+
+    public GhostFormation Grab()
+    {
+        isGrabbed = true;
+        isPlaced = false;
+        Visible = true;
+        return this;
+    }
+
+    public void Release()
+    {
+        isGrabbed = false;
+        if (_formation.GetWaypoint() == null)
+        {
+            Visible = false;
+            return;
+        }
+        MoveToTile(_formation.GetWaypoint().Cell, _formation.GetWaypoint().Direction);
+        isPlaced = true;
+    }
+
+    public void Place(Vector2I cell, Direction direction)
+    {
+        _formation.SetWaypoint(cell, direction);
+        Release();
     }
 }

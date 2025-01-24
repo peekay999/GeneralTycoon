@@ -14,6 +14,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	private PackedScene _commanderScene;
 	private PackedScene _ranksScene;
 
+
 	[Export]
 	public PackedScene Commander
 	{
@@ -75,6 +76,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		_commander = commander;
 
 		UpdateDirection(Direction.NORTH);
+
 	}
 
 	public Unit GetCommander()
@@ -167,7 +169,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public Waypoint GetWaypoint()
 	{
 		Waypoint waypoint;
-        List<TurnAction> turnActions = new List<TurnAction>();
+		List<TurnAction> turnActions = new List<TurnAction>();
 		List<MoveAction> moveActions = new List<MoveAction>();
 		if (_commander.GetActionQueue().GetActions() == null || _commander.GetActionQueue().GetActions().Length == 0)
 		{
@@ -184,8 +186,8 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 				moveActions.Add(moveAction);
 			}
 		}
-        waypoint = new Waypoint(moveActions[moveActions.Count - 1].GetTargetCell(), turnActions[turnActions.Count - 1].GetDirection());
-        return waypoint;
+		waypoint = new Waypoint(moveActions[moveActions.Count - 1].GetTargetCell(), turnActions[turnActions.Count - 1].GetDirection());
+		return waypoint;
 	}
 
 

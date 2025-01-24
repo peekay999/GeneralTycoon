@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -6,6 +7,8 @@ using Godot;
 /// </summary>
 public static class UnitUtil
 {
+	public const float TILE_WIDTH = 64.0f; // Adjusted width
+	public const float TILE_HEIGHT = 32.0f; // Adjusted height
 
 	/// <summary>
 	/// Determines the direction from a start to an end point. Used for unit movement. 
@@ -139,6 +142,29 @@ public static class UnitUtil
 		}
 		return positions;
 	}
+
+
+	// public static Vector2[] GetSpritePositions(Direction direction, int unitCount)
+	// {
+	// 	Vector2[] result = new Vector2[unitCount];
+
+	// 	if (unitCount <= 0 || unitCount > 9)
+	// 		return result; // invalid unit count
+	// 	int files = 3;
+	// 	int ranks = (int)Mathf.Ceil(unitCount / files);
+
+	// 	float totalWidth = TILE_WIDTH * 0.66f;
+	// 	float totalHeight = TILE_HEIGHT * 0.66f;
+
+	// 	Vector2 startPos = new Vector2(0, -TILE_HEIGHT / 2 * 0.66f);
+	// 	float stepX = totalWidth / 6;
+	// 	float stepY = stepX / 2;
+	// 	for (int i = 0; i < unitCount; i++)
+	// 	{
+	// 		result[i] = startPos += new Vector2(stepX, stepY);
+	// 	}
+	// 	return result;
+	// }
 }
 
 
@@ -170,53 +196,54 @@ public struct Animations
 	public const string WALK_READY = "walk_ready";
 }
 
-public struct SpritePositions
+public static class SpritePositions
 {
-	    public static readonly Vector2[] NORTH = new Vector2[]
-    {
-        new Vector2(-4, -36), new Vector2(5, -32), new Vector2(14, -27),
-        new Vector2(-16, -32), new Vector2(-6, -26), new Vector2(5, -22)
-    };
+	public static readonly Vector2[] NORTH = new Vector2[]
+	{
+		new Vector2(0, -12), new Vector2(12, -6), new Vector2(24, 0),
+		new Vector2(-11, -5), new Vector2(1, 1), new Vector2(13, 7),
+		new Vector2(-25, 1), new Vector2(-13, 7), new Vector2(-1, 13)
+	};
 
-    public static readonly Vector2[] NORTH_EAST = new Vector2[]
-    {
-        new Vector2(7, -45), new Vector2(8, -33), new Vector2(6, -23),
-        new Vector2(-6, -44), new Vector2(-6, -32), new Vector2(-7, -24)
-    };
+	public static readonly Vector2[] NORTH_EAST = new Vector2[]
+	{
+		new Vector2(7, -13), new Vector2(8, -1), new Vector2(6, 9),
+		new Vector2(-6, -12), new Vector2(-6, 0), new Vector2(-7, 8)
+	};
 
-    public static readonly Vector2[] EAST = new Vector2[]
-    {
-        new Vector2(20, -35), new Vector2(9, -28), new Vector2(-3, -23),
-        new Vector2(10, -41), new Vector2(-2, -34), new Vector2(-15, -28)
-    };
+	public static readonly Vector2[] EAST = new Vector2[]
+	{
+		new Vector2(-15, 4), new Vector2(-2, -2), new Vector2(10, -9),
+		new Vector2(-3, 9), new Vector2(9, 4), new Vector2(20, -3)
+	};
 
-    public static readonly Vector2[] SOUTH_EAST = new Vector2[]
-    {
-        new Vector2(21, -25), new Vector2(-1, -25), new Vector2(-22, -25),
-        new Vector2(20, -34), new Vector2(-1, -35), new Vector2(-22, -34)
-    };
+	public static readonly Vector2[] SOUTH_EAST = new Vector2[]
+	{
+		new Vector2(21, 7), new Vector2(-1, 7), new Vector2(-22, 7),
+		new Vector2(20, -2), new Vector2(-1, -3), new Vector2(-22, -2)
+	};
 
-    public static readonly Vector2[] SOUTH = new Vector2[]
-    {
-        new Vector2(5, -22), new Vector2(-6, -26), new Vector2(-16, -32),
-        new Vector2(14, -27), new Vector2(5, -32), new Vector2(-4, -36)
-    };
+	public static readonly Vector2[] SOUTH = new Vector2[]
+	{
+		new Vector2(5, 10), new Vector2(-6, 6), new Vector2(-16, 0),
+		new Vector2(14, 5), new Vector2(5, 0), new Vector2(-4, -4)
+	};
 
-    public static readonly Vector2[] SOUTH_WEST = new Vector2[]
-    {
-        new Vector2(-7, -24), new Vector2(-6, -32), new Vector2(-6, -44),
-        new Vector2(6, -23), new Vector2(8, -33), new Vector2(7, -45)
-    };
+	public static readonly Vector2[] SOUTH_WEST = new Vector2[]
+	{
+		new Vector2(-7, 8), new Vector2(-6, 0), new Vector2(-6, -12),
+		new Vector2(6, 9), new Vector2(8, -1), new Vector2(7, -13)
+	};
 
-    public static readonly Vector2[] WEST = new Vector2[]
-    {
-        new Vector2(-15, -28), new Vector2(-2, -34), new Vector2(10, -41),
-        new Vector2(-3, -23), new Vector2(9, -28), new Vector2(20, -35)
-    };
+	public static readonly Vector2[] WEST = new Vector2[]
+	{
+		new Vector2(-15, 4), new Vector2(-2, -2), new Vector2(10, -9),
+		new Vector2(-3, 9), new Vector2(9, 4), new Vector2(20, -3)
+	};
 
-    public static readonly Vector2[] NORTH_WEST = new Vector2[]
-    {
-        new Vector2(-22, -34), new Vector2(-1, -35), new Vector2(20, -34),
-        new Vector2(-22, -25), new Vector2(-1, -25), new Vector2(21, -25)
-    };
+	public static readonly Vector2[] NORTH_WEST = new Vector2[]
+	{
+		new Vector2(-22, -2), new Vector2(-1, -3), new Vector2(20, -2),
+		new Vector2(-22, 7), new Vector2(-1, 7), new Vector2(21, 7)
+	};
 }

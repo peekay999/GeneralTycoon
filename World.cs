@@ -66,11 +66,21 @@ public partial class World : Node2D
 
 	public Vector2 MapToWorld(Vector2I cell)
 	{
-		return _tileMapController.GetTopLayer(cell).MapToLocal(cell) + _tileMapController.GetTopLayer(cell).Position;
+		float offset = 0;
+		if (_tileMapController.GetTopLayer(cell).GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
+		{
+			offset = 8;
+		}
+		return _tileMapController.GetTopLayer(cell).MapToLocal(cell) + _tileMapController.GetTopLayer(cell).Position + new Vector2(0, offset);
 	}
 
 	public TileMapLayer GetTopLayer(Vector2I cell)
 	{
 		return _tileMapController.GetTopLayer(cell);
+	}
+
+	public float GetCellHeight(Vector2I cell)
+	{
+		return _tileMapController.GetTopLayerOffset(cell) * -1;
 	}
 }

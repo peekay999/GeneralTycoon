@@ -1,9 +1,12 @@
 using Godot;
 using System;
 
-public partial class TileMover : Node2D
+public abstract partial class TileMover : Node2D
 {
 	protected Vector2I currentCell = Vector2I.Zero;
+	protected Node2D _ysortOrigin;
+	protected Node2D _sprites;
+	protected Direction _direction;
 
 	[Signal]
 	public delegate void UnitMovedEventHandler(Vector2I currentCell, Vector2I targetCell);
@@ -11,19 +14,11 @@ public partial class TileMover : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_ysortOrigin = GetNode<Node2D>("YSort");
+		_sprites = _ysortOrigin.GetNode<Node2D>("Sprites");
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
-
-	/// <summary>
-	/// Moves the unit to a specific cell and updates its direction. Handles real position and tracking via the parent controller.
-	/// </summary>
-	/// <param name="cell">The target cell to move to.</param>
-	/// <param name="direction">The direction to face after moving.</param>
-	public void MoveToTile(Vector2I cellTo)
+	public virtual void MoveToTile(Vector2I cellTo)
 	{
 		TileMapLayer topLayer = World.Instance.GetTopLayer(cellTo);
 		if (topLayer == null)
@@ -31,12 +26,48 @@ public partial class TileMover : Node2D
 			return;
 		}
 		currentCell = cellTo;
-		UpdatePosition(cellTo);
+		Position = World.Instance.MapToWorld(cellTo);
+		float offset = DetermineSpritesYoffset(cellTo);
+		UpdateSpritesYoffset(offset - 1);
 		EmitSignal(SignalName.UnitMoved, currentCell, cellTo);
 	}
 
-	public virtual void UpdatePosition(Vector2I cellTo)
+	public virtual void LerpToTile(Vector2I cellFrom, Vector2I cellTo, float T)
 	{
-		Position = World.Instance.MapToWorld(cellTo);
+		TileMapLayer topLayer = World.Instance.GetTopLayer(cellTo);
+		if (topLayer == null)
+		{
+			return;
+		}
+		Vector2 startPos = World.Instance.MapToWorld(cellFrom);
+		Vector2 endPos = World.Instance.MapToWorld(cellTo);
+		float offsetStart = DetermineSpritesYoffset(cellFrom);
+		float offsetEnd = DetermineSpritesYoffset(cellTo);
+		UpdateSpritesYoffset(Mathf.Lerp(offsetStart, offsetEnd, T) + 1);
+		Position = startPos.Lerp(endPos, T);
+	}
+
+	public virtual void UpdateSpritesYoffset(float offset)
+	{
+		_ysortOrigin.Position = new Vector2(0, offset);
+		_sprites.Position = new Vector2(0, -offset);
+	}
+
+	public static float DetermineSpritesYoffset(Vector2I cell)
+	{
+		return World.Instance.GetCellHeight(cell);;
+	}
+
+	/// <summary>
+	/// Updates the direction the unit is facing.
+	/// </summary>
+	/// <param name="direction">The new direction to face.</param>
+	public virtual void UpdateDirection(Direction direction)
+	{
+		if (direction == Direction.CONTINUE)
+		{
+			return;
+		}
+		_direction = direction;
 	}
 }

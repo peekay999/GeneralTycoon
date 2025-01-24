@@ -6,22 +6,17 @@
 [node name="Unit" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_v8l5a")
+unitSprite = ExtResource("2_vaiuk")
 
-[node name="Ysort" type="Node2D" parent="."]
+[node name="YSort" type="Node2D" parent="."]
 
-[node name="Sprites" type="Node2D" parent="Ysort"]
+[node name="Sprites" type="Node2D" parent="YSort"]
 y_sort_enabled = true
 
-[node name="troop_0" type="AnimatedSprite2D" parent="Ysort/Sprites"]
-z_as_relative = false
-texture_filter = 1
-position = Vector2(0, -31)
-sprite_frames = ExtResource("2_vaiuk")
-
-[node name="Area2D" type="Area2D" parent="Ysort/Sprites"]
+[node name="Area2D" type="Area2D" parent="."]
 position = Vector2(0, -16)
 collision_layer = 2
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ysort/Sprites/Area2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
 z_as_relative = false
 polygon = PackedVector2Array(-32, -16, 0, -32, 32, -16, 32, 16, 0, 32, -32, 16)

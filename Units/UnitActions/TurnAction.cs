@@ -13,15 +13,17 @@ public partial class TurnAction : UnitAction
     {
         _t += (float)delta * _unit.GetWalkSpeed();
         _unit.Skew = Mathf.Sin(_t * Mathf.Pi * 2 + (_unit._skewPhaseOffset / 2)) * (_unit._skewAmplitude / 2);
+        // _unit.LerpToDirection(_direction, _t);
 
         if (_t > 0.5f)
         {
-            _unit.UpdateDirection(_direction);
             _unit.SetAnimation(Animations.STAND);
+            _unit.UpdateDirection(_direction);
         }
         if (_t > 1.0f)
         {
             _unit.Skew = 0.0f;
+            // _unit.UpdateSpritesYoffset(1.0f);
             Complete();
         }
     }

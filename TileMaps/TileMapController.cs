@@ -39,7 +39,6 @@ public partial class TileMapController : Node2D
 		else
 		{
 			GetGeneratedTileMapLayers();
-
 		}
 
 	}

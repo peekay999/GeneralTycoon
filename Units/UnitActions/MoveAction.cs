@@ -26,19 +26,15 @@ public partial class MoveAction : UnitAction
     {
         _t += (float)delta * _unit.GetWalkSpeed();
 
-        _unit.Position = _startPos.Lerp(_targetPos, _t);
         _unit.SetAnimation(Animations.WALK);
         _unit.Skew = Mathf.Sin(_t * Mathf.Pi * 2 + _unit._skewPhaseOffset) * _unit._skewAmplitude;
-
-        float startYoffset = Unit.DetermineSpritesYoffset(_startCell);
-        float targetYoffset = Unit.DetermineSpritesYoffset(_targetCell);
-        float Yoffset = Mathf.Lerp(startYoffset, targetYoffset, _t);
-        _unit.UpdateSpritesYoffset(Yoffset);
+        
+        _unit.LerpToTile(_startCell, _targetCell, _t);
         _unit.UpdateDirection(UnitUtil.DetermineDirection(_startCell, _targetCell));
+        // _unit.LerpToDirection(UnitUtil.DetermineDirection(_startCell, _targetCell), _t);
         if (_t >= 1.0f)
         {
             _unit.MoveToTile(_targetCell);
-            _unit.Skew = 0.0f;
             Complete();
         }
     }

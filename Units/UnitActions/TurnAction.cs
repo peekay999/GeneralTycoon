@@ -23,6 +23,7 @@ public partial class TurnAction : UnitAction
         if (_t > 0.5f)
         {
             _unit.SetAnimation(Animations.STAND);
+            if (_direction != Direction.CONTINUE)
             _unit.UpdateDirection(_direction);
         }
         if (_t > 1.0f)

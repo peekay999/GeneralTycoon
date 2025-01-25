@@ -7,17 +7,17 @@ using System.Collections.Generic;
 public partial class Unit : TileMover
 {
 	[Export(PropertyHint.Range, "1,9")]
-	int unitCount = 1;
+	protected int unitCount = 1;
 	[Export]
-	SpriteFrames unitSprite;
+	private SpriteFrames unitSprite;
 	[Export(PropertyHint.Range, "0.5,1.5")]
-	private float _moveSpeed = 1.0f;
+	protected float _moveSpeed = 1.0f;
 	[Export]
 	private float _spriteOffset_Y = 0.0f;
 	public float _skewAmplitude;
 	public float _skewPhaseOffset;
-	private List<AnimatedSprite2D> _animatedSprite2Ds;
-	private UnitType _unitType;
+	protected List<AnimatedSprite2D> _animatedSprite2Ds;
+	protected UnitType _unitType;
 	private Area2D _area2D;
 	private ActionQueue _actionQueue;
 	[Signal]
@@ -79,13 +79,6 @@ public partial class Unit : TileMover
 		{
 			sprite.Frame = (int)direction;
 		}
-		if (_animatedSprite2Ds.Count > 1)
-		{
-			for (int i = 0; i < _animatedSprite2Ds.Count; i++)
-			{
-				_animatedSprite2Ds[i].Position = UnitUtil.GetSpritePositions(direction)[i];
-			}
-		}
 	}
 
 	public void SetAnimation(string animation)
@@ -142,6 +135,10 @@ public partial class Unit : TileMover
 	public override void MoveToTile(Vector2I cellTo)
 	{
 		base.MoveToTile(cellTo);
+		if (World.Instance.GetTopLayer(cellTo) == null)
+		{
+			return;
+		}
 		float rotation = TileMapUtil.GetTileRotationAmount(World.Instance.GetTopLayer(cellTo).GetCellAtlasCoords(cellTo));
 		RotationDegrees = rotation;
 		foreach (AnimatedSprite2D sprite in _animatedSprite2Ds)

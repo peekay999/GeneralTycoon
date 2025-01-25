@@ -30,7 +30,7 @@ public partial class MoveAction : UnitAction
         _unit.Skew = Mathf.Sin(_t * Mathf.Pi * 2 + _unit._skewPhaseOffset) * _unit._skewAmplitude;
         
         _unit.LerpToTile(_startCell, _targetCell, _t);
-        _unit.UpdateDirection(UnitUtil.DetermineDirection(_startCell, _targetCell));
+        _unit.UpdateDirection(TileMapUtil.DetermineDirection(_startCell, _targetCell));
         // _unit.LerpToDirection(UnitUtil.DetermineDirection(_startCell, _targetCell), _t);
         if (_t >= 1.0f)
         {

@@ -17,7 +17,7 @@ public partial class FormationUiController : Node2D
 	private ControlledFormation _selectedFormation;
 	private FormationController _parentController;
 	private SelectionLayer _selectionLayer;
-	private GhostFormation _grabbedGhostFormation;
+	private GhostFormation _ghostFormation;
 	private Direction _ghostDirection;
 
 	public Direction Direction { get; private set; }
@@ -55,10 +55,10 @@ public partial class FormationUiController : Node2D
 	{
 		base._Process(delta);
 		AdjustUIPosition();
-		if (_grabbedGhostFormation != null && _grabbedGhostFormation.isGrabbed) 
+		if (_ghostFormation != null && _ghostFormation.isGrabbed)
 		{
-			_grabbedGhostFormation.MoveToTile(_selectionLayer.GetSelectedCell(), _ghostDirection);
-			_grabbedGhostFormation.QueueRedraw();
+			_ghostFormation.MoveToTile(_selectionLayer.GetSelectedCell(), _ghostDirection);
+			_ghostFormation.QueueRedraw();
 		}
 	}
 
@@ -66,7 +66,7 @@ public partial class FormationUiController : Node2D
 	{
 		if (_selectedFormation != null)
 		{
-			_grabbedGhostFormation = _selectedFormation.GhostFormation.Grab();
+			_ghostFormation = _selectedFormation.GhostFormation.Grab();
 		}
 	}
 
@@ -91,15 +91,28 @@ public partial class FormationUiController : Node2D
 
 	public void SetSelectedFormation(ControlledFormation formation)
 	{
-		_selectionLayer.Visible = false;
+		ClearSelectedFormation();
 		_selectedFormation = formation;
-		Visible = true;
+		_selectionLayer.Visible = false;
 		_canvasLayer.Visible = true;
+		Visible = true;
+		_ghostFormation = formation.GhostFormation;
+		_ghostDirection = formation.Direction;
+		_ghostFormation.isHidden = false;
 	}
 
 	public void ClearSelectedFormation()
 	{
-		_selectedFormation = null;
+		if (_selectedFormation != null)
+		{
+			_selectedFormation = null;
+		}
+		if (_ghostFormation != null)
+		{
+			_ghostFormation.isHidden = true;
+			_ghostFormation.Release();
+			_ghostFormation = null;
+		}
 		_selectionLayer.Visible = true;
 		_canvasLayer.Visible = false;
 		Visible = false;
@@ -113,23 +126,25 @@ public partial class FormationUiController : Node2D
 	{
 		if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
 		{
-			if (_grabbedGhostFormation != null && _grabbedGhostFormation.isGrabbed)
+			if (_ghostFormation != null && _ghostFormation.isGrabbed)
 			{
 				if (mouseButton.ButtonIndex == MouseButton.Left)
 				{
-					_grabbedGhostFormation.Place(_selectionLayer.GetSelectedCell(), _ghostDirection);
-					_grabbedGhostFormation = null;
+					_ghostFormation.Place(_selectionLayer.GetSelectedCell(), _ghostDirection);
 				}
 			}
 		}
 		if (@event is InputEventKey key && key.Pressed)
 		{
-			if (key.Keycode == Key.Escape)
+			if (_selectedFormation != null)
 			{
-				ClearSelectedFormation();
+				if (key.Keycode == Key.Escape)
+				{
+					ClearSelectedFormation();
+				}
 			}
 
-			if (_grabbedGhostFormation != null)
+			if (_ghostFormation != null)
 			{
 				if (key.Keycode == Key.Q)
 				{
@@ -139,12 +154,8 @@ public partial class FormationUiController : Node2D
 				{
 					_ghostDirection = UnitUtil.GetClockwiseDirection(_ghostDirection);
 				}
-				else if (key.Keycode == Key.Escape)
-				{
-					_selectedFormation.GhostFormation.Release();
-					_grabbedGhostFormation = null;
-				}
 			}
 		}
 	}
 }
+

@@ -1,19 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://bbbacrkxxyia1"]
+[gd_scene load_steps=3 format=3 uid="uid://2mc3lmbrt6tq"]
 
-[ext_resource type="Script" path="res://Units/Ranks.cs" id="1_r7tmd"]
-[ext_resource type="SpriteFrames" uid="uid://b6oichcsp8ehn" path="res://Units/British/British_soldier_01_sprites.tres" id="2_r7kfa"]
+[ext_resource type="Script" path="res://Units/Unit.cs" id="1_ysybq"]
+[ext_resource type="SpriteFrames" uid="uid://drd2hpl4mscvr" path="res://Units/British/British_sergeant_01_sprites.tres" id="2_xhyo0"]
 
 [node name="Unit" type="Node2D"]
-y_sort_enabled = true
-script = ExtResource("1_r7tmd")
-unitCount = 6
-unitSprite = ExtResource("2_r7kfa")
-_spriteOffset_Y = -30.0
+script = ExtResource("1_ysybq")
+unitSprite = ExtResource("2_xhyo0")
 
 [node name="YSort" type="Node2D" parent="."]
 
 [node name="Sprites" type="Node2D" parent="YSort"]
 y_sort_enabled = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="YSort/Sprites"]
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2(0, -16)

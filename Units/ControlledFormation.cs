@@ -2,15 +2,17 @@ using Godot;
 
 public abstract partial class ControlledFormation : Formation
 {
+    private FormationController _formationController;
     protected (int count, bool isHovered) _hoverStatus = (0, false);
     public GhostFormation GhostFormation { get; private set; }
+
 
     public override void _Ready()
     {
         base._Ready();
         YSortEnabled = true;
 
-        _formationController = GetParent<FormationController>();
+        _formationController = World.Instance.GetFormationController();
         foreach (Unit unit in _units)
         {
             unit.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(unit, currentCell, targetCell);
@@ -36,9 +38,12 @@ public abstract partial class ControlledFormation : Formation
         GhostFormation.UpdateDirection(Direction.NORTH);
         GhostFormation.FormationSize = FormationSize;
         GhostFormation.Name = "GhostCompany";
-        GhostFormation.Visible = false;
+        GhostFormation.UpdateDirection(Direction);
         GhostFormation.SetFormation(this);
+
         AddChild(GhostFormation);
+
+        // SetWaypoint(GetCurrentCell(), Direction);
 
     }
 
@@ -48,15 +53,29 @@ public abstract partial class ControlledFormation : Formation
         {
             if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
             {
-                SelectFormation(this);
+                SelectFormation();
                 _hoverStatus.isHovered = false;
             }
         }
     }
 
-    private static void SelectFormation(ControlledFormation formation)
+    private void SelectFormation()
     {
-        formation.EmitSignal("FormationSelected");
+        EmitSignal("FormationSelected");
+
+    }
+
+    public void RevealGhosts()
+    {
+        GhostFormation.isHidden = false;
+    }
+
+    public void HideGhosts()
+    {
+        if (!GhostFormation.isGrabbed)
+        {
+            GhostFormation.isHidden = true;
+        }
     }
 
     private void _on_mouse_entered()

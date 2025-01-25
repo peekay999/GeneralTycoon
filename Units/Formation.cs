@@ -6,7 +6,6 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 {
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
-	protected FormationController _formationController;
 	protected List<Unit> _units;
 	protected Unit _commander;
 	[Export]
@@ -169,6 +168,8 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public Waypoint GetWaypoint()
 	{
 		Waypoint waypoint;
+		Direction direction = Direction.NORTH; // or any default value
+		Vector2I targetCell = new Vector2I(); // or any default value
 		List<TurnAction> turnActions = new List<TurnAction>();
 		List<MoveAction> moveActions = new List<MoveAction>();
 		if (_commander.GetActionQueue().GetActions() == null || _commander.GetActionQueue().GetActions().Length == 0)
@@ -186,7 +187,15 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 				moveActions.Add(moveAction);
 			}
 		}
-		waypoint = new Waypoint(moveActions[moveActions.Count - 1].GetTargetCell(), turnActions[turnActions.Count - 1].GetDirection());
+		if (turnActions.Count > 0)
+		{
+			direction = turnActions[turnActions.Count - 1].GetDirection();
+		}
+		if (moveActions.Count > 0)
+		{
+			targetCell = moveActions[moveActions.Count - 1].GetTargetCell();
+		}
+		waypoint = new Waypoint(targetCell, direction);
 		return waypoint;
 	}
 

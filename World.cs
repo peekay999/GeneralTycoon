@@ -66,6 +66,15 @@ public partial class World : Node2D
 		return _pathfinder;
 	}
 
+	public FormationController GetFormationController()
+	{
+		if (_formationController == null)
+		{
+			_formationController = GetNode<FormationController>("FormationController");
+		}
+		return _formationController;
+	}
+
 	public Camera2D GetWorldCamera()
 	{
 		if (_worldCamera == null)

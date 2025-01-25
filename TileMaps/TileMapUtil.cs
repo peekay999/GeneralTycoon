@@ -6,6 +6,8 @@ using Godot;
 /// </summary>
 public static class TileMapUtil
 {
+	public const int TILE_WIDTH = 64;
+	public const int TILE_HEIGHT = 32;
 	/* ATLAS coords of tiles */
 	public static readonly Vector2I tile_none = new Vector2I(-1, -1);
 	public static readonly Vector2I tile_base = new Vector2I(0, 0);
@@ -35,6 +37,7 @@ public static class TileMapUtil
 		tile_slope_E,
 		tile_corner_high_NE,
 		tile_corner_NE,
+		tile_corner_double_NE
 
 	};
 
@@ -44,6 +47,7 @@ public static class TileMapUtil
 		tile_slope_W,
 		tile_corner_high_SW,
 		tile_corner_SW,
+		tile_corner_double_SW
 	};
 
 	public static float GetTileRotationAmount(Vector2I tile)
@@ -57,6 +61,48 @@ public static class TileMapUtil
 			return 10.0f;
 		}
 		return 0;
+	}
+
+		public static Direction DetermineDirection(Vector2I start, Vector2I end)
+	{
+		Vector2I diff = end - start;
+		if (diff.X == 0 && diff.Y == 0)
+		{
+			return Direction.NORTH;
+		}
+		else if (diff.X == 0 && diff.Y < 0)
+		{
+			return Direction.NORTH;
+		}
+		else if (diff.X > 0 && diff.Y < 0)
+		{
+			return Direction.NORTH_EAST;
+		}
+		else if (diff.X > 0 && diff.Y == 0)
+		{
+			return Direction.EAST;
+		}
+		else if (diff.X > 0 && diff.Y > 0)
+		{
+			return Direction.SOUTH_EAST;
+		}
+		else if (diff.X == 0 && diff.Y > 0)
+		{
+			return Direction.SOUTH;
+		}
+		else if (diff.X < 0 && diff.Y > 0)
+		{
+			return Direction.SOUTH_WEST;
+		}
+		else if (diff.X < 0 && diff.Y == 0)
+		{
+			return Direction.WEST;
+		}
+		else if (diff.X < 0 && diff.Y < 0)
+		{
+			return Direction.NORTH_WEST;
+		}
+		return Direction.NORTH;
 	}
 }
 

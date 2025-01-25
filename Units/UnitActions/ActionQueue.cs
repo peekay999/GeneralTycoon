@@ -61,8 +61,11 @@ public partial class ActionQueue : Node
 
 	private void OnActionCompleted()
 	{
-		_currentAction.ActionComplete -= OnActionCompleted;
-		_currentAction = null;
+		if (_currentAction != null)
+		{
+			_currentAction.ActionComplete -= OnActionCompleted;
+			_currentAction = null;
+		}
 		ExecuteQueue();
 	}
 }

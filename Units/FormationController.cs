@@ -10,18 +10,19 @@ public partial class FormationController : Node2D
 	private TileMapController _tileMapController;
 	private SelectionLayer _selectionLayer;
 	private FormationUiController _formationUiController;
-	private HashSet<Formation> _formations;
+	private HashSet<ControlledFormation> _formations;
 	private Dictionary<Unit, Vector2I> _units;
 
 	public override void _Ready()
 	{
+		base._Ready();
 		_world = GetParent<Node2D>();
 		_tileMapController = _world.GetNode<TileMapController>("TileMapController");
 		_selectionLayer = _world.GetNode<SelectionLayer>("SelectionLayer");
 		_formationUiController = GetNode<FormationUiController>("FormationUiController");
 		_units = new Dictionary<Unit, Vector2I>();
 
-		_formations = new HashSet<Formation>();
+		_formations = new HashSet<ControlledFormation>();
 		// _formations = new Dictionary<Formation, Vector2I>();
 
 		AddCompany(new Vector2I(30, 30));
@@ -29,28 +30,8 @@ public partial class FormationController : Node2D
 		AddCompany(new Vector2I(50, 40));
 
 		AddCompany(new Vector2I(60, 50));
-	}
 
-	public override void _Input(InputEvent @event)
-	{
-		//if is a left mouse click
-		if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
-		{
-			// Vector2I cell = _selectionLayer.GetSelectedCell();
-			// if (cell.X != -1 && cell.Y != -1)
-			// {
-			// 	AddFormation(cell);
-			// }
-		}
-
-		if (@event is InputEventKey key && key.Pressed)
-		{
-			if (key.Keycode == Key.C)
-			{
-				AllUnitsPerformActions();
-				_formationUiController.ClearSelectedFormation();
-			}
-		}
+		AllUnitsPerformActions();
 	}
 
 	/// <summary>
@@ -75,7 +56,7 @@ public partial class FormationController : Node2D
 
 	public void AllUnitsPerformActions()
 	{
-		foreach (Formation formation in _formations)
+		foreach (ControlledFormation formation in _formations)
 		{
 			formation.ExecuteAllUnitActions();
 		}
@@ -89,5 +70,42 @@ public partial class FormationController : Node2D
 	public void _on_unit_moved(Unit unit, Vector2I cellFrom, Vector2I cellTo)
 	{
 		_units[unit] = cellTo;
+	}
+
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventKey key)
+		{
+			if (key.Pressed)
+			{
+				if (key.Keycode == Key.C)
+				{
+					AllUnitsPerformActions();
+					_formationUiController.ClearSelectedFormation();
+				}
+				if (key.Keycode == Key.Space)
+				{
+					foreach (ControlledFormation formation in _formations)
+					{
+						formation.RevealGhosts();
+					}
+				}
+
+			}
+			if (key.IsReleased())
+			{
+				if (key.Keycode == Key.Space)
+				{
+					foreach (ControlledFormation formation in _formations)
+					{
+						if (formation == _formationUiController.GetSelectedFormation())
+						{
+							continue;
+						}
+						formation.HideGhosts();
+					}
+				}
+			}
+		}
 	}
 }

@@ -4,8 +4,8 @@ using Godot;
 public partial class GhostFormation : Formation
 {
     // private FormationUiController _foromationIUcontroller;
-    private Formation _formation;
-    public bool isPlaced = false;
+    private ControlledFormation _formation;
+    public bool isHidden = true;
     public bool isGrabbed = false;
 
     private LineDrawer lineDrawer;
@@ -13,6 +13,7 @@ public partial class GhostFormation : Formation
     public override void _Ready()
     {
         base._Ready();
+
         Modulate = new Color(1, 1, 1, 0.75f);
         YSortEnabled = true;
 
@@ -25,15 +26,25 @@ public partial class GhostFormation : Formation
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if (_formation == null || Visible == false)
+        if (isHidden || _formation == null)
         {
+            Visible = false;
             return;
         }
+        if (isGrabbed || _formation.GetWaypoint() != null)
+        {
+            Visible = true;
+        }
+        else
+        {
+            Visible = false;
+        }
+
         lineDrawer.SetPoints(_formation.GetCurrentPosition(), GetCurrentPosition());
         lineDrawer.QueueRedraw();
     }
 
-    public void SetFormation(Formation formation)
+    public void SetFormation(ControlledFormation formation)
     {
         _formation = formation;
     }
@@ -41,8 +52,6 @@ public partial class GhostFormation : Formation
     public GhostFormation Grab()
     {
         isGrabbed = true;
-        isPlaced = false;
-        Visible = true;
         return this;
     }
 
@@ -51,16 +60,18 @@ public partial class GhostFormation : Formation
         isGrabbed = false;
         if (_formation.GetWaypoint() == null)
         {
-            Visible = false;
             return;
         }
         MoveToTile(_formation.GetWaypoint().Cell, _formation.GetWaypoint().Direction);
-        isPlaced = true;
     }
 
     public void Place(Vector2I cell, Direction direction)
     {
+        if (isHidden)
+        {
+            return;
+        }
         _formation.SetWaypoint(cell, direction);
-        Release();
+        isGrabbed = false;
     }
 }

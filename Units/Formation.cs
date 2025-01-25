@@ -102,8 +102,8 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	{
 		UpdateDirection(direction);
 		int width = _units.Count;
-		Vector2I cellForPlacement = commanderCell + LocalisedDirections.forward + LocalisedDirections.left * (width / 2);
 		Vector2I[] targetCells = new Vector2I[_units.Count];
+		Vector2I cellForPlacement = commanderCell + LocalisedDirections.forward + LocalisedDirections.left * (width / 2);
 		for (int i = 0; i < width; i++)
 		{
 			targetCells[i] = cellForPlacement + LocalisedDirections.right * i;

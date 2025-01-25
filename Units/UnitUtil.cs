@@ -73,7 +73,7 @@ public static class UnitUtil
 		float C = TILE_HEIGHT / 2 * margin;
 		float D = -TILE_WIDTH / 2 * margin;
 
-		float padding = A / 2;
+		float padding = 0;
 
 		Vector2 pos_0_0 = new Vector2(0, A);
 		Vector2 pos_1_0 = new Vector2(B / 2, A / 2);
@@ -87,6 +87,8 @@ public static class UnitUtil
 
 		if (direction == Direction.NORTH_WEST || direction == Direction.SOUTH_WEST || direction == Direction.NORTH_EAST || direction == Direction.SOUTH_EAST)
 		{
+			padding = A / 2;
+			
 			if (direction == Direction.NORTH_WEST || direction == Direction.SOUTH_EAST)
 			{
 				A = -TILE_HEIGHT / 2 * (margin / 2);
@@ -102,21 +104,29 @@ public static class UnitUtil
 				D = -TILE_WIDTH / 2 * (margin / 2);
 			}
 
-			pos_0_0 = new Vector2(D, A + padding);
-			pos_1_0 = new Vector2(0, A + padding);
-			pos_2_0 = new Vector2(B, A + padding);
-			pos_0_1 = new Vector2(D, 0 + padding);
-			pos_1_1 = new Vector2(0, 0 + padding);
-			pos_2_1 = new Vector2(B, 0 + padding);
-			pos_0_2 = new Vector2(D, C + padding);
-			pos_1_2 = new Vector2(0, C + padding);
-			pos_2_2 = new Vector2(B, C + padding);
+			pos_0_0 = new Vector2(D, A);
+			pos_1_0 = new Vector2(0, A);
+			pos_2_0 = new Vector2(B, A);
+			pos_0_1 = new Vector2(D, 0);
+			pos_1_1 = new Vector2(0, 0);
+			pos_2_1 = new Vector2(B, 0);
+			pos_0_2 = new Vector2(D, C);
+			pos_1_2 = new Vector2(0, C);
+			pos_2_2 = new Vector2(B, C);
 		}
 		positions = new Vector2[3, 3] {
 			{ pos_0_0, pos_0_1, pos_0_2 },
 			{ pos_1_0, pos_1_1, pos_1_2 },
 			{ pos_2_0, pos_2_1, pos_2_2 }
 		};
+
+		for (int i = 0; i < positions.GetLength(0); i++)
+		{
+			for (int j = 0; j < positions.GetLength(1); j++)
+			{
+				positions[i, j] += new Vector2(0, padding);
+			}
+		}
 		return positions;
 	}
 }

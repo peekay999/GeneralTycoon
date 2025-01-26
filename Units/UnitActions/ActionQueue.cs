@@ -7,6 +7,8 @@ public partial class ActionQueue : Node
 	private Queue<UnitAction> _actionQueue = new Queue<UnitAction>();
 	private UnitAction _currentAction = null;
 	private (int current, int reset) _actionPoints;
+	[Signal]
+	public delegate void FinishedExecutingEventHandler();
 
 	public void ResetPoints()
 	{
@@ -21,11 +23,6 @@ public partial class ActionQueue : Node
 	public ActionQueue(int actionPoints)
 	{
 		_actionPoints = (actionPoints, actionPoints);
-	}
-
-	private Queue<UnitAction> GetActionQueue()
-	{
-		return _actionQueue;
 	}
 
 	public UnitAction[] GetActions()
@@ -56,6 +53,7 @@ public partial class ActionQueue : Node
 		else
 		{
 			_currentAction = null;
+			EmitSignal(SignalName.FinishedExecuting);
 		}
 	}
 

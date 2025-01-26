@@ -19,11 +19,17 @@ public partial class Unit : TileMover
 	protected List<AnimatedSprite2D> _animatedSprite2Ds;
 	protected UnitType _unitType;
 	private Area2D _area2D;
-	private ActionQueue _actionQueue;
+	public ActionQueue ActionQueue { get; private set; }
 	[Signal]
 	public delegate void MouseEnteredEventHandler();
 	[Signal]
 	public delegate void MouseExitedEventHandler();
+	[Signal]
+	public delegate void PathfindingStartedEventHandler();
+	[Signal]
+	public delegate void PathfindingCompleteEventHandler();
+	[Signal]
+	public delegate void StartExecutingActionsEventHandler();
 
 	public override void _Ready()
 	{
@@ -32,8 +38,8 @@ public partial class Unit : TileMover
 		_area2D = GetNode<Area2D>("Area2D");
 		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
 		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
-		_actionQueue = new ActionQueue(100000);
-		AddChild(_actionQueue);
+		ActionQueue = new ActionQueue(100);
+		// AddChild(_actionQueue);
 		// _parentController = GetParent<UnitController>();
 		_animatedSprite2Ds = new List<AnimatedSprite2D>();
 		for (int i = 0; i < unitCount; i++)
@@ -91,31 +97,35 @@ public partial class Unit : TileMover
 
 	public async void AssignPath(Vector2I cell, Direction direction)
 	{
-		_actionQueue.ClearQueue();
+		EmitSignal(SignalName.PathfindingStarted);
+		ActionQueue.ClearQueue();
 		List<Vector2I> path = await World.Instance.GetPathfinder().FindPathAsync(currentCell, cell);
 		for (int i = 0; i < path.Count - 1; i++)
 		{
 			MoveAction moveAction = new MoveAction(this, path[i], path[i + 1]);
-			_actionQueue.EnqueueAction(moveAction);
+			ActionQueue.EnqueueAction(moveAction);
 		}
 
 		// add in a final turn action
-		_actionQueue.EnqueueAction(new TurnAction(this, direction));
+		ActionQueue.EnqueueAction(new TurnAction(this, direction));
+
+		EmitSignal(SignalName.PathfindingComplete);
 	}
 
-	public void ExecuteNextAction()
+	public void ExecuteActions()
 	{
-		_actionQueue.ExecuteQueue();
+		EmitSignal(SignalName.StartExecutingActions);
+		ActionQueue.ExecuteQueue();
 	}
 
 	public void ResetActionPoints()
 	{
-		_actionQueue.ResetPoints();
+		ActionQueue.ResetPoints();
 	}
 
 	public List<Vector2I> GetTilePath()
 	{
-		UnitAction[] unitActions = _actionQueue.GetActions();
+		UnitAction[] unitActions = ActionQueue.GetActions();
 		List<Vector2I> path = new List<Vector2I>();
 		foreach (UnitAction action in unitActions)
 		{
@@ -125,11 +135,6 @@ public partial class Unit : TileMover
 			}
 		}
 		return path;
-	}
-
-	public ActionQueue GetActionQueue()
-	{
-		return _actionQueue;
 	}
 
 	public override void MoveToTile(Vector2I cellTo)

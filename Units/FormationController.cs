@@ -9,7 +9,7 @@ public partial class FormationController : Node2D
 	private Node2D _world;
 	private TileMapController _tileMapController;
 	private SelectionLayer _selectionLayer;
-	private FormationUiController _formationUiController;
+	private FormationUIcontroller _formationUiController;
 	private HashSet<ControlledFormation> _formations;
 	private Dictionary<Unit, Vector2I> _units;
 
@@ -19,7 +19,7 @@ public partial class FormationController : Node2D
 		_world = GetParent<Node2D>();
 		_tileMapController = _world.GetNode<TileMapController>("TileMapController");
 		_selectionLayer = _world.GetNode<SelectionLayer>("SelectionLayer");
-		_formationUiController = GetNode<FormationUiController>("FormationUiController");
+		_formationUiController = GetNode<FormationUIcontroller>("FormationUiController");
 		_units = new Dictionary<Unit, Vector2I>();
 
 		_formations = new HashSet<ControlledFormation>();
@@ -58,7 +58,7 @@ public partial class FormationController : Node2D
 	{
 		foreach (ControlledFormation formation in _formations)
 		{
-			formation.ExecuteAllUnitActions();
+			formation.ExecuteAllUnits();
 		}
 	}
 

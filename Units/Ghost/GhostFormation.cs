@@ -65,13 +65,13 @@ public partial class GhostFormation : Formation
         MoveToTile(_formation.GetWaypoint().Cell, _formation.GetWaypoint().Direction);
     }
 
-    public void Place(Vector2I cell, Direction direction)
+    public void Place()
     {
         if (isHidden)
         {
             return;
         }
-        _formation.SetWaypoint(cell, direction);
+        _formation.SetWaypoint(GetCurrentCell(), Direction);
         isGrabbed = false;
     }
 }

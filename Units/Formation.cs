@@ -4,15 +4,25 @@ using System.Collections.Generic;
 
 public abstract partial class Formation : Node2D, IDirectionAnchor
 {
+	[Export]
+	public int FormationSize { get; set; }
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
 	protected List<Unit> _units;
 	protected Unit _commander;
-	[Export]
-	public int FormationSize { get; set; }
 	private PackedScene _commanderScene;
 	private PackedScene _ranksScene;
+	private int unitsPathfinding = 0;
+	private int unitsExecutingActions = 0;
 
+	[Signal]
+	public delegate void PathfindingCompleteEventHandler();
+	[Signal]
+	public delegate void StartExecutingActionsEventHandler();
+	[Signal]
+	public delegate void AllPointsExpendedEventHandler();
+	[Signal]
+	public delegate void FormationSelectedEventHandler();
 
 	[Export]
 	public PackedScene Commander
@@ -48,8 +58,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		}
 	}
 
-	[Signal]
-	public delegate void FormationSelectedEventHandler();
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -74,8 +83,36 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		commander.Name = "Commander";
 		_commander = commander;
 
+		foreach (Unit unit in _units)
+		{
+			unit.PathfindingStarted += () => unitsPathfinding++;
+			unit.PathfindingComplete += () => _on_unit_pathfinding_complete();
+			unit.StartExecutingActions += () => unitsExecutingActions++;
+			unit.ActionQueue.FinishedExecuting += () => EmitSignal(SignalName.AllPointsExpended);
+		}
+
 		UpdateDirection(Direction.NORTH);
 
+	}
+
+	private void _on_unit_pathfinding_complete()
+	{
+		unitsPathfinding--;
+		if (unitsPathfinding <= 0)
+		{
+			EmitSignal(SignalName.PathfindingComplete);
+			unitsPathfinding = 0;
+		}
+	}
+
+	private void _on_unit_expend_all_points()
+	{
+		unitsExecutingActions--;
+		if (unitsExecutingActions <= 0)
+		{
+			EmitSignal(SignalName.AllPointsExpended);
+			unitsExecutingActions = 0;
+		}
 	}
 
 	public Unit GetCommander()
@@ -150,13 +187,14 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		_commander.UpdateDirection(direction);
 	}
 
-	public void ExecuteAllUnitActions()
+	public void ExecuteAllUnits()
 	{
-		_commander.ExecuteNextAction();
+		_commander.ExecuteActions();
 		foreach (Unit unit in _units)
 		{
-			unit.ExecuteNextAction();
+			unit.ExecuteActions();
 		}
+		EmitSignal(SignalName.StartExecutingActions);
 	}
 
 	public void UpdateDirection(Direction direction)
@@ -172,11 +210,11 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		Vector2I targetCell = new Vector2I(); // or any default value
 		List<TurnAction> turnActions = new List<TurnAction>();
 		List<MoveAction> moveActions = new List<MoveAction>();
-		if (_commander.GetActionQueue().GetActions() == null || _commander.GetActionQueue().GetActions().Length == 0)
+		if (_commander.ActionQueue.GetActions() == null || _commander.ActionQueue.GetActions().Length == 0)
 		{
 			return null;
 		}
-		foreach (UnitAction action in _commander.GetActionQueue().GetActions())
+		foreach (UnitAction action in _commander.ActionQueue.GetActions())
 		{
 			if (action is TurnAction turnAction)
 			{
@@ -197,6 +235,15 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		}
 		waypoint = new Waypoint(targetCell, direction);
 		return waypoint;
+	}
+
+	public void ResetActionPoints()
+	{
+		_commander.ResetActionPoints();
+		foreach (Unit unit in _units)
+		{
+			unit.ResetActionPoints();
+		}
 	}
 
 

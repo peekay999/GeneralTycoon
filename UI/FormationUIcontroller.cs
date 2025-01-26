@@ -1,17 +1,13 @@
 
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 
-public partial class FormationUiController : Node2D
+public partial class FormationUIcontroller : Node2D
 {
 	private CanvasLayer _canvasLayer;
-	private Control UIcontrol;
-	private Button b_Walk;
-	private Button b_Run;
-	private Button b_Fire;
-	private Button b_Charge;
-	private Button b_Cancel;
-	private HBoxContainer _formationButtonsHBox;
+	private FormationUI_controls ui_controls;
+	private FormationUI_confirmation ui_confirmation;
 	private Button testButton;
 	private Camera2D _worldCamera;
 	private ControlledFormation _selectedFormation;
@@ -19,6 +15,8 @@ public partial class FormationUiController : Node2D
 	private SelectionLayer _selectionLayer;
 	private GhostFormation _ghostFormation;
 	private Direction _ghostDirection;
+	private bool _isAwaitConfirmation = false;
+	private Vector2 _confirmationBearing;
 
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
@@ -34,17 +32,14 @@ public partial class FormationUiController : Node2D
 		_worldCamera = World.Instance.GetNode<Camera2D>("Camera2D");
 
 		_canvasLayer = GetNode<CanvasLayer>("FormationUI");
-		UIcontrol = _canvasLayer.GetNode<Control>("UIcontrol");
-		_formationButtonsHBox = UIcontrol.GetNode<HBoxContainer>("PanelContainer/FormationButtonsHBox");
+		ui_controls = _canvasLayer.GetNode<FormationUI_controls>("UIcontrols");
+		ui_confirmation = _canvasLayer.GetNode<FormationUI_confirmation>("UIconfirmation");
+		ui_controls.b_Walk.Pressed += GrabGhostFormation;
+		ui_confirmation.b_Cancel.Pressed += ClearSelectedFormation;
+		ui_confirmation.b_Confirm.Pressed += () => ConfirmAction();
 
-		b_Walk = _formationButtonsHBox.GetNode<Button>("b_Walk");
-		b_Walk.Pressed += _on_walk_pressed;
-		b_Run = _formationButtonsHBox.GetNode<Button>("b_Run");
-		b_Fire = _formationButtonsHBox.GetNode<Button>("b_Fire");
-		b_Charge = _formationButtonsHBox.GetNode<Button>("b_Charge");
-		b_Cancel = _formationButtonsHBox.GetNode<Button>("b_Cancel");
-
-		_canvasLayer.Visible = false;
+		ui_controls.Visible = false;
+		ui_confirmation.Visible = false;
 
 		Direction = Direction.CONTINUE;
 
@@ -55,19 +50,42 @@ public partial class FormationUiController : Node2D
 	{
 		base._Process(delta);
 		AdjustUIPosition();
-		if (_ghostFormation != null && _ghostFormation.isGrabbed)
+		if (_ghostFormation != null && _ghostFormation.isGrabbed && !_isAwaitConfirmation)
 		{
 			_ghostFormation.MoveToTile(_selectionLayer.GetSelectedCell(), _ghostDirection);
 			_ghostFormation.QueueRedraw();
 		}
 	}
 
-	private void _on_walk_pressed()
+	private void GrabGhostFormation()
 	{
 		if (_selectedFormation != null)
 		{
 			_ghostFormation = _selectedFormation.GhostFormation.Grab();
+			ui_controls.Visible = false;
 		}
+	}
+
+	private void AwaitConfirmation(Vector2 bearing)
+	{
+		_isAwaitConfirmation = true;
+		_confirmationBearing = bearing;
+		ui_confirmation.Visible = true;
+	}
+
+	private void CommenceActions()
+	{
+		if (!_isAwaitConfirmation && _selectedFormation != null)
+		{
+			_selectedFormation.ExecuteAllUnits();
+		}
+		ClearSelectedFormation();
+	}
+
+	private void ConfirmAction()
+	{
+		_ghostFormation.Place();
+		_isAwaitConfirmation = false;
 	}
 
 	private void AdjustUIPosition()
@@ -76,25 +94,39 @@ public partial class FormationUiController : Node2D
 		{
 			return;
 		}
-		// Adjust position to account for camera's zoom level
-		Vector2 positionDifference = _selectedFormation.GetCurrentPosition() - _worldCamera.Position;
+		ui_controls.Position = GetAdjustedPosition(_selectedFormation.GetCurrentPosition(), ui_controls.Size);
+
+		if (_isAwaitConfirmation)
+		{
+			ui_confirmation.Position = GetAdjustedPosition(_confirmationBearing + new Vector2(0, 20), ui_confirmation.Size);
+		}
+	}
+
+	private Vector2 GetAdjustedPosition(Vector2 targetPosition, Vector2 uiSize)
+	{
+		Vector2 positionDifference = targetPosition - _worldCamera.Position;
 		Vector2 adjustedPosition = positionDifference * _worldCamera.Zoom;
 
 		// Get viewport size and adjust position
 		Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
 		adjustedPosition += viewportSize / 2;
 
-		adjustedPosition -= new Vector2(_formationButtonsHBox.Size.X / 2, -50 * _worldCamera.Zoom.Y);
+		adjustedPosition -= new Vector2(uiSize.X / 2, -50 * _worldCamera.Zoom.Y);
 
-		UIcontrol.Position = adjustedPosition;
+		return adjustedPosition;
 	}
 
 	public void SetSelectedFormation(ControlledFormation formation)
 	{
 		ClearSelectedFormation();
 		_selectedFormation = formation;
+		if (_selectedFormation == null)
+		{
+			return;
+		}
+		_selectedFormation.PathfindingComplete += () => CommenceActions();
 		_selectionLayer.Visible = false;
-		_canvasLayer.Visible = true;
+		ui_controls.Visible = true;
 		Visible = true;
 		_ghostFormation = formation.GhostFormation;
 		_ghostDirection = formation.Direction;
@@ -103,8 +135,12 @@ public partial class FormationUiController : Node2D
 
 	public void ClearSelectedFormation()
 	{
+		_isAwaitConfirmation = false;
+		ui_controls.Visible = false;
+		ui_confirmation.Visible = false;
 		if (_selectedFormation != null)
 		{
+			_selectedFormation.PathfindingComplete -= () => CommenceActions();
 			_selectedFormation = null;
 		}
 		if (_ghostFormation != null)
@@ -114,7 +150,6 @@ public partial class FormationUiController : Node2D
 			_ghostFormation = null;
 		}
 		_selectionLayer.Visible = true;
-		_canvasLayer.Visible = false;
 		Visible = false;
 	}
 	public ControlledFormation GetSelectedFormation()
@@ -130,7 +165,10 @@ public partial class FormationUiController : Node2D
 			{
 				if (mouseButton.ButtonIndex == MouseButton.Left)
 				{
-					_ghostFormation.Place(_selectionLayer.GetSelectedCell(), _ghostDirection);
+					if (!_isAwaitConfirmation)
+					{
+						AwaitConfirmation(_ghostFormation.GetCurrentPosition());
+					}
 				}
 			}
 		}

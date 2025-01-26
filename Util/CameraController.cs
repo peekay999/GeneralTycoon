@@ -30,9 +30,18 @@ public partial class CameraController : Camera2D
             direction.Y += 1;
 
         if (Input.IsActionJustPressed("zoom_in"))
-            Zoom /= 1.1f;
-        if (Input.IsActionJustPressed("zoom_out"))
             Zoom *= 1.1f;
+        if (Input.IsActionJustPressed("zoom_out"))
+            Zoom /= 1.1f;
+
+        if (Zoom < new Vector2(0.5f, 0.5f))
+        {
+            Zoom = new Vector2(0.5f, 0.5f);
+        }
+        else if (Zoom > new Vector2(2.0f, 2.0f))
+        {
+            Zoom = new Vector2(2.0f, 2.0f);
+        }
 
         // Normalize direction to ensure consistent speed
         if (direction != Vector2.Zero)

@@ -6,7 +6,8 @@
 [node name="Unit" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_qjs11")
-unitCount = 6
+randomness = 4.923
+unitCount = 9
 unitSprite = ExtResource("2_r7kfa")
 _spriteOffset_Y = -32.0
 

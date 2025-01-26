@@ -4,42 +4,59 @@ using System.Collections.Generic;
 
 public partial class TileMapGenerator : Node2D
 {
+	private int erasedTiles = 0;
 	public List<TileMapLayer> GenerateTileMapLayers(Texture2D heightmap, int numberOfLayers, TileSet tileSet)
 	{
 		Image image = heightmap.GetImage();
 		List<TileMapLayer> tileMapLayers = new List<TileMapLayer>();
 		int Offset_Y = -16;
+
+		if (image == null)
+		{
+			GD.PrintErr("HeightMap image is null");
+			return null;
+		}
+
+		int imageWidth = image.GetWidth();
+		int imageHeight = image.GetHeight();
+
 		for (int i = 0; i < numberOfLayers; i++)
 		{
-			TileMapLayer tileMapLayer = new TileMapLayer();
-			tileMapLayer.TextureFilter = TextureFilterEnum.Nearest;
-			tileMapLayer.Name = "Layer " + i;
-			tileMapLayer.TileSet = tileSet;
-			tileMapLayer.GlobalPosition = new Vector2(0, i * Offset_Y);
-			tileMapLayer.YSortOrigin = -i * Offset_Y;
-			tileMapLayer.YSortEnabled = true;
-			tileMapLayer.ZIndex = 0;
-			tileMapLayer.CollisionEnabled = false;
-			tileMapLayer.NavigationEnabled = false;
+			TileMapLayer tileMapLayer = new TileMapLayer()
+			{
+				TextureFilter = TextureFilterEnum.Nearest,
+				Name = "Layer " + i,
+				TileSet = tileSet,
+				GlobalPosition = new Vector2(0, i * Offset_Y),
+				YSortOrigin = -i * Offset_Y,
+				YSortEnabled = true,
+				ZIndex = 0,
+				CollisionEnabled = false,
+				NavigationEnabled = false,
+				RenderingQuadrantSize = 16
+			};
 
 			tileMapLayers.Add(tileMapLayer);
 
+			List<Vector2I> tilePositions = new List<Vector2I>();
 
-			if (image == null)
-			{
-				GD.PrintErr("HeightMap image is null");
-				return null;
-			}
+			int threshold = 255 / numberOfLayers * i;
 
-			for (int x = 0; x < image.GetWidth() - 1; x++)
+			for (int x = 0; x < imageWidth - 1; x++)
 			{
-				for (int y = 0; y < image.GetHeight() - 1; y++)
+				for (int y = 0; y < imageHeight - 1; y++)
 				{
-					if (image.GetPixel(x, y).R8 >= 255 / numberOfLayers * i)
+					if (image.GetPixel(x, y).R8 >= threshold)
 					{
-						tileMapLayer.SetCell(new Vector2I(x, y), 0, new Vector2I(0, 0));
+						tilePositions.Add(new Vector2I(x, y));
 					}
 				}
+			}
+
+			// Batch set tiles
+			foreach (Vector2I position in tilePositions)
+			{
+				tileMapLayer.SetCell(position, 0, TileMapUtil.tile_base);
 			}
 		}
 		return tileMapLayers;

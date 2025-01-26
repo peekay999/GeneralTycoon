@@ -27,11 +27,12 @@ public partial class SelectionLayer : TileMapLayer
 		List<TileMapLayer> tileMapLayers = _tileMapController.GetTileMapLayers();
 		int layerCount = tileMapLayers.Count;
 		Clear();
+
 		for (int i = layerCount - 1; i >= 0; i--)
 		{
 			Position = tileMapLayers[i].Position;
 			TileMapLayer tileMapLayer = tileMapLayers[i];
-			Vector2 localMousePos = ToLocal(GetGlobalMousePosition());
+			Vector2 localMousePos = tileMapLayer.GetLocalMousePosition();
 			Vector2I cell = tileMapLayer.LocalToMap(localMousePos);
 
 			int layer = i;

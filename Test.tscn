@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bufsvbmaiccdc"]
+[gd_scene load_steps=12 format=3 uid="uid://bufsvbmaiccdc"]
 
 [ext_resource type="Script" path="res://TileMaps/TileMapController.cs" id="1_luie1"]
 [ext_resource type="Script" path="res://World.cs" id="1_ux6xs"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://TileMaps/Pathfinder.cs" id="6_qqpqo"]
 [ext_resource type="Script" path="res://TileMaps/SelectionLayer.cs" id="7_noex6"]
 [ext_resource type="Script" path="res://Units/UI/FormationUiController.cs" id="8_2eqc8"]
+[ext_resource type="Theme" uid="uid://cnjtetudthuan" path="res://addons/windows_95_theme/save1.tres" id="10_hm81m"]
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -60,37 +61,49 @@ offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FormationButtonsHBox" type="HBoxContainer" parent="FormationController/FormationUiController/FormationUI/UIcontrol"]
+[node name="PanelContainer" type="PanelContainer" parent="FormationController/FormationUiController/FormationUI/UIcontrol"]
 layout_mode = 0
-offset_left = -1.0
-offset_top = 1.0
-offset_right = 39.0
-offset_bottom = 41.0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("10_hm81m")
 
-[node name="b_Walk" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+[node name="FormationButtonsHBox" type="HBoxContainer" parent="FormationController/FormationUiController/FormationUI/UIcontrol/PanelContainer"]
+layout_mode = 2
+
+[node name="b_Walk" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/PanelContainer/FormationButtonsHBox"]
 layout_mode = 2
 focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("10_hm81m")
 text = "Walk
 "
 
-[node name="b_Run" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+[node name="b_Run" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/PanelContainer/FormationButtonsHBox"]
 layout_mode = 2
 focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("10_hm81m")
 text = "Run"
 
-[node name="b_Fire" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+[node name="b_Fire" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/PanelContainer/FormationButtonsHBox"]
 layout_mode = 2
 focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("10_hm81m")
 text = "Fire"
 
-[node name="b_Charge" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+[node name="b_Charge" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/PanelContainer/FormationButtonsHBox"]
 layout_mode = 2
 focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("10_hm81m")
 text = "Charge"
 
-[node name="b_Cancel" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/FormationButtonsHBox"]
+[node name="b_Cancel" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrol/PanelContainer/FormationButtonsHBox"]
 layout_mode = 2
 focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("10_hm81m")
 text = "Cancel"
 
 [node name="Pathfinder" type="Node2D" parent="."]

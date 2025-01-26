@@ -10,6 +10,14 @@ public static class UnitUtil
 	public const float TILE_WIDTH = TileMapUtil.TILE_WIDTH;
 	public const float TILE_HEIGHT = TileMapUtil.TILE_HEIGHT;
 
+	private static Vector2[,] North_Positions = DetermineSpritePositions(Direction.NORTH);
+	private static Vector2[,] North_East_Positions = DetermineSpritePositions(Direction.NORTH_EAST);
+	private static Vector2[,] East_Positions = DetermineSpritePositions(Direction.EAST);
+	private static Vector2[,] South_East_Positions = DetermineSpritePositions(Direction.SOUTH_EAST);
+	private static Vector2[,] South_Positions = DetermineSpritePositions(Direction.SOUTH);
+	private static Vector2[,] South_West_Positions = DetermineSpritePositions(Direction.SOUTH_WEST);
+	private static Vector2[,] West_Positions = DetermineSpritePositions(Direction.WEST);
+	private static Vector2[,] North_West_Positions = DetermineSpritePositions(Direction.NORTH_WEST);
 
 
 	public static Direction GetClockwiseDirection(Direction direction)
@@ -64,6 +72,33 @@ public static class UnitUtil
 
 	public static Vector2[,] GetSpritePositions(Direction direction)
 	{
+		switch (direction)
+		{
+			case Direction.NORTH:
+				return North_Positions;
+			case Direction.NORTH_EAST:
+				return North_East_Positions;
+			case Direction.EAST:
+				return East_Positions;
+			case Direction.SOUTH_EAST:
+				return South_East_Positions;
+			case Direction.SOUTH:
+				return South_Positions;
+			case Direction.SOUTH_WEST:
+				return South_West_Positions;
+			case Direction.WEST:
+				return West_Positions;
+			case Direction.NORTH_WEST:
+				return North_West_Positions;
+			case Direction.CONTINUE:
+			default:
+				return North_Positions;
+		}
+
+	}
+
+	private static Vector2[,] DetermineSpritePositions(Direction direction)
+	{
 		Vector2[,] positions;
 
 		float margin = 0.66f;
@@ -88,7 +123,7 @@ public static class UnitUtil
 		if (direction == Direction.NORTH_WEST || direction == Direction.SOUTH_WEST || direction == Direction.NORTH_EAST || direction == Direction.SOUTH_EAST)
 		{
 			padding = A / 2;
-			
+
 			if (direction == Direction.NORTH_WEST || direction == Direction.SOUTH_EAST)
 			{
 				A = -TILE_HEIGHT / 2 * (margin / 2);

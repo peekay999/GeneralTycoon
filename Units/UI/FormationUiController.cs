@@ -35,7 +35,7 @@ public partial class FormationUiController : Node2D
 
 		_canvasLayer = GetNode<CanvasLayer>("FormationUI");
 		UIcontrol = _canvasLayer.GetNode<Control>("UIcontrol");
-		_formationButtonsHBox = UIcontrol.GetNode<HBoxContainer>("FormationButtonsHBox");
+		_formationButtonsHBox = UIcontrol.GetNode<HBoxContainer>("PanelContainer/FormationButtonsHBox");
 
 		b_Walk = _formationButtonsHBox.GetNode<Button>("b_Walk");
 		b_Walk.Pressed += _on_walk_pressed;

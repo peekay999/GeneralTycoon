@@ -21,8 +21,6 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public delegate void StartExecutingActionsEventHandler();
 	[Signal]
 	public delegate void AllPointsExpendedEventHandler();
-	[Signal]
-	public delegate void FormationSelectedEventHandler();
 
 	[Export]
 	public PackedScene Commander

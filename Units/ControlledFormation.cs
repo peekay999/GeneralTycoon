@@ -2,7 +2,6 @@ using Godot;
 
 public abstract partial class ControlledFormation : Formation
 {
-    private FormationController _formationController;
     protected (int count, bool isHovered) _hoverStatus = (0, false);
     public GhostFormation GhostFormation { get; private set; }
 
@@ -12,17 +11,23 @@ public abstract partial class ControlledFormation : Formation
         base._Ready();
         YSortEnabled = true;
 
-        _formationController = World.Instance.GetFormationController();
+        FormationController formationController = World.Instance.GetFormationController();
         foreach (Unit unit in _units)
         {
-            unit.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(unit, currentCell, targetCell);
+            unit.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(unit, currentCell, targetCell);
             unit.MouseEntered += () => _on_mouse_entered();
             unit.MouseExited += () => _on_mouse_exited();
         }
-        _commander.UnitMoved += (currentCell, targetCell) => _formationController._on_unit_moved(_commander, currentCell, targetCell);
+        _commander.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(_commander, currentCell, targetCell);
         _commander.MouseEntered += () => _on_mouse_entered();
         _commander.MouseExited += () => _on_mouse_exited();
 
+        CreateGhostFormation();
+
+    }
+
+    protected virtual void CreateGhostFormation()
+    {
         // Ensure the resource path is correct
         PackedScene ghostFormationScene = (PackedScene)ResourceLoader.Load("res://Units/Ghost/ghost_formation.tscn");
         if (ghostFormationScene == null)
@@ -30,7 +35,6 @@ public abstract partial class ControlledFormation : Formation
             GD.PrintErr("Failed to load ghost_formation.tscn");
             return;
         }
-
         // Instantiate and cast to GhostFormation
         GhostFormation ghostFormation = (GhostFormation)ghostFormationScene.Instantiate();
 
@@ -42,14 +46,11 @@ public abstract partial class ControlledFormation : Formation
         GhostFormation.SetFormation(this);
 
         AddChild(GhostFormation);
-
-        // SetWaypoint(GetCurrentCell(), Direction);
-
     }
 
     public override void _Input(InputEvent @event)
     {
-        if (_hoverStatus.isHovered == true && _formationController.GetSelectedFormation() != this)
+        if (_hoverStatus.isHovered == true && World.Instance.GetFormationController().GetSelectedFormation() != this)
         {
             if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
             {
@@ -81,7 +82,7 @@ public abstract partial class ControlledFormation : Formation
     private void _on_mouse_entered()
     {
         _hoverStatus.count++;
-        if (_hoverStatus.count > 0 && _formationController.GetSelectedFormation() != this)
+        if (_hoverStatus.count > 0 && World.Instance.GetFormationController().GetSelectedFormation() != this)
         {
             _hoverStatus.isHovered = true;
             Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);

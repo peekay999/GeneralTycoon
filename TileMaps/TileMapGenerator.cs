@@ -354,11 +354,7 @@ public partial class TileMapGenerator : Node2D
 			{
 				if (nextLayer.GetCellSourceId(cell) != -1)
 				{
-					currentLayer.SetCell(cell, 0, TileMapUtil.tile_base);
-				}
-				if (nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_NE || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_NW || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_SE || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_SW)
-				{
-					currentLayer.SetCell(cell, 0, TileMapUtil.tile_debug_0);
+					currentLayer.SetCell(cell, 0, TileMapUtil.tile_walls_only);
 				}
 			}
 		}
@@ -369,15 +365,11 @@ public partial class TileMapGenerator : Node2D
 
 			foreach (Vector2I cell in currentLayer.GetUsedCells())
 			{
-				if (currentLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_debug_0)
+				if (currentLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_walls_only)
 				{
-					if (nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_debug_0)
+					if (nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_NE || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_NW || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_SE || nextLayer.GetCellAtlasCoords(cell) == TileMapUtil.tile_corner_double_SW)
 					{
-						currentLayer.SetCell(cell, 0, TileMapUtil.tile_base);
-					}
-					else
-					{
-						currentLayer.SetCell(cell, 0, TileMapUtil.tile_none);
+						currentLayer.EraseCell(cell);
 					}
 				}
 			}

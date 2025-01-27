@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public abstract partial class Formation : Node2D, IDirectionAnchor
 {
@@ -15,15 +16,19 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	[Signal]
 	public delegate void PathfindingCompleteEventHandler();
 
+	private PackedScene _commanderScene;
+
+	private PackedScene _rankersScene;
+
 	[Export]
 	public PackedScene Commander
 	{
-		get => Commander;
-		set
+		get => _commanderScene;
+		protected set
 		{
 			if (value.Instantiate() is Unit)
 			{
-				Commander = value;
+				_commanderScene = value;
 			}
 			else
 			{
@@ -35,12 +40,12 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	[Export]
 	public PackedScene Rankers
 	{
-		get => Rankers;
-		set
+		get => _rankersScene;
+		protected set
 		{
 			if (value.Instantiate() is Unit)
 			{
-				Rankers = value;
+				_rankersScene = value;
 			}
 			else
 			{
@@ -78,8 +83,6 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		{
 			unit.PathfindingStarted += () => unitsPathfinding++;
 			unit.PathfindingComplete += () => _on_unit_pathfinding_complete();
-
-
 		}
 
 		UpdateDirection(Direction.NORTH);
@@ -119,14 +122,14 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public abstract Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction);
 
 
-	public void SetWaypoint(Vector2I cell, Direction direction)
+	public void SetWaypoint(Waypoint waypoint)
 	{
-		UpdateDirection(direction);
-		_commander.AssignPath(cell, direction);
-		Vector2I[] targetCells = DressOffCommander(cell, direction);
+		UpdateDirection(waypoint.Direction);
+		_commander.AssignPath(waypoint.Cell, waypoint.Direction);
+		Vector2I[] targetCells = DressOffCommander(waypoint.Cell, waypoint.Direction);
 		for (int i = 0; i < _units.Count; i++)
 		{
-			_units[i].AssignPath(targetCells[i], direction);
+			_units[i].AssignPath(targetCells[i], waypoint.Direction);
 		}
 	}
 
@@ -151,36 +154,19 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 
 	public Waypoint GetWaypoint()
 	{
-		Waypoint waypoint;
-		Direction direction = Direction.NORTH; // or any default value
-		Vector2I targetCell = new Vector2I(); // or any default value
-		List<TurnAction> turnActions = new List<TurnAction>();
-		List<MoveAction> moveActions = new List<MoveAction>();
-		if (_commander.ActionQueue.GetActions() == null || _commander.ActionQueue.GetActions().Length == 0)
+		var actions = _commander.ActionQueue.GetActions();
+		if (actions == null || actions.Length == 0)
 		{
 			return null;
 		}
-		foreach (UnitAction action in _commander.ActionQueue.GetActions())
-		{
-			if (action is TurnAction turnAction)
-			{
-				turnActions.Add(turnAction);
-			}
-			else if (action is MoveAction moveAction)
-			{
-				moveActions.Add(moveAction);
-			}
-		}
-		if (turnActions.Count > 0)
-		{
-			direction = turnActions[turnActions.Count - 1].GetDirection();
-		}
-		if (moveActions.Count > 0)
-		{
-			targetCell = moveActions[moveActions.Count - 1].GetTargetCell();
-		}
-		waypoint = new Waypoint(targetCell, direction);
-		return waypoint;
+
+		TurnAction turnAction = actions.OfType<TurnAction>().LastOrDefault();
+		MoveAction moveAction = actions.OfType<MoveAction>().LastOrDefault();
+
+		Direction direction = turnAction?.GetDirection() ?? Direction.CONTINUE;
+		Vector2I targetCell = moveAction?.GetTargetCell() ?? Vector2I.Zero;
+
+		return new Waypoint(targetCell, direction);
 	}
 
 	public void ResetActionPoints()

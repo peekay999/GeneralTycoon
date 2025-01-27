@@ -8,4 +8,4 @@
 script = ExtResource("1_o1dej")
 FormationSize = 10
 Commander = ExtResource("2_eyxlr")
-Ranks = ExtResource("2_g5csj")
+Rankers = ExtResource("2_g5csj")

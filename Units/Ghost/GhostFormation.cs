@@ -71,7 +71,8 @@ public partial class GhostFormation : Formation
         {
             return;
         }
-        _formation.SetWaypoint(GetCurrentCell(), Direction);
+        Waypoint waypoint = new Waypoint(GetCurrentCell(), Direction);
+        _formation.SetWaypoint(waypoint);
         isGrabbed = false;
     }
 

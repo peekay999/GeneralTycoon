@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=8 format=3 uid="uid://cl6fplrb3wsga"]
 
-[ext_resource type="Texture2D" uid="uid://cwxb3c31qlv05" path="res://Sprites/Terrain/grass_01.png" id="1_ejbjh"]
+[ext_resource type="Texture2D" uid="uid://s5hm05fond2i" path="res://Sprites/Terrain/grass_01.png" id="1_ejbjh"]
 [ext_resource type="Texture2D" uid="uid://diagvsd3k327l" path="res://Sprites/UI/selection_overlay.png" id="2_70idp"]
 [ext_resource type="Texture2D" uid="uid://c8nww0w2lctlg" path="res://Sprites/unit_tilemap.png" id="3_8d2er"]
 

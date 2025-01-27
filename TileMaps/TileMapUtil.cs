@@ -29,7 +29,7 @@ public static class TileMapUtil
 	public static readonly Vector2I tile_corner_double_NE = new Vector2I(3, 0);
 	public static readonly Vector2I tile_corner_double_SE = new Vector2I(3, 4);
 	public static readonly Vector2I tile_corner_double_SW = new Vector2I(1, 0);
-	public static readonly Vector2I tile_debug_0 = new Vector2I(0, 4);
+	public static readonly Vector2I tile_walls_only = new Vector2I(0, 4);
 
 	private static readonly HashSet<Vector2I> sloped_tiles_R = new HashSet<Vector2I>
 	{

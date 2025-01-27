@@ -21,28 +21,23 @@ public abstract partial class ControlledFormation : Formation
     public override void _Ready()
     {
         base._Ready();
-        YSortEnabled = true;
+        CreateGhostFormation();
+    }
 
+    protected override void InitialiseUnits()
+    {
+        base.InitialiseUnits();
         FormationController formationController = World.Instance.GetFormationController();
-        foreach (Unit unit in _subordinates)
+        foreach (Unit unit in _allUnits)
         {
             unit.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(unit, currentCell, targetCell);
             unit.MouseEntered += () => _on_mouse_entered();
             unit.MouseExited += () => _on_mouse_exited();
             unit.StartExecutingActions += () => unitsExecutingActions++;
             unit.ActionQueue.FinishedExecuting += () => EmitSignal(SignalName.AllPointsExpended);
-        }
-        _commander.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(_commander, currentCell, targetCell);
-        _commander.MouseEntered += () => _on_mouse_entered();
-        _commander.MouseExited += () => _on_mouse_exited();
-
-        foreach (Unit unit in _subordinates)
-        {
             unit.PathfindingStarted += () => unitsPathfinding++;
             unit.PathfindingComplete += () => _on_unit_pathfinding_complete();
         }
-
-        CreateGhostFormation();
     }
 
     protected virtual void CreateGhostFormation()

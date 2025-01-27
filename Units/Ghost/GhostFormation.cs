@@ -13,7 +13,6 @@ public partial class GhostFormation : Formation
         base._Ready();
 
         Modulate = new Color(1, 1, 1, 0.75f);
-        YSortEnabled = true;
         
         lineDrawer = new LineDrawer();
         AddChild(lineDrawer);

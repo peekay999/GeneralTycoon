@@ -10,6 +10,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
 	protected List<Unit> _subordinates;
+	protected List<Unit> _allUnits;
 	protected Unit _commander;
 
 	private PackedScene _commanderScene;
@@ -55,7 +56,15 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		YSortEnabled = true;
+		InitialiseUnits();
+		UpdateDirection(Direction.NORTH);
+	}
+
+	protected virtual void InitialiseUnits()
+	{
 		_subordinates = new List<Unit>();
+		_allUnits = new List<Unit>();
 
 		if (Rankers == null || Commander == null)
 		{
@@ -68,22 +77,14 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 			Unit unit = (Unit)Rankers.Instantiate();
 			AddChild(unit);
 			_subordinates.Add(unit);
+			_allUnits.Add(unit);
 			unit.Name = "Unit " + _subordinates.IndexOf(unit);
 		}
 		Unit commander = (Unit)Commander.Instantiate();
 		AddChild(commander);
+		_allUnits.Add(commander);
 		commander.Name = "Commander";
 		_commander = commander;
-
-
-
-		UpdateDirection(Direction.NORTH);
-
-	}
-
-	protected virtual void InitialiseUnits()
-	{
-
 	}
 
 

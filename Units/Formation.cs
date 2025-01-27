@@ -10,10 +10,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public LocalisedDirections LocalisedDirections { get; private set; }
 	protected List<Unit> _units;
 	protected Unit _commander;
-	private PackedScene _commanderScene;
-	private PackedScene _ranksScene;
 	private int unitsPathfinding = 0;
-
 
 	[Signal]
 	public delegate void PathfindingCompleteEventHandler();
@@ -21,12 +18,12 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	[Export]
 	public PackedScene Commander
 	{
-		get => _commanderScene;
+		get => Commander;
 		set
 		{
 			if (value.Instantiate() is Unit)
 			{
-				_commanderScene = value;
+				Commander = value;
 			}
 			else
 			{
@@ -36,14 +33,14 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	}
 
 	[Export]
-	public PackedScene Ranks
+	public PackedScene Rankers
 	{
-		get => _ranksScene;
+		get => Rankers;
 		set
 		{
 			if (value.Instantiate() is Unit)
 			{
-				_ranksScene = value;
+				Rankers = value;
 			}
 			else
 			{
@@ -59,7 +56,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	{
 		_units = new List<Unit>();
 
-		if (_ranksScene == null || _commanderScene == null)
+		if (Rankers == null || Commander == null)
 		{
 			GD.PrintErr("Ranks or Commander scene is not assigned.");
 			return;
@@ -67,7 +64,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 
 		for (int i = 0; i < FormationSize; i++)
 		{
-			Unit unit = (Unit)Ranks.Instantiate();
+			Unit unit = (Unit)Rankers.Instantiate();
 			AddChild(unit);
 			_units.Add(unit);
 			unit.Name = "Unit " + _units.IndexOf(unit);

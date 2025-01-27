@@ -9,12 +9,8 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public int FormationSize { get; set; }
 	public Direction Direction { get; private set; }
 	public LocalisedDirections LocalisedDirections { get; private set; }
-	protected List<Unit> _units;
+	protected List<Unit> _subordinates;
 	protected Unit _commander;
-	private int unitsPathfinding = 0;
-
-	[Signal]
-	public delegate void PathfindingCompleteEventHandler();
 
 	private PackedScene _commanderScene;
 
@@ -59,7 +55,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_units = new List<Unit>();
+		_subordinates = new List<Unit>();
 
 		if (Rankers == null || Commander == null)
 		{
@@ -71,32 +67,23 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		{
 			Unit unit = (Unit)Rankers.Instantiate();
 			AddChild(unit);
-			_units.Add(unit);
-			unit.Name = "Unit " + _units.IndexOf(unit);
+			_subordinates.Add(unit);
+			unit.Name = "Unit " + _subordinates.IndexOf(unit);
 		}
 		Unit commander = (Unit)Commander.Instantiate();
 		AddChild(commander);
 		commander.Name = "Commander";
 		_commander = commander;
 
-		foreach (Unit unit in _units)
-		{
-			unit.PathfindingStarted += () => unitsPathfinding++;
-			unit.PathfindingComplete += () => _on_unit_pathfinding_complete();
-		}
+
 
 		UpdateDirection(Direction.NORTH);
 
 	}
 
-	private void _on_unit_pathfinding_complete()
+	protected virtual void InitialiseUnits()
 	{
-		unitsPathfinding--;
-		if (unitsPathfinding <= 0)
-		{
-			EmitSignal(SignalName.PathfindingComplete);
-			unitsPathfinding = 0;
-		}
+
 	}
 
 
@@ -107,7 +94,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 
 	public int GetWidth()
 	{
-		return _units.Count;
+		return _subordinates.Count;
 	}
 
 	public Vector2I GetCurrentCell()
@@ -127,9 +114,9 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		UpdateDirection(waypoint.Direction);
 		_commander.AssignPath(waypoint.Cell, waypoint.Direction);
 		Vector2I[] targetCells = DressOffCommander(waypoint.Cell, waypoint.Direction);
-		for (int i = 0; i < _units.Count; i++)
+		for (int i = 0; i < _subordinates.Count; i++)
 		{
-			_units[i].AssignPath(targetCells[i], waypoint.Direction);
+			_subordinates[i].AssignPath(targetCells[i], waypoint.Direction);
 		}
 	}
 
@@ -137,10 +124,10 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	{
 		_commander.MoveToTile(cell);
 		Vector2I[] targetCells = DressOffCommander(cell, direction);
-		for (int i = 0; i < _units.Count; i++)
+		for (int i = 0; i < _subordinates.Count; i++)
 		{
-			_units[i].MoveToTile(targetCells[i]);
-			_units[i].UpdateDirection(direction);
+			_subordinates[i].MoveToTile(targetCells[i]);
+			_subordinates[i].UpdateDirection(direction);
 		}
 		_commander.UpdateDirection(direction);
 	}
@@ -172,7 +159,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	public void ResetActionPoints()
 	{
 		_commander.ResetActionPoints();
-		foreach (Unit unit in _units)
+		foreach (Unit unit in _subordinates)
 		{
 			unit.ResetActionPoints();
 		}

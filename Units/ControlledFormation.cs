@@ -5,6 +5,10 @@ public abstract partial class ControlledFormation : Formation
     protected (int count, bool isHovered) _hoverStatus = (0, false);
     public GhostFormation GhostFormation { get; private set; }
     private int unitsExecutingActions = 0;
+    private int unitsPathfinding = 0;
+
+    [Signal]
+    public delegate void PathfindingCompleteEventHandler();
 
     [Signal]
     public delegate void StartExecutingActionsEventHandler();
@@ -20,7 +24,7 @@ public abstract partial class ControlledFormation : Formation
         YSortEnabled = true;
 
         FormationController formationController = World.Instance.GetFormationController();
-        foreach (Unit unit in _units)
+        foreach (Unit unit in _subordinates)
         {
             unit.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(unit, currentCell, targetCell);
             unit.MouseEntered += () => _on_mouse_entered();
@@ -32,8 +36,13 @@ public abstract partial class ControlledFormation : Formation
         _commander.MouseEntered += () => _on_mouse_entered();
         _commander.MouseExited += () => _on_mouse_exited();
 
-        CreateGhostFormation();
+        foreach (Unit unit in _subordinates)
+        {
+            unit.PathfindingStarted += () => unitsPathfinding++;
+            unit.PathfindingComplete += () => _on_unit_pathfinding_complete();
+        }
 
+        CreateGhostFormation();
     }
 
     protected virtual void CreateGhostFormation()
@@ -69,6 +78,16 @@ public abstract partial class ControlledFormation : Formation
         }
     }
 
+    private void _on_unit_pathfinding_complete()
+    {
+        unitsPathfinding--;
+        if (unitsPathfinding <= 0)
+        {
+            EmitSignal(SignalName.PathfindingComplete);
+            unitsPathfinding = 0;
+        }
+    }
+
     public void SelectFormation()
     {
         EmitSignal(SignalName.FormationSelected);
@@ -95,7 +114,7 @@ public abstract partial class ControlledFormation : Formation
         {
             _hoverStatus.isHovered = true;
             Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
-            foreach (Unit unit in _units)
+            foreach (Unit unit in _subordinates)
             {
                 unit.Modulate = new Color(1, 1, 1, 0.75f);
             }
@@ -108,7 +127,7 @@ public abstract partial class ControlledFormation : Formation
         {
             _hoverStatus.isHovered = false;
             Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
-            foreach (Unit unit in _units)
+            foreach (Unit unit in _subordinates)
             {
                 unit.Modulate = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }
@@ -118,7 +137,7 @@ public abstract partial class ControlledFormation : Formation
     public void ExecuteAllUnits()
     {
         _commander.ExecuteActions();
-        foreach (Unit unit in _units)
+        foreach (Unit unit in _subordinates)
         {
             unit.ExecuteActions();
         }

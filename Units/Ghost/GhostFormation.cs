@@ -3,11 +3,9 @@ using Godot;
 
 public partial class GhostFormation : Formation
 {
-    // private FormationUiController _foromationIUcontroller;
     private ControlledFormation _formation;
     public bool isHidden = true;
     public bool isGrabbed = false;
-
     private LineDrawer lineDrawer;
 
     public override void _Ready()

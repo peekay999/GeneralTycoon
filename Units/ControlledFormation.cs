@@ -5,6 +5,9 @@ public abstract partial class ControlledFormation : Formation
     protected (int count, bool isHovered) _hoverStatus = (0, false);
     public GhostFormation GhostFormation { get; private set; }
 
+    [Signal]
+    public delegate void FormationSelectedEventHandler();
+
 
     public override void _Ready()
     {
@@ -55,14 +58,14 @@ public abstract partial class ControlledFormation : Formation
             if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
             {
                 SelectFormation();
-                _hoverStatus.isHovered = false;
             }
         }
     }
 
-    private void SelectFormation()
+    public void SelectFormation()
     {
-        EmitSignal("FormationSelected");
+        EmitSignal(SignalName.FormationSelected);
+        _hoverStatus.isHovered = false;
 
     }
 

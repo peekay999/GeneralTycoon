@@ -13,14 +13,10 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	private PackedScene _commanderScene;
 	private PackedScene _ranksScene;
 	private int unitsPathfinding = 0;
-	private int unitsExecutingActions = 0;
+
 
 	[Signal]
 	public delegate void PathfindingCompleteEventHandler();
-	[Signal]
-	public delegate void StartExecutingActionsEventHandler();
-	[Signal]
-	public delegate void AllPointsExpendedEventHandler();
 
 	[Export]
 	public PackedScene Commander
@@ -85,8 +81,8 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		{
 			unit.PathfindingStarted += () => unitsPathfinding++;
 			unit.PathfindingComplete += () => _on_unit_pathfinding_complete();
-			unit.StartExecutingActions += () => unitsExecutingActions++;
-			unit.ActionQueue.FinishedExecuting += () => EmitSignal(SignalName.AllPointsExpended);
+
+
 		}
 
 		UpdateDirection(Direction.NORTH);
@@ -103,15 +99,6 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		}
 	}
 
-	private void _on_unit_expend_all_points()
-	{
-		unitsExecutingActions--;
-		if (unitsExecutingActions <= 0)
-		{
-			EmitSignal(SignalName.AllPointsExpended);
-			unitsExecutingActions = 0;
-		}
-	}
 
 	public Unit GetCommander()
 	{
@@ -123,36 +110,17 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		return _units.Count;
 	}
 
-	private static void SelectFormation(Formation formation)
-	{
-		formation.EmitSignal("FormationSelected");
-	}
-
 	public Vector2I GetCurrentCell()
 	{
 		return _commander.GetCurrentCell();
 	}
-
-	// public Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction)
-	// {
-	// 	UpdateDirection(direction);
-	// 	int width = _units.Count;
-	// 	Vector2I[] targetCells = new Vector2I[_units.Count];
-	// 	Vector2I cellForPlacement = commanderCell + LocalisedDirections.forward + LocalisedDirections.left * (width / 2);
-	// 	for (int i = 0; i < width; i++)
-	// 	{
-	// 		targetCells[i] = cellForPlacement + LocalisedDirections.right * i;
-	// 	}
-
-	// 	return targetCells;
-	// }
-
-	public abstract Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction);
-
 	public Vector2 GetCurrentPosition()
 	{
 		return _commander.Position;
 	}
+
+	public abstract Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction);
+
 
 	public void SetWaypoint(Vector2I cell, Direction direction)
 	{
@@ -177,15 +145,6 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		_commander.UpdateDirection(direction);
 	}
 
-	public void ExecuteAllUnits()
-	{
-		_commander.ExecuteActions();
-		foreach (Unit unit in _units)
-		{
-			unit.ExecuteActions();
-		}
-		EmitSignal(SignalName.StartExecutingActions);
-	}
 
 	public void UpdateDirection(Direction direction)
 	{

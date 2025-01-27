@@ -4,7 +4,12 @@ public abstract partial class ControlledFormation : Formation
 {
     protected (int count, bool isHovered) _hoverStatus = (0, false);
     public GhostFormation GhostFormation { get; private set; }
+    private int unitsExecutingActions = 0;
 
+    [Signal]
+    public delegate void StartExecutingActionsEventHandler();
+    [Signal]
+    public delegate void AllPointsExpendedEventHandler();
     [Signal]
     public delegate void FormationSelectedEventHandler();
 
@@ -20,6 +25,8 @@ public abstract partial class ControlledFormation : Formation
             unit.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(unit, currentCell, targetCell);
             unit.MouseEntered += () => _on_mouse_entered();
             unit.MouseExited += () => _on_mouse_exited();
+            unit.StartExecutingActions += () => unitsExecutingActions++;
+            unit.ActionQueue.FinishedExecuting += () => EmitSignal(SignalName.AllPointsExpended);
         }
         _commander.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(_commander, currentCell, targetCell);
         _commander.MouseEntered += () => _on_mouse_entered();
@@ -66,7 +73,6 @@ public abstract partial class ControlledFormation : Formation
     {
         EmitSignal(SignalName.FormationSelected);
         _hoverStatus.isHovered = false;
-
     }
 
     public void RevealGhosts()
@@ -106,6 +112,26 @@ public abstract partial class ControlledFormation : Formation
             {
                 unit.Modulate = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }
+        }
+    }
+
+    public void ExecuteAllUnits()
+    {
+        _commander.ExecuteActions();
+        foreach (Unit unit in _units)
+        {
+            unit.ExecuteActions();
+        }
+        EmitSignal(SignalName.StartExecutingActions);
+    }
+
+    private void _on_unit_expend_all_points()
+    {
+        unitsExecutingActions--;
+        if (unitsExecutingActions <= 0)
+        {
+            EmitSignal(SignalName.AllPointsExpended);
+            unitsExecutingActions = 0;
         }
     }
 }

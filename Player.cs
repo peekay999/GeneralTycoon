@@ -3,7 +3,7 @@ using Godot;
 
 public partial class Player : Node
 {
-    private List<Formation> _formations = new List<Formation>();
+    private List<ControlledFormation> _formations = new List<ControlledFormation>();
 
     private int formationsExecutingActions = 0; 
 
@@ -15,7 +15,7 @@ public partial class Player : Node
     {
     }
 
-    public List<Formation> Formations
+    public List<ControlledFormation> Formations
     {
         get => _formations;
     }
@@ -29,7 +29,7 @@ public partial class Player : Node
         }
     }
 
-    public void AddFormation(Formation formation)
+    public void AddFormation(ControlledFormation formation)
     {
         _formations.Add(formation);
         formation.StartExecutingActions += () => formationsExecutingActions++;
@@ -38,7 +38,7 @@ public partial class Player : Node
 
     public void ExecuteAllFormations()
     {
-        foreach (Formation formation in _formations)
+        foreach (ControlledFormation formation in _formations)
         {
             formation.ExecuteAllUnits();
         }

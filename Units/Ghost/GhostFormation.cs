@@ -77,11 +77,11 @@ public partial class GhostFormation : Formation
 
     public override Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction)
     {
-        UpdateDirection(direction);
         if (_formation == null)
         {
             return new Vector2I[0];
         }
+        UpdateDirection(direction);
         return _formation.DressOffCommander(commanderCell, direction);
     }
 }

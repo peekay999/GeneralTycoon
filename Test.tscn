@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bufsvbmaiccdc"]
+[gd_scene load_steps=14 format=3 uid="uid://bufsvbmaiccdc"]
 
 [ext_resource type="Script" path="res://TileMaps/TileMapController.cs" id="1_luie1"]
 [ext_resource type="Script" path="res://World.cs" id="1_ux6xs"]
@@ -13,7 +13,6 @@
 [ext_resource type="Theme" uid="uid://cnjtetudthuan" path="res://addons/windows_95_theme/save1.tres" id="10_hm81m"]
 [ext_resource type="Script" path="res://UI/FormationUI_controls.cs" id="10_l2l88"]
 [ext_resource type="Script" path="res://UI/FormationUI_confirmation.cs" id="12_5xjw1"]
-[ext_resource type="Script" path="res://TurnManager.cs" id="14_4xuqv"]
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -134,8 +133,3 @@ text = "Confirm"
 [node name="Pathfinder" type="Node2D" parent="."]
 position = Vector2(0, 1)
 script = ExtResource("6_qqpqo")
-
-[node name="UI" type="CanvasLayer" parent="."]
-
-[node name="TurnManager" type="Node" parent="."]
-script = ExtResource("14_4xuqv")

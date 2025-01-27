@@ -39,8 +39,8 @@ public partial class Unit : TileMover
 		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
 		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
 		ActionQueue = new ActionQueue(100);
-		// AddChild(_actionQueue);
-		// _parentController = GetParent<UnitController>();
+		AddChild(ActionQueue);
+		
 		_animatedSprite2Ds = new List<AnimatedSprite2D>();
 		for (int i = 0; i < unitCount; i++)
 		{

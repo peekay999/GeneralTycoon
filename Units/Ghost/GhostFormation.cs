@@ -14,10 +14,8 @@ public partial class GhostFormation : Formation
 
         Modulate = new Color(1, 1, 1, 0.75f);
         YSortEnabled = true;
-
+        
         lineDrawer = new LineDrawer();
-        lineDrawer.SetPoints(Vector2.Zero, Vector2.Zero);
-        lineDrawer.ZIndex = 1;
         AddChild(lineDrawer);
     }
 

@@ -133,29 +133,21 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		return _commander.GetCurrentCell();
 	}
 
-	public Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction)
-	{
-		UpdateDirection(direction);
-		int width = _units.Count;
-		Vector2I[] targetCells = new Vector2I[_units.Count];
-		Vector2I cellForPlacement = commanderCell + LocalisedDirections.forward + LocalisedDirections.left * (width / 2);
-		for (int i = 0; i < width; i++)
-		{
-			targetCells[i] = cellForPlacement + LocalisedDirections.right * i;
-		}
+	// public Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction)
+	// {
+	// 	UpdateDirection(direction);
+	// 	int width = _units.Count;
+	// 	Vector2I[] targetCells = new Vector2I[_units.Count];
+	// 	Vector2I cellForPlacement = commanderCell + LocalisedDirections.forward + LocalisedDirections.left * (width / 2);
+	// 	for (int i = 0; i < width; i++)
+	// 	{
+	// 		targetCells[i] = cellForPlacement + LocalisedDirections.right * i;
+	// 	}
 
-		return targetCells;
-	}
+	// 	return targetCells;
+	// }
 
-	public Vector2I GetLeftMarkerCell()
-	{
-		return _commander.GetCurrentCell() + LocalisedDirections.forward + LocalisedDirections.left * (GetWidth() / 2);
-	}
-
-	public Vector2I GetRightMarkerCell()
-	{
-		return GetLeftMarkerCell() + LocalisedDirections.right * (GetWidth() - 1);
-	}
+	public abstract Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction);
 
 	public Vector2 GetCurrentPosition()
 	{

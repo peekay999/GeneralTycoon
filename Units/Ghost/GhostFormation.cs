@@ -74,4 +74,14 @@ public partial class GhostFormation : Formation
         _formation.SetWaypoint(GetCurrentCell(), Direction);
         isGrabbed = false;
     }
+
+    public override Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction)
+    {
+        UpdateDirection(direction);
+        if (_formation == null)
+        {
+            return new Vector2I[0];
+        }
+        return _formation.DressOffCommander(commanderCell, direction);
+    }
 }

@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://danlogrohjxk6"]
+
+[ext_resource type="Script" path="res://Formations/Units/ControlledUnit.cs" id="1_iihb0"]
+[ext_resource type="SpriteFrames" uid="uid://ccu1pr64gfy2q" path="res://Formations/Units/Ghost/Sprites/ghost_commander_sprites.tres" id="2_t01j2"]
+[ext_resource type="SpriteFrames" uid="uid://7jwsqvcystyk" path="res://Formations/Units/British/Sprites/British_captain_01.tres" id="2_vaiuk"]
+
+[node name="Unit" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_iihb0")
+GhostSprite = ExtResource("2_t01j2")
+UnitCount = 1
+UnitSprite = ExtResource("2_vaiuk")
+_spriteOffset_Y = -32.0
+
+[node name="YSort" type="Node2D" parent="."]
+
+[node name="Sprites" type="Node2D" parent="YSort"]
+y_sort_enabled = true
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(0, -16)
+collision_layer = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+z_as_relative = false
+polygon = PackedVector2Array(-32, -16, 0, -32, 32, -16, 32, 16, 0, 32, -32, 16)

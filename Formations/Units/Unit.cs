@@ -7,9 +7,10 @@ using System.Collections.Generic;
 public partial class Unit : TileMover
 {
 	[Export(PropertyHint.Range, "1,9")]
-	protected int unitCount = 1;
+	public int UnitCount {get; protected set;}
 	[Export]
-	private SpriteFrames unitSprite;
+	public SpriteFrames UnitSprite {get; protected set;}
+
 	[Export(PropertyHint.Range, "0.5,1.5")]
 	protected float _moveSpeed = 1.0f;
 	[Export]
@@ -22,11 +23,11 @@ public partial class Unit : TileMover
 		_direction = Direction.NORTH;
 		
 		_animatedSprite2Ds = new List<AnimatedSprite2D>();
-		for (int i = 0; i < unitCount; i++)
+		for (int i = 0; i < UnitCount; i++)
 		{
 			AnimatedSprite2D sprite = new AnimatedSprite2D();
 			sprite.TextureFilter = TextureFilterEnum.Nearest;
-			sprite.SpriteFrames = unitSprite;
+			sprite.SpriteFrames = UnitSprite;
 			sprite.Offset = new Vector2(0, _spriteOffset_Y);
 			sprite.Frame = 0;
 			sprite.Position = Vector2.Zero;
@@ -34,6 +35,14 @@ public partial class Unit : TileMover
 			_sprites.AddChild(sprite);
 		}
 		UpdateDirection(Direction.NORTH);
+	}
+
+	public void SetSprite(SpriteFrames spriteFrames)
+	{
+		foreach (AnimatedSprite2D sprite in _animatedSprite2Ds)
+		{
+			sprite.SpriteFrames = spriteFrames;
+		}
 	}
 
 	public Vector2I GetCurrentCell()

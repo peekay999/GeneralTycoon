@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2utkog71hafu"]
+
+[ext_resource type="Script" path="res://Formations/Units/Ghost/GhostFormation.cs" id="1_kyh1a"]
+
+[node name="GhostFormation" type="Node2D"]
+script = ExtResource("1_kyh1a")

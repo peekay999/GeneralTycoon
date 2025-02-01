@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Util/CameraController.cs" id="3_4f6d4"]
 [ext_resource type="Texture2D" uid="uid://dimbf0et8fm5f" path="res://height.png" id="3_f1de7"]
 [ext_resource type="Script" path="res://TileMaps/TileMapGenerator.cs" id="6_ee2ii"]
-[ext_resource type="Script" path="res://Units/FormationController.cs" id="6_fvck0"]
+[ext_resource type="Script" path="res://Formations/FormationController.cs" id="6_fvck0"]
 [ext_resource type="Script" path="res://TileMaps/Pathfinder.cs" id="6_qqpqo"]
 [ext_resource type="Script" path="res://TileMaps/SelectionLayer.cs" id="7_noex6"]
 [ext_resource type="Script" path="res://UI/FormationUIcontroller.cs" id="8_2eqc8"]

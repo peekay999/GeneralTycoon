@@ -1,19 +1,20 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class GhostFormation : Formation<Unit>
+public partial class GhostFormation : Formation<GhostUnit>
 {
     private ControlledFormation _formation;
     public bool isHidden = true;
     public bool isGrabbed = false;
     private LineDrawer lineDrawer;
 
+    private PackedScene GhostUnitScene => ResourceLoader.Load<PackedScene>(Assets.GhostUnitScenePath);
+
     public override void _Ready()
     {
         base._Ready();
-
         Modulate = new Color(1, 1, 1, 0.75f);
-        
+
         lineDrawer = new LineDrawer();
         AddChild(lineDrawer);
     }
@@ -79,5 +80,22 @@ public partial class GhostFormation : Formation<Unit>
         }
         UpdateDirection(direction);
         return _formation.DressOffCommander(commanderCell, direction);
+    }
+
+    protected override void InitialiseUnits()
+    {
+        for (int i = 0; i < FormationSize; i++)
+        {
+            GhostUnit unit = GhostUnitScene.Instantiate<GhostUnit>();
+            AddChild(unit);
+            Subordinates.Add(unit);
+            AllUnits.Add(unit);
+            unit.Name = "Ghost Unit " + Subordinates.IndexOf(unit);
+        }
+        GhostUnit commander = GhostUnitScene.Instantiate<GhostUnit>();
+        AddChild(commander);
+        AllUnits.Add(commander);
+        commander.Name = "Ghost Commander";
+        Commander = commander;
     }
 }

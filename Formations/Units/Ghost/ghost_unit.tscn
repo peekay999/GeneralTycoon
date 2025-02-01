@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://co6f7a42mif2f"]
+
+[ext_resource type="Script" path="res://Formations/Units/Ghost/GhostUnit.cs" id="1_1vaa7"]
+
+[node name="GhostUnit" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_1vaa7")
+_spriteOffset_Y = -20.0
+
+[node name="YSort" type="Node2D" parent="."]
+position = Vector2(0, 1)
+
+[node name="Sprites" type="Node2D" parent="YSort"]
+y_sort_enabled = true

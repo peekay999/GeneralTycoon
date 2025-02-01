@@ -40,7 +40,7 @@ public partial class FormationController : Node2D
 	/// <param name="cell">The cell on the map where the unit should be placed.</param>
 	public void AddCompany(Vector2I cell)
 	{
-		PackedScene companyScene = (PackedScene)ResourceLoader.Load("res://Units/company.tscn");
+		PackedScene companyScene = (PackedScene)ResourceLoader.Load("res://Formations/company.tscn");
 		Company company = (Company)companyScene.Instantiate();
 		company.FormationSelected += () => _on_formation_selected(company);
 		AddChild(company);

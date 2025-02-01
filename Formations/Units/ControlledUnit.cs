@@ -8,6 +8,9 @@ public partial class ControlledUnit : Unit
 	private Area2D _area2D;
 	public float SkewAmplitude;
 	public float SkewPhaseOffset;
+
+	[Export]
+	public SpriteFrames GhostSprite { get; protected set; }
 	[Signal]
 	public delegate void MouseEnteredEventHandler();
 	[Signal]
@@ -18,7 +21,7 @@ public partial class ControlledUnit : Unit
 	public delegate void PathfindingCompleteEventHandler();
 	[Signal]
 	public delegate void StartExecutingActionsEventHandler();
-	// Called when the node enters the scene tree for the first time.
+	
 	public override void _Ready()
 	{
 		base._Ready();

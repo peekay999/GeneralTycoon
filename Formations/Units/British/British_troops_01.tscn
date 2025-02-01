@@ -1,14 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bbbacrkxxyia1"]
+[gd_scene load_steps=4 format=3 uid="uid://bbbacrkxxyia1"]
 
-[ext_resource type="Script" path="res://Units/Rankers.cs" id="1_qjs11"]
-[ext_resource type="SpriteFrames" uid="uid://b6oichcsp8ehn" path="res://Units/British/British_soldier_01_sprites.tres" id="2_r7kfa"]
+[ext_resource type="Script" path="res://Formations/Units/Rankers.cs" id="1_qjs11"]
+[ext_resource type="SpriteFrames" uid="uid://csf4pi8ap8jjt" path="res://Formations/Units/Ghost/Sprites/ghost_unit_sprites.tres" id="2_ovfud"]
+[ext_resource type="SpriteFrames" uid="uid://b6oichcsp8ehn" path="res://Formations/Units/British/Sprites/British_soldier_01_sprites.tres" id="2_r7kfa"]
 
 [node name="Unit3" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_qjs11")
 randomness = 4.923
-unitCount = 9
-unitSprite = ExtResource("2_r7kfa")
+GhostSprite = ExtResource("2_ovfud")
+UnitCount = 6
+UnitSprite = ExtResource("2_r7kfa")
 _spriteOffset_Y = -32.0
 
 [node name="YSort" type="Node2D" parent="."]

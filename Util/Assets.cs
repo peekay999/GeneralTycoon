@@ -12,6 +12,5 @@ public struct Assets
         return scene;
     }
 
-    public static string UnitScene = "res://Units/Unit.tscn";
-    public static string Captain1_scene = "res://Units/British/British_captain_01.tscn";
+    public static string GhostUnitScenePath => "res://Formations/Units/Ghost/ghost_unit.tscn";
 }

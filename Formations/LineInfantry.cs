@@ -12,8 +12,8 @@ public abstract partial class LineInfantry : ControlledFormation
 	public override Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction)
 	{
 		UpdateDirection(direction);
-		int width = _subordinates.Count;
-		Vector2I[] targetCells = new Vector2I[_subordinates.Count];
+		int width = Subordinates.Count;
+		Vector2I[] targetCells = new Vector2I[Subordinates.Count];
 		Vector2I cellForPlacement = commanderCell + LocalisedDirections.forward + LocalisedDirections.left * (width / 2);
 		for (int i = 0; i < width; i++)
 		{
@@ -25,6 +25,6 @@ public abstract partial class LineInfantry : ControlledFormation
 
 	public int GetWidth()
 	{
-		return _subordinates.Count;
+		return Subordinates.Count;
 	}
 }

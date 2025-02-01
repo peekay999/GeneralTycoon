@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcdfk0c7ep24b"]
+
+[ext_resource type="Script" path="res://Formations/Units/Unit.cs" id="1_cpo7t"]
+
+[node name="GhostCommander" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_cpo7t")
+_spriteOffset_Y = -20.0
+
+[node name="YSort" type="Node2D" parent="."]
+
+[node name="Sprites" type="Node2D" parent="YSort"]
+y_sort_enabled = true

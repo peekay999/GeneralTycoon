@@ -1,12 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://2mc3lmbrt6tq"]
+[gd_scene format=3 uid="uid://j6w17aeboghh"]
 
-[ext_resource type="Script" path="res://Units/Unit.cs" id="1_ysybq"]
-[ext_resource type="SpriteFrames" uid="uid://drd2hpl4mscvr" path="res://Units/British/British_sergeant_01_sprites.tres" id="2_xhyo0"]
-
-[node name="Unit2" type="Node2D"]
-script = ExtResource("1_ysybq")
-unitSprite = ExtResource("2_xhyo0")
-_spriteOffset_Y = -32.0
+[node name="Unit" type="Node2D"]
 
 [node name="YSort" type="Node2D" parent="."]
 

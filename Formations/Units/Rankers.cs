@@ -9,7 +9,7 @@ public partial class Rankers : ControlledUnit
     public override void _Ready()
     {
         base._Ready();
-        for (int i = 0; i < unitCount; i++)
+        for (int i = 0; i < UnitCount; i++)
         {
             spriteRandoms[i] = new Vector2((float)GD.RandRange(0, randomness), (float)GD.RandRange(0, randomness));
         }

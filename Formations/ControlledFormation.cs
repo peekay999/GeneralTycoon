@@ -9,6 +9,20 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
     private int unitsExecutingActions = 0;
     private int unitsPathfinding = 0;
 
+    [Export]
+    public PackedScene CommanderScene
+    {
+        get;
+        protected set;
+    }
+
+    [Export]
+    public PackedScene RankerScene
+    {
+        get;
+        protected set;
+    }
+
     [Signal]
     public delegate void PathfindingCompleteEventHandler();
     [Signal]
@@ -27,9 +41,28 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
 
     protected override void InitialiseUnits()
     {
-        base.InitialiseUnits();
+        if (RankerScene == null || CommanderScene == null)
+        {
+            GD.PrintErr(Name + ": Ranks or Commander scene is not assigned.");
+            return;
+        }
+
+        for (int i = 0; i < FormationSize; i++)
+        {
+            ControlledUnit unit = (ControlledUnit)RankerScene.Instantiate();
+            AddChild(unit);
+            Subordinates.Add(unit);
+            AllUnits.Add(unit);
+            unit.Name = "Unit " + Subordinates.IndexOf(unit);
+        }
+        ControlledUnit commander = (ControlledUnit)CommanderScene.Instantiate();
+        AddChild(commander);
+        AllUnits.Add(commander);
+        commander.Name = "Commander";
+        Commander = commander;
+
         FormationController formationController = World.Instance.GetFormationController();
-        foreach (ControlledUnit unit in _allUnits)
+        foreach (ControlledUnit unit in AllUnits)
         {
             unit.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(unit, currentCell, targetCell);
             unit.MouseEntered += () => _on_mouse_entered();
@@ -44,7 +77,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
     protected virtual void CreateGhostFormation()
     {
         // Ensure the resource path is correct
-        PackedScene ghostFormationScene = (PackedScene)ResourceLoader.Load("res://Units/Ghost/ghost_formation.tscn");
+        PackedScene ghostFormationScene = (PackedScene)ResourceLoader.Load("res://Formations/Units/Ghost/ghost_formation.tscn");
         if (ghostFormationScene == null)
         {
             GD.PrintErr("Failed to load ghost_formation.tscn");
@@ -52,15 +85,19 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
         }
         // Instantiate and cast to GhostFormation
         GhostFormation ghostFormation = (GhostFormation)ghostFormationScene.Instantiate();
-
         GhostFormation = ghostFormation;
         GhostFormation.UpdateDirection(Direction.NORTH);
         GhostFormation.FormationSize = FormationSize;
         GhostFormation.Name = "GhostCompany";
         GhostFormation.UpdateDirection(Direction);
         GhostFormation.SetFormation(this);
-
         AddChild(GhostFormation);
+
+        for (int i = 0; i < GhostFormation.Subordinates.Count; i++)
+        {
+            GhostFormation.Subordinates[i].SetControlledUnit(Subordinates[i]);
+        }
+        GhostFormation.Commander.SetControlledUnit(Commander);
     }
 
     public override void _Input(InputEvent @event)
@@ -110,7 +147,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
         {
             _hoverStatus.isHovered = true;
             Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
-            foreach (Unit unit in _allUnits)
+            foreach (Unit unit in AllUnits)
             {
                 unit.Modulate = new Color(1, 1, 1, 0.75f);
             }
@@ -123,7 +160,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
         {
             _hoverStatus.isHovered = false;
             Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
-            foreach (Unit unit in _allUnits)
+            foreach (Unit unit in AllUnits)
             {
                 unit.Modulate = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }
@@ -133,17 +170,17 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
     public void SetWaypoint(Waypoint waypoint)
     {
         UpdateDirection(waypoint.Direction);
-        _commander.AssignPath(waypoint.Cell, waypoint.Direction);
+        Commander.AssignPath(waypoint.Cell, waypoint.Direction);
         Vector2I[] targetCells = DressOffCommander(waypoint.Cell, waypoint.Direction);
-        for (int i = 0; i < _subordinates.Count; i++)
+        for (int i = 0; i < Subordinates.Count; i++)
         {
-            _subordinates[i].AssignPath(targetCells[i], waypoint.Direction);
+            Subordinates[i].AssignPath(targetCells[i], waypoint.Direction);
         }
     }
 
     public Waypoint GetWaypoint()
     {
-        var actions = _commander.ActionQueue.GetActions();
+        var actions = Commander.ActionQueue.GetActions();
         if (actions == null || actions.Length == 0)
         {
             return null;
@@ -160,8 +197,8 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
 
     public void ResetActionPoints()
     {
-        _commander.ResetActionPoints();
-        foreach (ControlledUnit unit in _subordinates)
+        Commander.ResetActionPoints();
+        foreach (ControlledUnit unit in Subordinates)
         {
             unit.ResetActionPoints();
         }
@@ -169,8 +206,8 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
 
     public void ExecuteAllUnits()
     {
-        _commander.ExecuteActions();
-        foreach (ControlledUnit unit in _subordinates)
+        Commander.ExecuteActions();
+        foreach (ControlledUnit unit in Subordinates)
         {
             unit.ExecuteActions();
         }

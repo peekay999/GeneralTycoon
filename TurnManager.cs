@@ -24,7 +24,7 @@ public partial class TurnManager : Node
 
 	private void EndTurn()
 	{
-		foreach (Formation formation in currentPlayer.Formations)
+		foreach (ControlledFormation formation in currentPlayer.Formations)
 		{
 			formation.ResetActionPoints();
 		}

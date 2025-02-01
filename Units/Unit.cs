@@ -10,8 +10,6 @@ public partial class Unit : TileMover
 	protected int unitCount = 1;
 	[Export]
 	private SpriteFrames unitSprite;
-	// [Export]
-	// public SpriteFrames GhostSprite { get; set; }
 	[Export(PropertyHint.Range, "0.5,1.5")]
 	protected float _moveSpeed = 1.0f;
 	[Export]

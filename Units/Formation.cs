@@ -7,53 +7,26 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 {
 	[Export]
 	public int FormationSize { get; set; }
-	public Direction Direction { get; private set; }
-	public LocalisedDirections LocalisedDirections { get; private set; }
+	public Direction Direction { get; protected set; }
+	public LocalisedDirections LocalisedDirections { get; protected set; }
 	protected List<Unit> _subordinates;
 	protected List<Unit> _allUnits;
 	protected Unit _commander;
 
-	private PackedScene _commanderScene;
-
-	private PackedScene _rankersScene;
-
 	[Export]
 	public PackedScene Commander
 	{
-		get => _commanderScene;
-		protected set
-		{
-			if (value.Instantiate() is Unit)
-			{
-				_commanderScene = value;
-			}
-			else
-			{
-				GD.PrintErr("Assigned scene is not of type Unit.");
-			}
-		}
+		get;
+		protected set;
 	}
 
 	[Export]
 	public PackedScene Rankers
 	{
-		get => _rankersScene;
-		protected set
-		{
-			if (value.Instantiate() is Unit)
-			{
-				_rankersScene = value;
-			}
-			else
-			{
-				GD.PrintErr("Assigned scene is not of type Unit.");
-			}
-		}
+		get;
+		protected set;
 	}
 
-
-
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		YSortEnabled = true;
@@ -93,11 +66,6 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		return _commander;
 	}
 
-	public int GetWidth()
-	{
-		return _subordinates.Count;
-	}
-
 	public Vector2I GetCurrentCell()
 	{
 		return _commander.GetCurrentCell();
@@ -108,18 +76,6 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	}
 
 	public abstract Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction);
-
-
-	public void SetWaypoint(Waypoint waypoint)
-	{
-		UpdateDirection(waypoint.Direction);
-		_commander.AssignPath(waypoint.Cell, waypoint.Direction);
-		Vector2I[] targetCells = DressOffCommander(waypoint.Cell, waypoint.Direction);
-		for (int i = 0; i < _subordinates.Count; i++)
-		{
-			_subordinates[i].AssignPath(targetCells[i], waypoint.Direction);
-		}
-	}
 
 	public void MoveToTile(Vector2I cell, Direction direction)
 	{
@@ -139,32 +95,4 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 		Direction = direction;
 		LocalisedDirections = Pathfinder.GetLocalisedDirections(Direction);
 	}
-
-	public Waypoint GetWaypoint()
-	{
-		var actions = _commander.ActionQueue.GetActions();
-		if (actions == null || actions.Length == 0)
-		{
-			return null;
-		}
-
-		TurnAction turnAction = actions.OfType<TurnAction>().LastOrDefault();
-		MoveAction moveAction = actions.OfType<MoveAction>().LastOrDefault();
-
-		Direction direction = turnAction?.GetDirection() ?? Direction.CONTINUE;
-		Vector2I targetCell = moveAction?.GetTargetCell() ?? Vector2I.Zero;
-
-		return new Waypoint(targetCell, direction);
-	}
-
-	public void ResetActionPoints()
-	{
-		_commander.ResetActionPoints();
-		foreach (Unit unit in _subordinates)
-		{
-			unit.ResetActionPoints();
-		}
-	}
-
-
 }

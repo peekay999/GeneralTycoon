@@ -22,4 +22,9 @@ public abstract partial class LineInfantry : ControlledFormation
 
 		return targetCells;
 	}
+
+	public int GetWidth()
+	{
+		return _subordinates.Count;
+	}
 }

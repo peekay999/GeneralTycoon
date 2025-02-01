@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public abstract partial class ControlledFormation : Formation
@@ -9,7 +11,6 @@ public abstract partial class ControlledFormation : Formation
 
     [Signal]
     public delegate void PathfindingCompleteEventHandler();
-
     [Signal]
     public delegate void StartExecutingActionsEventHandler();
     [Signal]
@@ -126,6 +127,43 @@ public abstract partial class ControlledFormation : Formation
             {
                 unit.Modulate = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }
+        }
+    }
+
+    public void SetWaypoint(Waypoint waypoint)
+    {
+        UpdateDirection(waypoint.Direction);
+        _commander.AssignPath(waypoint.Cell, waypoint.Direction);
+        Vector2I[] targetCells = DressOffCommander(waypoint.Cell, waypoint.Direction);
+        for (int i = 0; i < _subordinates.Count; i++)
+        {
+            _subordinates[i].AssignPath(targetCells[i], waypoint.Direction);
+        }
+    }
+
+    public Waypoint GetWaypoint()
+    {
+        var actions = _commander.ActionQueue.GetActions();
+        if (actions == null || actions.Length == 0)
+        {
+            return null;
+        }
+
+        TurnAction turnAction = actions.OfType<TurnAction>().LastOrDefault();
+        MoveAction moveAction = actions.OfType<MoveAction>().LastOrDefault();
+
+        Direction direction = turnAction?.GetDirection() ?? Direction.CONTINUE;
+        Vector2I targetCell = moveAction?.GetTargetCell() ?? Vector2I.Zero;
+
+        return new Waypoint(targetCell, direction);
+    }
+
+    public void ResetActionPoints()
+    {
+        _commander.ResetActionPoints();
+        foreach (Unit unit in _subordinates)
+        {
+            unit.ResetActionPoints();
         }
     }
 

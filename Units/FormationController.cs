@@ -49,7 +49,7 @@ public partial class FormationController : Node2D
 		company.MoveToTile(cell, Direction.NORTH);
 	}
 
-	public Formation GetSelectedFormation()
+	public ControlledFormation GetSelectedFormation()
 	{
 		return _formationUiController.GetSelectedFormation();
 	}

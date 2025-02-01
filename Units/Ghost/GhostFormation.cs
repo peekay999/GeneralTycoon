@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class GhostFormation : Formation
+public partial class GhostFormation : Formation<Unit>
 {
     private ControlledFormation _formation;
     public bool isHidden = true;

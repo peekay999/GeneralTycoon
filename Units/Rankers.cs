@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public partial class Rankers : Unit
+public partial class Rankers : ControlledUnit
 {
     private Vector2[] spriteRandoms = new Vector2[9];
     [Export(PropertyHint.Range, "0, 5.0")]

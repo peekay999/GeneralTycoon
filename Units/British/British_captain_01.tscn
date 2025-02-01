@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://danlogrohjxk6"]
 
-[ext_resource type="Script" path="res://Units/Unit.cs" id="1_v8l5a"]
+[ext_resource type="Script" path="res://Units/ControlledUnit.cs" id="1_iihb0"]
 [ext_resource type="SpriteFrames" uid="uid://7jwsqvcystyk" path="res://Units/British/British_captain_01.tres" id="2_vaiuk"]
 
 [node name="Unit" type="Node2D"]
 y_sort_enabled = true
-script = ExtResource("1_v8l5a")
+script = ExtResource("1_iihb0")
 unitSprite = ExtResource("2_vaiuk")
 _spriteOffset_Y = -32.0
 

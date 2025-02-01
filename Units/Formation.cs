@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public abstract partial class Formation : Node2D, IDirectionAnchor
+public abstract partial class Formation<TUnit> : Node2D, IDirectionAnchor where TUnit : Unit
 {
 	[Export]
 	public int FormationSize { get; set; }
 	public Direction Direction { get; protected set; }
 	public LocalisedDirections LocalisedDirections { get; protected set; }
-	protected List<Unit> _subordinates;
-	protected List<Unit> _allUnits;
-	protected Unit _commander;
+	protected List<TUnit> _subordinates;
+	protected List<TUnit> _allUnits;
+	protected TUnit _commander;
 
 	[Export]
 	public PackedScene Commander
@@ -29,6 +29,11 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 
 	public override void _Ready()
 	{
+		if (Commander == null || Rankers == null)
+		{
+			GD.PrintErr(Name + " : Commander or Rankers scene is not assigned.");
+			return;
+		}
 		YSortEnabled = true;
 		InitialiseUnits();
 		UpdateDirection(Direction.NORTH);
@@ -36,8 +41,8 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 
 	protected virtual void InitialiseUnits()
 	{
-		_subordinates = new List<Unit>();
-		_allUnits = new List<Unit>();
+		_subordinates = new List<TUnit>();
+		_allUnits = new List<TUnit>();
 
 		if (Rankers == null || Commander == null)
 		{
@@ -47,13 +52,13 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 
 		for (int i = 0; i < FormationSize; i++)
 		{
-			Unit unit = (Unit)Rankers.Instantiate();
+			TUnit unit = (TUnit)Rankers.Instantiate();
 			AddChild(unit);
 			_subordinates.Add(unit);
 			_allUnits.Add(unit);
 			unit.Name = "Unit " + _subordinates.IndexOf(unit);
 		}
-		Unit commander = (Unit)Commander.Instantiate();
+		TUnit commander = (TUnit)Commander.Instantiate();
 		AddChild(commander);
 		_allUnits.Add(commander);
 		commander.Name = "Commander";
@@ -61,7 +66,7 @@ public abstract partial class Formation : Node2D, IDirectionAnchor
 	}
 
 
-	public Unit GetCommander()
+	public TUnit GetCommander()
 	{
 		return _commander;
 	}

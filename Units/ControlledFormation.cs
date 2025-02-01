@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public abstract partial class ControlledFormation : Formation
+public abstract partial class ControlledFormation : Formation<ControlledUnit>
 {
     protected (int count, bool isHovered) _hoverStatus = (0, false);
     public GhostFormation GhostFormation { get; private set; }

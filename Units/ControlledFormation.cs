@@ -109,7 +109,7 @@ public abstract partial class ControlledFormation : Formation
         {
             _hoverStatus.isHovered = true;
             Input.SetDefaultCursorShape(Input.CursorShape.PointingHand);
-            foreach (Unit unit in _subordinates)
+            foreach (Unit unit in _allUnits)
             {
                 unit.Modulate = new Color(1, 1, 1, 0.75f);
             }
@@ -122,7 +122,7 @@ public abstract partial class ControlledFormation : Formation
         {
             _hoverStatus.isHovered = false;
             Input.SetDefaultCursorShape(Input.CursorShape.Arrow);
-            foreach (Unit unit in _subordinates)
+            foreach (Unit unit in _allUnits)
             {
                 unit.Modulate = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }

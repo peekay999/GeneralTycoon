@@ -5,10 +5,24 @@ using System.Collections.Generic;
 public partial class ControlledUnit : Unit
 {
 	public ActionQueue ActionQueue { get; private set; }
+	private Area2D _area2D;
+	[Signal]
+	public delegate void MouseEnteredEventHandler();
+	[Signal]
+	public delegate void MouseExitedEventHandler();
+	[Signal]
+	public delegate void PathfindingStartedEventHandler();
+	[Signal]
+	public delegate void PathfindingCompleteEventHandler();
+	[Signal]
+	public delegate void StartExecutingActionsEventHandler();
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		base._Ready();
+		_area2D = GetNode<Area2D>("Area2D");
+		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
+		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
 		ActionQueue = new ActionQueue(100);
 		AddChild(ActionQueue);
 	}

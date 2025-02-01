@@ -17,26 +17,11 @@ public partial class Unit : TileMover
 	public float _skewAmplitude;
 	public float _skewPhaseOffset;
 	protected List<AnimatedSprite2D> _animatedSprite2Ds;
-	protected UnitType _unitType;
-	private Area2D _area2D;
-	[Signal]
-	public delegate void MouseEnteredEventHandler();
-	[Signal]
-	public delegate void MouseExitedEventHandler();
-	[Signal]
-	public delegate void PathfindingStartedEventHandler();
-	[Signal]
-	public delegate void PathfindingCompleteEventHandler();
-	[Signal]
-	public delegate void StartExecutingActionsEventHandler();
 
 	public override void _Ready()
 	{
 		base._Ready();
 		_direction = Direction.NORTH;
-		_area2D = GetNode<Area2D>("Area2D");
-		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
-		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
 		
 		_animatedSprite2Ds = new List<AnimatedSprite2D>();
 		for (int i = 0; i < unitCount; i++)

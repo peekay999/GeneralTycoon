@@ -13,11 +13,3 @@ _spriteOffset_Y = -20.0
 
 [node name="Sprites" type="Node2D" parent="YSort"]
 y_sort_enabled = true
-
-[node name="Area2D" type="Area2D" parent="."]
-position = Vector2(0, -16)
-collision_layer = 2
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
-z_as_relative = false
-polygon = PackedVector2Array(-32, -16, 0, -32, 32, -16, 32, 16, 0, 32, -32, 16)

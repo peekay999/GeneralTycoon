@@ -7,7 +7,7 @@ public partial class MoveAction : UnitAction
     private Vector2 _targetPos;
     private Vector2 _startPos;
 
-    public MoveAction(Unit unit, Vector2I startCell, Vector2I targetCell) : base(unit)
+    public MoveAction(ControlledUnit unit, Vector2I startCell, Vector2I targetCell) : base(unit)
     {
         _t = 0.0f;
         _cost = Pathfinder.GetMovementCost(startCell, targetCell);

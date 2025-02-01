@@ -3,7 +3,7 @@ using Godot;
 public partial class TurnAction : UnitAction
 {
     private Direction _direction;
-    public TurnAction(Unit unit, Direction direction) : base(unit)
+    public TurnAction(ControlledUnit unit, Direction direction) : base(unit)
     {
         _cost = 5;
         _direction = direction;

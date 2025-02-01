@@ -4,7 +4,7 @@ using System;
 public abstract partial class UnitAction : Node
 {
 	public int _cost;
-	protected Unit _unit;
+	protected ControlledUnit _unit;
 	private bool _isExecuting = false;
 	protected float _t = 0.0f;
 
@@ -16,7 +16,7 @@ public abstract partial class UnitAction : Node
 		}
     }
 
-    public UnitAction(Unit unit)
+    public UnitAction(ControlledUnit unit)
 	{
 		_unit = unit;
 	}

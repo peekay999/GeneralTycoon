@@ -8,7 +8,7 @@ y_sort_enabled = true
 script = ExtResource("1_qjs11")
 randomness = 4.923
 unitCount = 9
-DefaultUnitSprite = ExtResource("2_r7kfa")
+unitSprite = ExtResource("2_r7kfa")
 _spriteOffset_Y = -32.0
 
 [node name="YSort" type="Node2D" parent="."]

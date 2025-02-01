@@ -1,27 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://bcdfk0c7ep24b"]
+[gd_scene load_steps=3 format=3 uid="uid://bcdfk0c7ep24b"]
 
 [ext_resource type="Script" path="res://Units/Unit.cs" id="1_cpo7t"]
-[ext_resource type="Texture2D" uid="uid://5kgu808e0tnn" path="res://Sprites/Character/GhostCommander.png" id="2_gi6n8"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_45c5o"]
-atlas = ExtResource("2_gi6n8")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_jixpu"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_45c5o")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[ext_resource type="SpriteFrames" uid="uid://ccu1pr64gfy2q" path="res://Units/Ghost/ghost_commander_sprites.tres" id="2_8rc66"]
 
 [node name="GhostCommander" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_cpo7t")
-unitSprite = SubResource("SpriteFrames_jixpu")
+unitSprite = ExtResource("2_8rc66")
 _spriteOffset_Y = -20.0
 
 [node name="YSort" type="Node2D" parent="."]

@@ -27,7 +27,7 @@ public partial class MoveAction : UnitAction
         _t += (float)delta * _unit.GetWalkSpeed();
 
         _unit.SetAnimation(Animations.WALK);
-        _unit.Skew = Mathf.Sin(_t * Mathf.Pi * 2 + _unit._skewPhaseOffset) * _unit._skewAmplitude;
+        _unit.Skew = Mathf.Sin(_t * Mathf.Pi * 2 + _unit.SkewPhaseOffset) * _unit.SkewAmplitude;
         
         _unit.LerpToTile(_startCell, _targetCell, _t);
         _unit.UpdateDirection(TileMapUtil.DetermineDirection(_startCell, _targetCell));

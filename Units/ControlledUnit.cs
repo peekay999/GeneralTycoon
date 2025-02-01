@@ -6,6 +6,8 @@ public partial class ControlledUnit : Unit
 {
 	public ActionQueue ActionQueue { get; private set; }
 	private Area2D _area2D;
+	public float SkewAmplitude;
+	public float SkewPhaseOffset;
 	[Signal]
 	public delegate void MouseEnteredEventHandler();
 	[Signal]
@@ -25,6 +27,11 @@ public partial class ControlledUnit : Unit
 		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
 		ActionQueue = new ActionQueue(100);
 		AddChild(ActionQueue);
+
+		RandomNumberGenerator _rng = new RandomNumberGenerator();
+
+		SkewAmplitude = _rng.RandfRange(0.075f, 0.125f);
+		SkewPhaseOffset = _rng.RandfRange(0.0f, Mathf.Pi * 0.5f);
 	}
 
 	public async void AssignPath(Vector2I cell, Direction direction)

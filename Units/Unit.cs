@@ -14,8 +14,6 @@ public partial class Unit : TileMover
 	protected float _moveSpeed = 1.0f;
 	[Export]
 	private float _spriteOffset_Y = 0.0f;
-	public float _skewAmplitude;
-	public float _skewPhaseOffset;
 	protected List<AnimatedSprite2D> _animatedSprite2Ds;
 
 	public override void _Ready()
@@ -36,11 +34,6 @@ public partial class Unit : TileMover
 			_sprites.AddChild(sprite);
 		}
 		UpdateDirection(Direction.NORTH);
-
-		RandomNumberGenerator _rng = new RandomNumberGenerator();
-
-		_skewAmplitude = _rng.RandfRange(0.075f, 0.125f);
-		_skewPhaseOffset = _rng.RandfRange(0.0f, Mathf.Pi * 0.5f);
 	}
 
 	public Vector2I GetCurrentCell()

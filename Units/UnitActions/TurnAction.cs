@@ -17,7 +17,7 @@ public partial class TurnAction : UnitAction
     protected override void ProcessAction(double delta)
     {
         _t += (float)delta * _unit.GetWalkSpeed();
-        _unit.Skew = Mathf.Sin(_t * Mathf.Pi * 2 + (_unit._skewPhaseOffset / 2)) * (_unit._skewAmplitude / 2);
+        _unit.Skew = Mathf.Sin(_t * Mathf.Pi * 2 + (_unit.SkewPhaseOffset / 2)) * (_unit.SkewAmplitude / 2);
         // _unit.LerpToDirection(_direction, _t);
 
         if (_t > 0.5f)

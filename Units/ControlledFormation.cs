@@ -29,7 +29,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
     {
         base.InitialiseUnits();
         FormationController formationController = World.Instance.GetFormationController();
-        foreach (Unit unit in _allUnits)
+        foreach (ControlledUnit unit in _allUnits)
         {
             unit.UnitMoved += (currentCell, targetCell) => formationController._on_unit_moved(unit, currentCell, targetCell);
             unit.MouseEntered += () => _on_mouse_entered();
@@ -161,7 +161,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
     public void ResetActionPoints()
     {
         _commander.ResetActionPoints();
-        foreach (Unit unit in _subordinates)
+        foreach (ControlledUnit unit in _subordinates)
         {
             unit.ResetActionPoints();
         }
@@ -170,7 +170,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
     public void ExecuteAllUnits()
     {
         _commander.ExecuteActions();
-        foreach (Unit unit in _subordinates)
+        foreach (ControlledUnit unit in _subordinates)
         {
             unit.ExecuteActions();
         }

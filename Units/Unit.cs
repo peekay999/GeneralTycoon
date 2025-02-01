@@ -19,7 +19,6 @@ public partial class Unit : TileMover
 	protected List<AnimatedSprite2D> _animatedSprite2Ds;
 	protected UnitType _unitType;
 	private Area2D _area2D;
-	public ActionQueue ActionQueue { get; private set; }
 	[Signal]
 	public delegate void MouseEnteredEventHandler();
 	[Signal]
@@ -38,8 +37,6 @@ public partial class Unit : TileMover
 		_area2D = GetNode<Area2D>("Area2D");
 		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
 		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
-		ActionQueue = new ActionQueue(100);
-		AddChild(ActionQueue);
 		
 		_animatedSprite2Ds = new List<AnimatedSprite2D>();
 		for (int i = 0; i < unitCount; i++)
@@ -54,8 +51,6 @@ public partial class Unit : TileMover
 			_sprites.AddChild(sprite);
 		}
 		UpdateDirection(Direction.NORTH);
-
-		_unitType = UnitType.BLUE_INF;
 
 		RandomNumberGenerator _rng = new RandomNumberGenerator();
 
@@ -73,11 +68,6 @@ public partial class Unit : TileMover
 		return _moveSpeed;
 	}
 
-	public Vector2I GetUnitTypeAtlasCoords()
-	{
-		return _unitType.AtlasCoords;
-	}
-
 	public override void UpdateDirection(Direction direction)
 	{
 		base.UpdateDirection(direction);
@@ -93,48 +83,6 @@ public partial class Unit : TileMover
 		{
 			sprite.Animation = animation;
 		}
-	}
-
-	public async void AssignPath(Vector2I cell, Direction direction)
-	{
-		EmitSignal(SignalName.PathfindingStarted);
-		ActionQueue.ClearQueue();
-		List<Vector2I> path = await World.Instance.GetPathfinder().FindPathAsync(currentCell, cell);
-		for (int i = 0; i < path.Count - 1; i++)
-		{
-			MoveAction moveAction = new MoveAction(this, path[i], path[i + 1]);
-			ActionQueue.EnqueueAction(moveAction);
-		}
-
-		// add in a final turn action
-		ActionQueue.EnqueueAction(new TurnAction(this, direction));
-
-		EmitSignal(SignalName.PathfindingComplete);
-	}
-
-	public void ExecuteActions()
-	{
-		EmitSignal(SignalName.StartExecutingActions);
-		ActionQueue.ExecuteQueue();
-	}
-
-	public void ResetActionPoints()
-	{
-		ActionQueue.ResetPoints();
-	}
-
-	public List<Vector2I> GetTilePath()
-	{
-		UnitAction[] unitActions = ActionQueue.GetActions();
-		List<Vector2I> path = new List<Vector2I>();
-		foreach (UnitAction action in unitActions)
-		{
-			if (action is MoveAction moveAction)
-			{
-				path.Add(moveAction.GetTargetCell());
-			}
-		}
-		return path;
 	}
 
 	public override void MoveToTile(Vector2I cellTo)

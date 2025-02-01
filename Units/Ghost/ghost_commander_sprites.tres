@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://ccu1pr64gfy2q"]
+
+[ext_resource type="Texture2D" uid="uid://5kgu808e0tnn" path="res://Sprites/Character/GhostCommander.png" id="1_pbi12"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_pbi12")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

@@ -6,7 +6,7 @@
 [node name="GhostUnit" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_s0q0b")
-unitSprite = ExtResource("2_wqbsf")
+DefaultUnitSprite = ExtResource("2_wqbsf")
 _spriteOffset_Y = -20.0
 
 [node name="YSort" type="Node2D" parent="."]

@@ -9,7 +9,7 @@ public partial class TileMapGenerator : Node2D
 	{
 		Image image = heightmap.GetImage();
 		List<TileMapLayer> tileMapLayers = new List<TileMapLayer>();
-		int Offset_Y = -16;
+		int Offset_Y = -TileMapUtil.TILE_HEIGHT / 2;
 
 		if (image == null)
 		{

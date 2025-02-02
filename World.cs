@@ -89,7 +89,7 @@ public partial class World : Node2D
 		float offset = 0;
 		if (_tileMapController.GetTopLayer(cell).GetCellAtlasCoords(cell) != TileMapUtil.tile_base)
 		{
-			offset = 8;
+			offset = TileMapUtil.TILE_HEIGHT / 4;
 		}
 		return _tileMapController.GetTopLayer(cell).MapToLocal(cell) + _tileMapController.GetTopLayer(cell).Position + new Vector2(0, offset);
 	}

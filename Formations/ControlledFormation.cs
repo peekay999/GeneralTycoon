@@ -212,7 +212,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
 
     public void ExecuteAllUnits()
     {
-        
+
         Commander.ExecuteActions();
         foreach (ControlledUnit unit in Subordinates)
         {

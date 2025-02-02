@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bufsvbmaiccdc"]
+[gd_scene load_steps=20 format=3 uid="uid://bufsvbmaiccdc"]
 
 [ext_resource type="Script" path="res://TileMaps/TileMapController.cs" id="1_luie1"]
 [ext_resource type="Script" path="res://World.cs" id="1_ux6xs"]
@@ -13,10 +13,38 @@
 [ext_resource type="Theme" uid="uid://cnjtetudthuan" path="res://addons/windows_95_theme/save1.tres" id="10_hm81m"]
 [ext_resource type="Script" path="res://UI/FormationUI_controls.cs" id="10_l2l88"]
 [ext_resource type="Script" path="res://UI/FormationUI_confirmation.cs" id="12_5xjw1"]
+[ext_resource type="Shader" path="res://Clouds.gdshader" id="14_mvdad"]
+
+[sub_resource type="Gradient" id="Gradient_xccb1"]
+offsets = PackedFloat32Array(0, 0.645038)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_s22ny"]
+noise_type = 2
+seed = 270
+frequency = 0.0042
+cellular_return_type = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_30h5y"]
+height = 1024
+seamless = true
+color_ramp = SubResource("Gradient_xccb1")
+noise = SubResource("FastNoiseLite_s22ny")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ommrb"]
+shader = ExtResource("14_mvdad")
+shader_parameter/density = 0.34
+shader_parameter/speed = Vector2(0.005, 0.005)
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_30h5y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vk5cb"]
+shader = ExtResource("14_mvdad")
+shader_parameter/density = 0.238
+shader_parameter/speed = Vector2(0.01, 0.01)
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_30h5y")
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
-position = Vector2(-1, 1)
+position = Vector2(-1, 2)
 script = ExtResource("1_ux6xs")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -133,3 +161,32 @@ text = "Confirm"
 [node name="Pathfinder" type="Node2D" parent="."]
 position = Vector2(0, 1)
 script = ExtResource("6_qqpqo")
+
+[node name="Clouds_1" type="ColorRect" parent="."]
+z_index = 100
+material = SubResource("ShaderMaterial_ommrb")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4730.0
+offset_top = -13.0
+offset_right = 5270.0
+offset_bottom = 9987.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Clouds_2" type="ColorRect" parent="."]
+z_index = 100
+material = SubResource("ShaderMaterial_vk5cb")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -5307.0
+offset_top = 46.0
+offset_right = 4693.0
+offset_bottom = 10046.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0.235294)

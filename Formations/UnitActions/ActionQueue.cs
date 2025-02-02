@@ -6,7 +6,7 @@ public partial class ActionQueue : Node
 {
 	private Queue<UnitAction> _actionQueue = new Queue<UnitAction>();
 	private UnitAction _currentAction = null;
-	private (int current, int reset) _actionPoints;
+	private (float current, float reset) _actionPoints;
 	[Signal]
 	public delegate void FinishedExecutingEventHandler();
 
@@ -47,8 +47,8 @@ public partial class ActionQueue : Node
 		{
 			_currentAction = _actionQueue.Dequeue();
 			_currentAction.ActionComplete += OnActionCompleted;
-			_actionPoints.current -= _currentAction._cost;
 			_currentAction.Execute();
+			_actionPoints.current -= _currentAction._cost;
 		}
 		else
 		{

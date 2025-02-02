@@ -1,0 +1,67 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://bolmukh4go08q"]
+
+[ext_resource type="Texture2D" uid="uid://dt8qnuxho5x67" path="res://Aseprite/GhostFlanker.png" id="1_e8s7j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdpps"]
+atlas = ExtResource("1_e8s7j")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mfevb"]
+atlas = ExtResource("1_e8s7j")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ywjex"]
+atlas = ExtResource("1_e8s7j")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xijkr"]
+atlas = ExtResource("1_e8s7j")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2khbj"]
+atlas = ExtResource("1_e8s7j")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_grsyi"]
+atlas = ExtResource("1_e8s7j")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v8gir"]
+atlas = ExtResource("1_e8s7j")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_elqje"]
+atlas = ExtResource("1_e8s7j")
+region = Rect2(448, 0, 64, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdpps")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mfevb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ywjex")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xijkr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2khbj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_grsyi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v8gir")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_elqje")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

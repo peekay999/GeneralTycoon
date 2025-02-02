@@ -160,6 +160,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
     }
     private void _on_mouse_exited()
     {
+
         _hoverStatus.count--;
         if (_hoverStatus.count <= 0)
         {
@@ -211,6 +212,7 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
 
     public void ExecuteAllUnits()
     {
+        
         Commander.ExecuteActions();
         foreach (ControlledUnit unit in Subordinates)
         {
@@ -227,5 +229,38 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
             EmitSignal(SignalName.AllPointsExpended);
             unitsExecutingActions = 0;
         }
+    }
+
+    public void _on_running_toggled(bool isRunning)
+    {
+        if (isRunning)
+        {
+            foreach (ControlledUnit unit in AllUnits)
+            {
+                unit.IsRunning = true;
+            }
+        }
+        else
+        {
+            foreach (ControlledUnit unit in AllUnits)
+            {
+                unit.IsRunning = false;
+            }
+        }
+    }
+
+    public bool GetIsRunning()
+    {
+        bool isRunning = false;
+        foreach (ControlledUnit unit in AllUnits)
+        {
+            if (unit.IsRunning)
+            {
+                isRunning = true;
+                break;
+            }
+        }
+        return isRunning;
+
     }
 }

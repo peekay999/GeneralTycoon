@@ -6,9 +6,18 @@ public abstract partial class ControlledUnit : Unit
 {
 	public ActionQueue ActionQueue { get; private set; }
 	private Area2D _area2D;
-	public float SkewAmplitude;
-	public float SkewPhaseOffset;
-
+	public float SkewAmplitude { get; protected set; }
+	public float SkewPhaseOffset { get; protected set; }
+	[Export]
+	public float MaxCohesion { get; protected set; }
+	[Export]
+	public float MaxFatigue { get; protected set; }
+	public float Cohesion { get; set; }
+	public float Fatigue { get; set; }
+	[Export]
+	public float StandardMoveFatigueCost { get; protected set; }
+	[Export]
+	public float RunFatigueMultiplier { get; protected set; }
 	[Export]
 	public SpriteFrames GhostSprite { get; protected set; }
 	[Signal]
@@ -35,6 +44,9 @@ public abstract partial class ControlledUnit : Unit
 
 		SkewAmplitude = _rng.RandfRange(0.075f, 0.125f);
 		SkewPhaseOffset = _rng.RandfRange(0.0f, Mathf.Pi * 0.5f);
+
+		Cohesion = MaxCohesion;
+		Fatigue = MaxFatigue;
 	}
 
 	public async void AssignPath(Vector2I cell, Direction direction)
@@ -44,7 +56,7 @@ public abstract partial class ControlledUnit : Unit
 		List<Vector2I> path = await World.Instance.GetPathfinder().FindPathAsync(currentCell, cell);
 		for (int i = 0; i < path.Count - 1; i++)
 		{
-			MoveAction moveAction = new MoveAction(this, path[i], path[i + 1]);
+			MoveAction moveAction = new MoveAction(this, path[i], path[i + 1], StandardMoveFatigueCost);
 			ActionQueue.EnqueueAction(moveAction);
 		}
 

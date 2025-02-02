@@ -7,6 +7,10 @@
 [node name="BritishTroops" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_qjs11")
+MaxCohesion = 100.0
+MaxFatigue = 100.0
+StandardMoveFatigueCost = 10.0
+RunFatigueMultiplier = 3.0
 GhostSprite = ExtResource("2_ovfud")
 UnitCount = 9
 UnitSprite = ExtResource("2_r7kfa")

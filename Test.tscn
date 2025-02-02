@@ -65,19 +65,19 @@ theme = ExtResource("10_hm81m")
 [node name="HBox" type="HBoxContainer" parent="FormationController/FormationUiController/FormationUI/UIcontrols/PanelContainer"]
 layout_mode = 2
 
-[node name="b_Walk" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrols/PanelContainer/HBox"]
+[node name="b_Move" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrols/PanelContainer/HBox"]
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = ExtResource("10_hm81m")
-text = "Walk
-"
+text = "Move"
 
 [node name="b_Run" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrols/PanelContainer/HBox"]
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = ExtResource("10_hm81m")
+toggle_mode = true
 text = "Run"
 
 [node name="b_Fire" type="Button" parent="FormationController/FormationUiController/FormationUI/UIcontrols/PanelContainer/HBox"]
@@ -99,7 +99,7 @@ layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = ExtResource("10_hm81m")
-text = "Cancel"
+text = "X"
 
 [node name="UIconfirmation" type="Control" parent="FormationController/FormationUiController/FormationUI"]
 visible = false

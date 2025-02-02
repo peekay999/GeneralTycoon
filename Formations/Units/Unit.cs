@@ -12,7 +12,12 @@ public abstract partial class Unit : TileMover
 	public SpriteFrames UnitSprite { get; protected set; }
 
 	[Export(PropertyHint.Range, "0.5,1.5")]
-	protected float _moveSpeed = 1.0f;
+	protected float _walkSpeed = 0.8f;
+	[Export(PropertyHint.Range, "1.0,2.5")]
+	protected float _runSpeed = 1.5f;
+
+	public bool IsRunning { get; set; } = false;
+	
 	[Export]
 	protected float _spriteOffset_Y = 0.0f;
 	protected List<AnimatedSprite2D> _animatedSprite2Ds;
@@ -54,10 +59,16 @@ public abstract partial class Unit : TileMover
 		return currentCell;
 	}
 
-	public float GetWalkSpeed()
+	public float GetMoveSpeed()
 	{
-		return _moveSpeed;
+		return IsRunning? _runSpeed : _walkSpeed;
 	}
+
+	public string GetMoveAnimation()
+	{
+		return IsRunning ? Animations.RUN : Animations.WALK;
+	}
+	
 
 	public override void UpdateDirection(Direction direction)
 	{

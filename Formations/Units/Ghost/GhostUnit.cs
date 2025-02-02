@@ -17,4 +17,10 @@ public partial class GhostUnit : Unit
 		_controlledUnit = controlledUnit;
 		SetSprite(_controlledUnit.GhostSprite);
 	}
+
+	public override void MoveToTile(Vector2I cellTo)
+	{
+		base.MoveToTile(cellTo);
+		Position = new Vector2(Position.X, Position.Y + 1);
+	}
 }

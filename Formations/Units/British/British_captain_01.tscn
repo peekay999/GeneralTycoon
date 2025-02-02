@@ -7,6 +7,10 @@
 [node name="BritishCaptain" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_ojk2n")
+MaxCohesion = 100.0
+MaxFatigue = 100.0
+StandardMoveFatigueCost = 10.0
+RunFatigueMultiplier = 3.0
 GhostSprite = ExtResource("2_t01j2")
 UnitCount = 1
 UnitSprite = ExtResource("2_vaiuk")

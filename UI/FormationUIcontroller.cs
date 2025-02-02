@@ -34,7 +34,9 @@ public partial class FormationUIcontroller : Node2D
 		_canvasLayer = GetNode<CanvasLayer>("FormationUI");
 		ui_controls = _canvasLayer.GetNode<FormationUI_controls>("UIcontrols");
 		ui_confirmation = _canvasLayer.GetNode<FormationUI_confirmation>("UIconfirmation");
-		ui_controls.b_Walk.Pressed += GrabGhostFormation;
+		ui_controls.b_Move.Pressed += GrabGhostFormation;
+		ui_controls.b_Run.Toggled += (bool toggled) => _selectedFormation?._on_running_toggled(toggled);
+		ui_controls.b_Cancel.Pressed += ClearSelectedFormation;
 		ui_confirmation.b_Cancel.Pressed += ClearSelectedFormation;
 		ui_confirmation.b_Confirm.Pressed += () => ConfirmAction();
 
@@ -55,6 +57,10 @@ public partial class FormationUIcontroller : Node2D
 			_ghostFormation.MoveToTile(_selectionLayer.GetSelectedCell(), _ghostDirection);
 			_ghostFormation.QueueRedraw();
 		}
+		if (_selectedFormation != null)
+		{
+			ui_controls.b_Run.ButtonPressed = _selectedFormation.GetIsRunning();
+		}
 	}
 
 	private void GrabGhostFormation()
@@ -62,6 +68,7 @@ public partial class FormationUIcontroller : Node2D
 		if (_selectedFormation != null)
 		{
 			_ghostFormation = _selectedFormation.GhostFormation.Grab();
+			_selectedFormation._on_running_toggled(ui_controls.b_Run.ButtonPressed);
 			ui_controls.Visible = false;
 		}
 	}
@@ -119,6 +126,7 @@ public partial class FormationUIcontroller : Node2D
 	public void SetSelectedFormation(ControlledFormation formation)
 	{
 		ClearSelectedFormation();
+		ui_controls.b_Run.ButtonPressed = formation.GetIsRunning();
 		_selectedFormation = formation;
 		if (_selectedFormation == null)
 		{

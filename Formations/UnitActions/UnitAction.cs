@@ -3,7 +3,7 @@ using System;
 
 public abstract partial class UnitAction : Node
 {
-	public int _cost;
+	public float _cost;
 	protected ControlledUnit _unit;
 	private bool _isExecuting = false;
 	protected float _t = 0.0f;

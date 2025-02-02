@@ -12,11 +12,14 @@ public partial class GhostFormation : Formation<GhostUnit>
 
     public override void _Ready()
     {
+        Visible = false;
         base._Ready();
         Modulate = new Color(1, 1, 1, 0.75f);
 
         lineDrawer = new LineDrawer();
         AddChild(lineDrawer);
+
+
     }
 
     public override void _Process(double delta)
@@ -34,6 +37,11 @@ public partial class GhostFormation : Formation<GhostUnit>
         else
         {
             Visible = false;
+        }
+        if (Visible && !isGrabbed)
+        {
+            float DistanceToFormation = GetCurrentPosition().DistanceTo(_formation.GetCurrentPosition());
+            Modulate = new Color(1, 1, 1, Mathf.Clamp(DistanceToFormation / 200, 0, 0.75f));
         }
 
         lineDrawer.SetPoints(_formation.GetCurrentPosition(), GetCurrentPosition());

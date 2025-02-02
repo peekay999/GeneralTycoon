@@ -193,4 +193,5 @@ public struct Animations
 	public const string STAND = "default";
 	public const string WALK = "walk";
 	public const string WALK_READY = "walk_ready";
+	public const string RUN = "run";
 }

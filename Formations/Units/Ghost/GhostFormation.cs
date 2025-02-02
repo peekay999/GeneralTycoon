@@ -12,7 +12,6 @@ public partial class GhostFormation : Formation<GhostUnit>
 
     public override void _Ready()
     {
-        Visible = false;
         base._Ready();
         Modulate = new Color(1, 1, 1, 0.75f);
 
@@ -55,6 +54,7 @@ public partial class GhostFormation : Formation<GhostUnit>
 
     public GhostFormation Grab()
     {
+        Modulate = new Color(1, 1, 1, 0.75f);
         isGrabbed = true;
         return this;
     }

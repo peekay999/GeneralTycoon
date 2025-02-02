@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Godot;
 
 public abstract partial class ControlledFormation : Formation<ControlledUnit>
@@ -76,14 +77,18 @@ public abstract partial class ControlledFormation : Formation<ControlledUnit>
 
     protected virtual void CreateGhostFormation()
     {
-        // Ensure the resource path is correct
+        if (GhostFormation != null)
+        {
+            GhostFormation.Name = " ";
+            GhostFormation.QueueFree();
+        }
+        GhostFormation = new GhostFormation();
         PackedScene ghostFormationScene = (PackedScene)ResourceLoader.Load("res://Formations/Units/Ghost/ghost_formation.tscn");
         if (ghostFormationScene == null)
         {
             GD.PrintErr("Failed to load ghost_formation.tscn");
             return;
         }
-        // Instantiate and cast to GhostFormation
         GhostFormation ghostFormation = (GhostFormation)ghostFormationScene.Instantiate();
         GhostFormation = ghostFormation;
         GhostFormation.UpdateDirection(Direction.NORTH);

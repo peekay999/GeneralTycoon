@@ -36,11 +36,14 @@ public abstract partial class LineInfantry : ControlledFormation
 		AddChild(leftFlanker);
 		AddChild(rightFlanker);
 
+
 		base.InitialiseUnits();
 
 		Subordinates.Insert(0, leftFlanker);
 		Subordinates.Add(rightFlanker);
 
+		FormationSize += 2;
+		CreateGhostFormation();
 	}
 
 	public override Vector2I[] DressOffCommander(Vector2I commanderCell, Direction direction)

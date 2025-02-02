@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://b425yd1ckte8r"]
+
+[ext_resource type="Script" path="res://Formations/Units/Flankers.cs" id="1_gvjg1"]
+[ext_resource type="SpriteFrames" uid="uid://drd2hpl4mscvr" path="res://Formations/Units/British/Sprites/British_sergeant_01_sprites.tres" id="2_eogxg"]
+[ext_resource type="SpriteFrames" uid="uid://ccu1pr64gfy2q" path="res://Formations/Units/Ghost/Sprites/ghost_commander_sprites.tres" id="3_2w4wn"]
+[ext_resource type="SpriteFrames" uid="uid://7jwsqvcystyk" path="res://Formations/Units/British/Sprites/British_captain_01.tres" id="4_j0a3n"]
+
+[node name="BritishFlankers" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_gvjg1")
+SecondSpriteFrames = ExtResource("2_eogxg")
+_SecondspriteOffset_Y = -32.0
+GhostSprite = ExtResource("3_2w4wn")
+UnitCount = 2
+UnitSprite = ExtResource("4_j0a3n")
+_spriteOffset_Y = -32.0
+metadata/_edit_vertical_guides_ = [989.0]
+
+[node name="YSort" type="Node2D" parent="."]
+
+[node name="Sprites" type="Node2D" parent="YSort"]
+y_sort_enabled = true
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(0, -16)
+collision_layer = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+z_as_relative = false
+polygon = PackedVector2Array(-32, -16, 0, -32, 32, -16, 32, 16, 0, 32, -32, 16)

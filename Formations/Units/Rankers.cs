@@ -1,17 +1,19 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public partial class Rankers : ControlledUnit
 {
-    private Vector2[] spriteRandoms = new Vector2[9];
+    private Vector2[] _spriteRandoms = new Vector2[9];
     [Export(PropertyHint.Range, "0, 5.0")]
-    private float randomness = 2.5f;
+    private float _randomness = 2.5f;
+
     public override void _Ready()
     {
         base._Ready();
         for (int i = 0; i < UnitCount; i++)
         {
-            spriteRandoms[i] = new Vector2((float)GD.RandRange(0, randomness), (float)GD.RandRange(0, randomness));
+            _spriteRandoms[i] = new Vector2((float)GD.RandRange(0, _randomness), (float)GD.RandRange(0, _randomness));
         }
     }
 
@@ -42,7 +44,7 @@ public partial class Rankers : ControlledUnit
             }
             for (int i = 0; i < _animatedSprite2Ds.Count; i++)
             {
-                _animatedSprite2Ds[i].Position = positions[i] + spriteRandoms[i];
+                _animatedSprite2Ds[i].Position = positions[i] + _spriteRandoms[i];
             }
         }
     }

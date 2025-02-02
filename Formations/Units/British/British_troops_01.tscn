@@ -4,10 +4,9 @@
 [ext_resource type="SpriteFrames" uid="uid://csf4pi8ap8jjt" path="res://Formations/Units/Ghost/Sprites/ghost_unit_sprites.tres" id="2_ovfud"]
 [ext_resource type="SpriteFrames" uid="uid://b6oichcsp8ehn" path="res://Formations/Units/British/Sprites/British_soldier_01_sprites.tres" id="2_r7kfa"]
 
-[node name="Unit3" type="Node2D"]
+[node name="BritishTroops" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_qjs11")
-randomness = 4.923
 GhostSprite = ExtResource("2_ovfud")
 UnitCount = 9
 UnitSprite = ExtResource("2_r7kfa")

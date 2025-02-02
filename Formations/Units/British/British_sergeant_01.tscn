@@ -1,13 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://2mc3lmbrt6tq"]
+[gd_scene format=3 uid="uid://2mc3lmbrt6tq"]
 
-[ext_resource type="Script" path="res://Formations/Units/ControlledUnit.cs" id="1_i3fpw"]
-[ext_resource type="SpriteFrames" uid="uid://csf4pi8ap8jjt" path="res://Formations/Units/Ghost/Sprites/ghost_unit_sprites.tres" id="2_1mded"]
-[ext_resource type="SpriteFrames" uid="uid://drd2hpl4mscvr" path="res://Formations/Units/British/Sprites/British_sergeant_01_sprites.tres" id="3_4eg0r"]
-
-[node name="Unit2" type="Node2D"]
-script = ExtResource("1_i3fpw")
-GhostSprite = ExtResource("2_1mded")
-UnitSprite = ExtResource("3_4eg0r")
+[node name="BritishSergeant" type="Node2D"]
 
 [node name="YSort" type="Node2D" parent="."]
 

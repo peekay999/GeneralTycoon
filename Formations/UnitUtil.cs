@@ -103,51 +103,51 @@ public static class UnitUtil
 
 		float margin = 0.66f;
 
-		float A = -TILE_HEIGHT / 2 * margin;
-		float B = TILE_WIDTH / 2 * margin;
-		float C = TILE_HEIGHT / 2 * margin;
-		float D = -TILE_WIDTH / 2 * margin;
+		float TOP = -TILE_HEIGHT / 2 * margin;
+		float RIGHT = TILE_WIDTH / 2 * margin;
+		float BOTTOM = TILE_HEIGHT / 2 * margin;
+		float LEFT = -TILE_WIDTH / 2 * margin;
 
 		float padding = 0;
 
-		Vector2 pos_0_0 = new Vector2(0, A);
-		Vector2 pos_1_0 = new Vector2(B / 2, A / 2);
-		Vector2 pos_2_0 = new Vector2(B, 0);
-		Vector2 pos_0_1 = new Vector2(D / 2, A / 2);
+		Vector2 pos_0_0 = new Vector2(0, TOP);
+		Vector2 pos_1_0 = new Vector2(RIGHT / 2, TOP / 2);
+		Vector2 pos_2_0 = new Vector2(RIGHT, 0);
+		Vector2 pos_0_1 = new Vector2(LEFT / 2, TOP / 2);
 		Vector2 pos_1_1 = new Vector2(0, 0);
-		Vector2 pos_2_1 = new Vector2(B / 2, C / 2);
-		Vector2 pos_0_2 = new Vector2(D, 0);
-		Vector2 pos_1_2 = new Vector2(D / 2, C / 2);
-		Vector2 pos_2_2 = new Vector2(0, C);
+		Vector2 pos_2_1 = new Vector2(RIGHT / 2, BOTTOM / 2);
+		Vector2 pos_0_2 = new Vector2(LEFT, 0);
+		Vector2 pos_1_2 = new Vector2(LEFT / 2, BOTTOM / 2);
+		Vector2 pos_2_2 = new Vector2(0, BOTTOM);
 
 		if (direction == Direction.NORTH_WEST || direction == Direction.SOUTH_WEST || direction == Direction.NORTH_EAST || direction == Direction.SOUTH_EAST)
 		{
-			padding = A / 2;
+			padding = TOP / 2;
 
 			if (direction == Direction.NORTH_WEST || direction == Direction.SOUTH_EAST)
 			{
-				A = -TILE_HEIGHT / 2 * (margin / 2);
-				B = TILE_WIDTH / 2 * margin;
-				C = TILE_HEIGHT / 2 * (margin / 2);
-				D = -TILE_WIDTH / 2 * margin;
+				TOP = -TILE_HEIGHT / 2 * (margin / 2);
+				RIGHT = TILE_WIDTH / 2 * margin;
+				BOTTOM = TILE_HEIGHT / 2 * (margin / 2);
+				LEFT = -TILE_WIDTH / 2 * margin;
 			}
 			else if (direction == Direction.NORTH_EAST || direction == Direction.SOUTH_WEST)
 			{
-				A = -TILE_HEIGHT / 2 * margin;
-				B = TILE_WIDTH / 2 * (margin / 2);
-				C = TILE_HEIGHT / 2 * margin;
-				D = -TILE_WIDTH / 2 * (margin / 2);
+				TOP = -TILE_HEIGHT / 2 * margin;
+				RIGHT = TILE_WIDTH / 2 * (margin / 2);
+				BOTTOM = TILE_HEIGHT / 2 * margin;
+				LEFT = -TILE_WIDTH / 2 * (margin / 2);
 			}
 
-			pos_0_0 = new Vector2(D, A);
-			pos_1_0 = new Vector2(0, A);
-			pos_2_0 = new Vector2(B, A);
-			pos_0_1 = new Vector2(D, 0);
+			pos_0_0 = new Vector2(LEFT, TOP);
+			pos_1_0 = new Vector2(0, TOP);
+			pos_2_0 = new Vector2(RIGHT, TOP);
+			pos_0_1 = new Vector2(LEFT, 0);
 			pos_1_1 = new Vector2(0, 0);
-			pos_2_1 = new Vector2(B, 0);
-			pos_0_2 = new Vector2(D, C);
-			pos_1_2 = new Vector2(0, C);
-			pos_2_2 = new Vector2(B, C);
+			pos_2_1 = new Vector2(RIGHT, 0);
+			pos_0_2 = new Vector2(LEFT, BOTTOM);
+			pos_1_2 = new Vector2(0, BOTTOM);
+			pos_2_2 = new Vector2(RIGHT, BOTTOM);
 		}
 		positions = new Vector2[3, 3] {
 			{ pos_0_0, pos_0_1, pos_0_2 },

@@ -4,7 +4,7 @@
 [ext_resource type="SpriteFrames" uid="uid://ccu1pr64gfy2q" path="res://Formations/Units/Ghost/Sprites/ghost_commander_sprites.tres" id="2_t01j2"]
 [ext_resource type="SpriteFrames" uid="uid://7jwsqvcystyk" path="res://Formations/Units/British/Sprites/British_captain_01.tres" id="2_vaiuk"]
 
-[node name="Unit" type="Node2D"]
+[node name="BritishCaptain" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_ojk2n")
 GhostSprite = ExtResource("2_t01j2")

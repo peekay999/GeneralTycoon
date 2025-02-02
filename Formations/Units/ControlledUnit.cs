@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class ControlledUnit : Unit
+public abstract partial class ControlledUnit : Unit
 {
 	public ActionQueue ActionQueue { get; private set; }
 	private Area2D _area2D;
@@ -28,7 +28,7 @@ public partial class ControlledUnit : Unit
 		_area2D = GetNode<Area2D>("Area2D");
 		_area2D.MouseShapeEntered += (id) => EmitSignal(SignalName.MouseEntered);
 		_area2D.MouseShapeExited += (id) => EmitSignal(SignalName.MouseExited);
-		ActionQueue = new ActionQueue(100);
+		ActionQueue = new ActionQueue(100000000);
 		AddChild(ActionQueue);
 
 		RandomNumberGenerator _rng = new RandomNumberGenerator();
@@ -79,19 +79,5 @@ public partial class ControlledUnit : Unit
 		ActionQueue.ResetPoints();
 	}
 
-	protected override void InitialiseSprites()
-	{
-		_animatedSprite2Ds = new List<AnimatedSprite2D>();
-		for (int i = 0; i < UnitCount; i++)
-		{
-			AnimatedSprite2D sprite = new AnimatedSprite2D();
-			sprite.TextureFilter = TextureFilterEnum.Nearest;
-			sprite.SpriteFrames = UnitSprite;
-			sprite.Offset = new Vector2(0, _spriteOffset_Y);
-			sprite.Frame = 0;
-			sprite.Position = Vector2.Zero;
-			_animatedSprite2Ds.Add(sprite);
-			_sprites.AddChild(sprite);
-		}
-	}
+
 }

@@ -9,11 +9,15 @@ public partial class GhostFormation : Formation<GhostUnit>
     private LineDrawer lineDrawer;
 
     private PackedScene GhostUnitScene => ResourceLoader.Load<PackedScene>(Assets.GhostUnitScenePath);
+    private Color _defaultColor = new Color(1, 1, 1, 0.75f);
+    private Color _color;
 
     public override void _Ready()
     {
         base._Ready();
         Modulate = new Color(1, 1, 1, 0.75f);
+
+        _color = _defaultColor;
 
         lineDrawer = new LineDrawer();
         AddChild(lineDrawer);
@@ -37,10 +41,16 @@ public partial class GhostFormation : Formation<GhostUnit>
         {
             Visible = false;
         }
-        if (Visible && !isGrabbed)
+        if (Visible)
         {
+            (float low, float high) clamp = (0.00f, 0.75f);
+            if (isGrabbed)
+            {
+                clamp.low = 0.5f;
+            }
             float DistanceToFormation = GetCurrentPosition().DistanceTo(_formation.GetCurrentPosition());
-            Modulate = new Color(1, 1, 1, Mathf.Clamp(DistanceToFormation / 200, 0, 0.75f));
+            _color.A = Mathf.Clamp(DistanceToFormation / 100, clamp.low, clamp.high);
+            Modulate = _color;
         }
 
         lineDrawer.SetPoints(_formation.GetCurrentPosition(), GetCurrentPosition());
@@ -54,9 +64,15 @@ public partial class GhostFormation : Formation<GhostUnit>
 
     public GhostFormation Grab()
     {
-        Modulate = new Color(1, 1, 1, 0.75f);
+        ResetColour();
         isGrabbed = true;
         return this;
+    }
+
+    private void ResetColour()
+    {
+        _color = _defaultColor;
+        Modulate = _color;
     }
 
     public void Release()

@@ -9,7 +9,7 @@ y_sort_enabled = true
 script = ExtResource("1_qjs11")
 randomness = 4.923
 GhostSprite = ExtResource("2_ovfud")
-UnitCount = 6
+UnitCount = 9
 UnitSprite = ExtResource("2_r7kfa")
 _spriteOffset_Y = -32.0
 

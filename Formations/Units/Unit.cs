@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a unit in the game.
 /// </summary>
-public partial class Unit : TileMover
+public abstract partial class Unit : TileMover
 {
 	[Export(PropertyHint.Range, "1,9")]
 	public int UnitCount {get; protected set;}
@@ -14,28 +14,18 @@ public partial class Unit : TileMover
 	[Export(PropertyHint.Range, "0.5,1.5")]
 	protected float _moveSpeed = 1.0f;
 	[Export]
-	private float _spriteOffset_Y = 0.0f;
+	protected float _spriteOffset_Y = 0.0f;
 	protected List<AnimatedSprite2D> _animatedSprite2Ds;
 
 	public override void _Ready()
 	{
 		base._Ready();
 		_direction = Direction.NORTH;
-		
-		_animatedSprite2Ds = new List<AnimatedSprite2D>();
-		for (int i = 0; i < UnitCount; i++)
-		{
-			AnimatedSprite2D sprite = new AnimatedSprite2D();
-			sprite.TextureFilter = TextureFilterEnum.Nearest;
-			sprite.SpriteFrames = UnitSprite;
-			sprite.Offset = new Vector2(0, _spriteOffset_Y);
-			sprite.Frame = 0;
-			sprite.Position = Vector2.Zero;
-			_animatedSprite2Ds.Add(sprite);
-			_sprites.AddChild(sprite);
-		}
+		InitialiseSprites();
 		UpdateDirection(Direction.NORTH);
 	}
+
+	protected abstract void InitialiseSprites();
 
 	public void SetSprite(SpriteFrames spriteFrames)
 	{

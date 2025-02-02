@@ -21,7 +21,7 @@ public partial class ControlledUnit : Unit
 	public delegate void PathfindingCompleteEventHandler();
 	[Signal]
 	public delegate void StartExecutingActionsEventHandler();
-	
+
 	public override void _Ready()
 	{
 		base._Ready();
@@ -77,5 +77,21 @@ public partial class ControlledUnit : Unit
 	public void ResetActionPoints()
 	{
 		ActionQueue.ResetPoints();
+	}
+
+	protected override void InitialiseSprites()
+	{
+		_animatedSprite2Ds = new List<AnimatedSprite2D>();
+		for (int i = 0; i < UnitCount; i++)
+		{
+			AnimatedSprite2D sprite = new AnimatedSprite2D();
+			sprite.TextureFilter = TextureFilterEnum.Nearest;
+			sprite.SpriteFrames = UnitSprite;
+			sprite.Offset = new Vector2(0, _spriteOffset_Y);
+			sprite.Frame = 0;
+			sprite.Position = Vector2.Zero;
+			_animatedSprite2Ds.Add(sprite);
+			_sprites.AddChild(sprite);
+		}
 	}
 }

@@ -36,16 +36,107 @@ public partial class Flankers : ControlledUnit
 			Vector2[,] positionsGrid = UnitUtil.GetSpritePositions(direction);
 			Vector2[] positions = new Vector2[2];
 
-			if (LeftOrRight == FlankType.LEFT)
+			switch (direction)
 			{
-				positions[0] = positionsGrid[2, 0];
-				positions[1] = positionsGrid[2, 2];
+				case Direction.NORTH:
+					if (LeftOrRight == FlankType.LEFT)
+					{
+						positions[0] = positionsGrid[2, 0];
+						positions[1] = positionsGrid[2, 2];
+					}
+					else
+					{
+						positions[0] = positionsGrid[0, 0];
+						positions[1] = positionsGrid[0, 2];
+					}
+					break;
+				case Direction.NORTH_EAST:
+					if (LeftOrRight == FlankType.LEFT)
+					{
+						positions[0] = positionsGrid[2, 2];
+						positions[1] = positionsGrid[0, 2];
+					}
+					else
+					{
+						positions[0] = positionsGrid[2, 0];
+						positions[1] = positionsGrid[0, 0];
+					}
+					break;
+				case Direction.EAST:
+					if (LeftOrRight == FlankType.LEFT)
+					{
+						positions[0] = positionsGrid[2, 2];
+						positions[1] = positionsGrid[0, 2];
+					}
+					else
+					{
+						positions[0] = positionsGrid[2, 0];
+						positions[1] = positionsGrid[0, 0];
+					}
+					break;
+				case Direction.SOUTH_EAST:
+					if (LeftOrRight == FlankType.LEFT)
+					{
+						positions[0] = positionsGrid[0, 2];
+						positions[1] = positionsGrid[0, 0];
+					}
+					else
+					{
+						positions[0] = positionsGrid[2, 2];
+						positions[1] = positionsGrid[2, 0];
+					}
+					break;
+				case Direction.SOUTH:
+					if (LeftOrRight == FlankType.LEFT)
+					{
+						positions[0] = positionsGrid[0, 2];
+						positions[1] = positionsGrid[0, 0];
+					}
+					else
+					{
+						positions[0] = positionsGrid[2, 2];
+						positions[1] = positionsGrid[2, 0];
+					}
+					break;
+				case Direction.SOUTH_WEST:
+					if (LeftOrRight == FlankType.LEFT)
+					{
+						positions[0] = positionsGrid[0, 0];
+						positions[1] = positionsGrid[2, 0];
+					}
+					else
+					{
+						positions[0] = positionsGrid[0, 2];
+						positions[1] = positionsGrid[2, 2];
+					}
+					break;
+				case Direction.WEST:
+					if (LeftOrRight == FlankType.LEFT)
+					{
+						positions[0] = positionsGrid[0, 0];
+						positions[1] = positionsGrid[2, 0];
+					}
+					else
+					{
+						positions[0] = positionsGrid[0, 2];
+						positions[1] = positionsGrid[2, 2];
+					}
+					break;
+				case Direction.NORTH_WEST:
+					if (LeftOrRight == FlankType.LEFT)
+					{
+						positions[0] = positionsGrid[2, 0];
+						positions[1] = positionsGrid[2, 2];
+					}
+					else
+					{
+						positions[0] = positionsGrid[0, 0];
+						positions[1] = positionsGrid[0, 2];
+					}
+					break;
 			}
-			else
-			{
-				positions[0] = positionsGrid[0, 0];
-				positions[1] = positionsGrid[0, 2];
-			}
+
+
 			foreach (AnimatedSprite2D sprite in _animatedSprite2Ds)
 			{
 				sprite.Position = positions[_animatedSprite2Ds.IndexOf(sprite)];
